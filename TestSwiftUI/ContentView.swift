@@ -10,23 +10,12 @@ import SwiftUI
 @available(macOS 12.0, *)
 struct ContentView: View {
     @State var filesLst = getDirContents(url: URL(fileURLWithPath: "/Users/uks/Desktop/DoublePen"))
-    let tableSpec = TableSpec(heightOfRow: 30 , multiSelect: true, highlightStyle: .regular)
-    
-    @State var selection: Set<Int> = []
+    let layout = flowLayout()
     
     var body: some View {
-        VStack{
-            Text("some text")
-            
-            SwiftNSCollectionView(items: $filesLst, itemSize: nil) { item in
-                Text(item.lastPathComponent )
-            }
+        SwiftNSCollectionView(items: $filesLst, itemSize: nil, layout: layout) { item in
+            Text(item.lastPathComponent )
         }
-        
-//        FBrowser2(id: "RemotesList", filesLst, spec: tableSpec, selection: $selection) { file, _ in
-//            Text(file.lastPathComponent)
-//        }
-//        .frame(width: 400, height: 400)
     }
 }
 
@@ -42,4 +31,15 @@ func getDirContents(url: URL) -> [URL] {
     }
     
     return []
+}
+
+
+fileprivate func flowLayout() -> NSCollectionViewFlowLayout{
+    let flowLayout = NSCollectionViewFlowLayout()
+            flowLayout.itemSize = NSSize(width: 160.0, height: 140.0)
+            flowLayout.sectionInset = NSEdgeInsets(top: 30.0, left: 20.0, bottom: 30.0, right: 20.0)
+            flowLayout.minimumInteritemSpacing = 20.0
+            flowLayout.minimumLineSpacing = 20.0
+            flowLayout.sectionHeadersPinToVisibleBounds = true
+    return flowLayout
 }

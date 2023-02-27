@@ -1,83 +1,12 @@
 import SwiftUI
 import Quartz
 
-fileprivate var i = 0
-
-private final class Cell<Content: View>: NSCollectionViewItem {
-    // TODO: also highlight/hover state!
-    // TODO: pass to Content
-    override var isSelected: Bool {
-        didSet {
-            if isSelected {
-                view.layer?.borderColor = NSColor.selectedControlColor.cgColor
-                view.layer?.borderWidth = 3
-            } else {
-                view.layer?.borderColor = NSColor.clear.cgColor
-                view.layer?.borderWidth = 0
-            }
-        }
-    }
-    
-    var contents: NSView?
-    let container = NSStackView()
-    
-    override func loadView() {
-        container.orientation = NSUserInterfaceLayoutOrientation.vertical
-        container.wantsLayer = true
-        
-        // For debugging rendering, choose the text field:
-        self.view = container
-        // self.view = NSTextField(labelWithString: "item \(i)")
-        // print("Rendering item \(i)")
-        i += 1
-    }
-    
-    // UKS: looks like unnecessary
-//    override func prepareForReuse() {
-//        super.prepareForReuse()
-//    }
-    
-    // TODO: Double-tap to activate inspector.
-    // typealias DoubleTapHandler = (_ event: NSEvent) -> Bool
-    // var doubleTapHandler: DoubleTapHandler?
-    // override func mouseDown(with event: NSEvent) {
-    //     print(event.clickCount)
-    //     if event.clickCount == 2, let handler = doubleTapHandler {
-    //         if (handler(event)) {
-    //             return
-    //         }
-    //     }
-    //
-    //     super.mouseDown(with: event)
-    // }
-}
-
-private final class InternalCollectionView: NSCollectionView {
-    // Return whether or not you handled the event
-    typealias KeyDownHandler = (_ event: NSEvent) -> Bool
-    var keyDownHandler: KeyDownHandler? = nil
-    
-    typealias ContextMenuItemsGenerator = (_ items: [IndexPath]) -> [NSMenuItemProxy]
-    var contextMenuItemsGenerator: ContextMenuItemsGenerator? = nil
-    var currentContextMenuItemProxies: [NSMenuItemProxy] = []
-    
-    override func keyDown(with event: NSEvent) {
-        if let keyDownHandler = keyDownHandler {
-            let didHandle = keyDownHandler(event)
-            if (didHandle) {
-                return
-            }
-        }
-        
-        super.keyDown(with: event)
-    }
-}
-
 // NSObject is necessary to implement NSCollectionViewDataSource
 // TODO: ItemType extends identifiable?
 // TODO: Move the delegates to a coordinator.
 struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRepresentable /* NSCollectionViewDataSource, NSCollectionViewDelegateFlowLayout */ {
     var itemWidth: Double?
+    var layout: NSCollectionViewFlowLayout
     
     // TODO: why is this a binding?
     @Binding var items: [ItemType]
@@ -99,10 +28,11 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
     
     private var collectionView: NSCollectionView? = nil
     
-    init(items: Binding<[ItemType]>, itemSize: Double? = nil, renderer: @escaping (_ item: ItemType) -> Content) {
+    init(items: Binding<[ItemType]>, itemSize: Double? = nil, layout: NSCollectionViewFlowLayout, renderer: @escaping (_ item: ItemType) -> Content) {
         self.itemWidth = itemSize
         self._items = items
         self.renderer = renderer
+        self.layout = layout
     }
     
     internal final class Coordinator: NSObject, NSCollectionViewDelegate, QLPreviewPanelDelegate, QLPreviewPanelDataSource, NSCollectionViewDataSource {
@@ -272,17 +202,6 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
             return urls[index] as QLPreviewItem?
         }
         
-//        func handleContextMenu(_ items: [IndexPath]) -> [NSMenuItemProxy] {
-//            guard let generator = parent.contextMenuItemsGenerator else {
-//                fatalError("Context menu generator should not be called if there is no generator")
-//            }
-//
-//            let mappedItems = items.map { parent.getItem(for: $0) }
-//
-//            let menuItems = generator(mappedItems)
-//            return menuItems
-//        }
-        
         // NSCollectionViewDataSource
         func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
             // Assume collectionView is the current collectionView.
@@ -362,12 +281,6 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
         
         collectionView.keyDownHandler = context.coordinator.handleKeyDown(_:)
         
-//        if (contextMenuItemsGenerator == nil) {
-//            collectionView.contextMenuItemsGenerator = nil
-//        } else {
-//            collectionView.contextMenuItemsGenerator = context.coordinator.handleContextMenu
-//        }
-        
         // let layout = NSCollectionViewFlowLayout()
         // layout.minimumLineSpacing = 200
         // layout.scrollDirection = .vertical
@@ -391,7 +304,6 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
         let configuration = NSCollectionViewCompositionalLayoutConfiguration()
         configuration.scrollDirection = .vertical
         
-        let layout = NSCollectionViewCompositionalLayout(section: section, configuration: configuration)
         collectionView.collectionViewLayout = layout
         
         collectionView.backgroundColors = [.clear]
@@ -399,14 +311,6 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
         collectionView.allowsMultipleSelection = true
         
         collectionView.register(Cell<Content>.self, forItemWithIdentifier: NSUserInterfaceItemIdentifier("Cell"))
-        
-        collectionView.frame = CGRect(x: 0, y: 0, width: 400, height: 100)
-        print(collectionView.frame)
-        // TODO: ???
-        // layout.itemSize = NSSize(width: 100, height: 100)
-        collectionView.frame = CGRect(x: 0, y: 0, width: 400, height: 100)
-        
-        collectionView.setNeedsDisplay(collectionView.frame)
     }
     
     private func getItem(for indexPath: IndexPath) -> ItemType {
@@ -440,19 +344,71 @@ extension SwiftNSCollectionView {
     }
 }
 
-//extension SwiftNSCollectionView {
-//    func itemContextMenu(_ contextMenuItemGenerator: ContextMenuItemsGenerator?) -> SwiftNSCollectionView {
-//        var view = self
-//        view.contextMenuItemsGenerator = contextMenuItemGenerator
-//        return view
-//    }
-//}
 
-struct SwiftNSCollectionView_Previews: PreviewProvider {
-    static var previews: some View {
-        SwiftNSCollectionView(items: Binding.constant(["a", "b"])) { item in
-            Text(item)
+//////////////////////////////
+///HELPERS
+/////////////////////////////
+
+private final class Cell<Content: View>: NSCollectionViewItem {
+    var selectedCGColor: CGColor { NSColor.selectedControlColor.cgColor }
+    var nonSelectedCGColor: CGColor { NSColor.clear.cgColor }
+    
+    // TODO: also highlight/hover state!
+    // TODO: pass to Content
+    override var isSelected: Bool {
+        didSet {
+            if isSelected {
+                view.layer?.borderColor = selectedCGColor
+                view.layer?.borderWidth = 3
+            } else {
+                view.layer?.borderColor = nonSelectedCGColor
+                view.layer?.borderWidth = 0
+            }
         }
-        .frame(width: 100, height: 100, alignment: .center)
+    }
+    
+    var contents: NSView?
+    let container = NSStackView()
+    
+    override func loadView() {
+        container.orientation = NSUserInterfaceLayoutOrientation.vertical
+        container.wantsLayer = true
+        
+        self.view = container
+    }
+    
+    // TODO: Double-tap to activate inspector.
+    // typealias DoubleTapHandler = (_ event: NSEvent) -> Bool
+    // var doubleTapHandler: DoubleTapHandler?
+    // override func mouseDown(with event: NSEvent) {
+    //     print(event.clickCount)
+    //     if event.clickCount == 2, let handler = doubleTapHandler {
+    //         if (handler(event)) {
+    //             return
+    //         }
+    //     }
+    //
+    //     super.mouseDown(with: event)
+    // }
+}
+
+private final class InternalCollectionView: NSCollectionView {
+    // Return whether or not you handled the event
+    typealias KeyDownHandler = (_ event: NSEvent) -> Bool
+    var keyDownHandler: KeyDownHandler? = nil
+    
+    typealias ContextMenuItemsGenerator = (_ items: [IndexPath]) -> [NSMenuItemProxy]
+    var contextMenuItemsGenerator: ContextMenuItemsGenerator? = nil
+    var currentContextMenuItemProxies: [NSMenuItemProxy] = []
+    
+    override func keyDown(with event: NSEvent) {
+        if let keyDownHandler = keyDownHandler {
+            let didHandle = keyDownHandler(event)
+            if (didHandle) {
+                return
+            }
+        }
+        
+        super.keyDown(with: event)
     }
 }
