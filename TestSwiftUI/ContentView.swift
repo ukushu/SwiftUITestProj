@@ -13,6 +13,11 @@ struct ContentView: View {
     let layout = flowLayout()
     
     var body: some View {
+        Button("test delete") {
+            filesLst.remove(at: 0)
+            print("filesLst.count: \(filesLst.count )")
+        }
+        
         SwiftNSCollectionView(items: $filesLst, itemSize: nil, layout: layout) { item in
             Text(item.lastPathComponent )
         }
