@@ -1,14 +1,12 @@
 import SwiftUI
 import Quartz
 
-// NSObject is necessary to implement NSCollectionViewDataSource
 // TODO: ItemType extends identifiable?
 // TODO: Move the delegates to a coordinator.
 struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRepresentable /* NSCollectionViewDataSource, NSCollectionViewDelegateFlowLayout */ {
     var itemWidth: Double?
     var layout: NSCollectionViewFlowLayout
     
-    // TODO: why is this a binding?
     @Binding var items: [ItemType]
     
     typealias ItemRenderer = (_ item: ItemType) -> Content
@@ -96,10 +94,6 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
         collectionView.allowsMultipleSelection = true
         
         collectionView.register(CollectionViewCell<Content>.self, forItemWithIdentifier: NSUserInterfaceItemIdentifier("Cell"))
-    }
-    
-    func getItem(for indexPath: IndexPath) -> ItemType {
-        return items[indexPath.item]
     }
 }
 

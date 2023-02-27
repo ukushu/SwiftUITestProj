@@ -66,20 +66,13 @@ extension SwiftNSCollectionView {
             }
         }
         
-        private func isQuickLookEnabled() -> Bool {
-            return parent.quickLookHandler != nil
-        }
-        
-        private func isDeleteItemsEnabled() -> Bool {
-            return parent.deleteItemsHandler != nil
-        }
         
         func handleKeyDown(_ event: NSEvent) -> Bool {
             let spaceKeyCode: UInt16 = 49
             let deleteKeyCode: UInt16 = 51
             switch event {
             case _ where event.keyCode == spaceKeyCode:
-                guard isQuickLookEnabled() else {
+                guard isQuickLookEnabled else {
                     return false
                 }
                 
@@ -98,7 +91,7 @@ extension SwiftNSCollectionView {
                 
                 return true
             case _ where event.keyCode == deleteKeyCode && event.modifierFlags.intersection(.deviceIndependentFlagsMask) == .command:
-                guard isDeleteItemsEnabled() else {
+                guard isDeleteItemsEnabled else {
                     return false
                 }
                 
@@ -148,7 +141,7 @@ extension SwiftNSCollectionView {
         
         // QLPreviewPanelDataSource
         func numberOfPreviewItems(in panel: QLPreviewPanel!) -> Int {
-            guard isQuickLookEnabled() else {
+            guard isQuickLookEnabled else {
                 return 0
             }
             
@@ -156,7 +149,7 @@ extension SwiftNSCollectionView {
         }
         
         func previewPanel(_ panel: QLPreviewPanel!, previewItemAt index: Int) -> QLPreviewItem! {
-            guard isQuickLookEnabled() else {
+            guard isQuickLookEnabled else {
                 return nil
             }
             
@@ -215,5 +208,24 @@ extension SwiftNSCollectionView {
         //         height: itemWidth ?? 400
         //     )
         // }
-    } // Coordinator
+    }
+}
+
+/////////////////////////
+/// HELPERS
+////////////////////////
+fileprivate extension SwiftNSCollectionView {
+    func getItem(for indexPath: IndexPath) -> ItemType {
+        return items[indexPath.item]
+    }
+}
+
+fileprivate extension SwiftNSCollectionView.Coordinator {
+    var isQuickLookEnabled: Bool {
+        return parent.quickLookHandler != nil
+    }
+    
+    var isDeleteItemsEnabled: Bool {
+        return parent.deleteItemsHandler != nil
+    }
 }
