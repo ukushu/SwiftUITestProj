@@ -12,14 +12,23 @@ struct ContentView: View {
     @State var filesLst = getDirContents(url: URL(fileURLWithPath: "/Users/uks/Desktop/DoublePen"))
     let layout = flowLayout()
     
+    @State var selectedItems: Set<Int> = []
+    
+    let dataSource: NSCollectionViewDataSource =  MyDataSource()
+    
     var body: some View {
-        Button("test delete") {
-            filesLst.remove(at: 0)
-            print("filesLst.count: \(filesLst.count )")
-        }
-        
-        SwiftNSCollectionView(items: $filesLst, itemSize: nil, layout: layout) { item in
-            Text(item.lastPathComponent )
+        VStack{
+            Button("test delete") {
+                filesLst.remove(at: 0)
+                print("filesLst.count: \(filesLst.count )")
+            }
+            
+//            NSCollectionViewWrapper(dataSource: dataSource, selectedItems: $selected)
+//                .frame(width: 300, height: 300)
+            
+            SwiftNSCollectionView(items: $filesLst, selectedItems: $selectedItems, itemSize: nil, layout: layout) { item in
+                        Text(item.lastPathComponent )
+                    }
         }
     }
 }
@@ -39,7 +48,7 @@ func getDirContents(url: URL) -> [URL] {
 }
 
 
-fileprivate func flowLayout() -> NSCollectionViewFlowLayout{
+func flowLayout() -> NSCollectionViewFlowLayout{
     let flowLayout = NSCollectionViewFlowLayout()
             flowLayout.itemSize = NSSize(width: 160.0, height: 140.0)
             flowLayout.sectionInset = NSEdgeInsets(top: 30.0, left: 20.0, bottom: 30.0, right: 20.0)

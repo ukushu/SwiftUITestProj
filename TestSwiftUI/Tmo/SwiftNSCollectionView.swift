@@ -8,6 +8,7 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
     var layout: NSCollectionViewFlowLayout
     
     @Binding var items: [ItemType]
+    @Binding var selectedItems: Set<Int>
     
     typealias ItemRenderer = (_ item: ItemType) -> Content
     var renderer: ItemRenderer
@@ -15,26 +16,24 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
     typealias DragHandler = (_ item: ItemType) -> NSPasteboardWriting?
     var dragHandler: DragHandler?
     
-    typealias QuickLookHandler = (_ items: [ItemType]) -> [URL]?
-    var quickLookHandler: QuickLookHandler?
-    
-    typealias DeleteItemsHandler = (_ items: [ItemType]) -> Void
-    var deleteItemsHandler: DeleteItemsHandler?
+//    typealias QuickLookHandler = (_ items: [ItemType]) -> [URL]?
+//    var quickLookHandler: QuickLookHandler?
     
 //    typealias ContextMenuItemsGenerator = (_ items: [ItemType]) -> [NSMenuItemProxy]
 //    var contextMenuItemsGenerator: ContextMenuItemsGenerator? = nil
     
     var collectionView: NSCollectionView? = nil
     
-    init(items: Binding<[ItemType]>, itemSize: Double? = nil, layout: NSCollectionViewFlowLayout, renderer: @escaping (_ item: ItemType) -> Content) {
+    init(items: Binding<[ItemType]>, selectedItems: Binding<Set<Int>>, itemSize: Double? = nil, layout: NSCollectionViewFlowLayout, renderer: @escaping (_ item: ItemType) -> Content) {
         self.itemWidth = itemSize
         self._items = items
+        self._selectedItems = selectedItems
         self.renderer = renderer
         self.layout = layout
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator(self)
+        Coordinator(self, selectedItems: $selectedItems)
     }
     
     typealias NSViewType = NSScrollView
@@ -50,6 +49,7 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
     }
     
     func updateNSView(_ scrollView: NSScrollView, context: Context) {
+        
         print("Update")
         let collectionView = scrollView.documentView as! InternalCollectionView
         // self.collection = collectionView
@@ -82,8 +82,6 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: heightDimension)
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
-        let section = NSCollectionLayoutSection(group: group)
-        
         let configuration = NSCollectionViewCompositionalLayoutConfiguration()
         configuration.scrollDirection = .vertical
         
@@ -107,13 +105,13 @@ extension SwiftNSCollectionView {
     }
 }
 
-extension SwiftNSCollectionView {
-    func onQuickLook(_ quickLookHandler: @escaping QuickLookHandler) -> SwiftNSCollectionView {
-        var view = self
-        view.quickLookHandler = quickLookHandler
-        return view
-    }
-}
+//extension SwiftNSCollectionView {
+//    func onQuickLook(_ quickLookHandler: @escaping QuickLookHandler) -> SwiftNSCollectionView {
+//        var view = self
+//        view.quickLookHandler = quickLookHandler
+//        return view
+//    }
+//}
 
 //////////////////////////////
 ///HELPERS

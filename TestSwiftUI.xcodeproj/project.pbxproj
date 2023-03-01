@@ -16,6 +16,7 @@
 		1D4A87B9298EE53B0062686C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D4A87B8298EE53B0062686C /* Assets.xcassets */; };
 		1D4A87BC298EE53B0062686C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D4A87BB298EE53B0062686C /* Preview Assets.xcassets */; };
 		1DBD331C29AC117400A69C42 /* Tmp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DBD331B29AC117400A69C42 /* Tmp.swift */; };
+		1DE4F5EB29AFCB2900ADD3C9 /* NSCollectionViewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE4F5EA29AFCB2900ADD3C9 /* NSCollectionViewWrapper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		1D4A87BB298EE53B0062686C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		1D4A87BD298EE53B0062686C /* TestSwiftUI.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestSwiftUI.entitlements; sourceTree = "<group>"; };
 		1DBD331B29AC117400A69C42 /* Tmp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tmp.swift; sourceTree = "<group>"; };
+		1DE4F5EA29AFCB2900ADD3C9 /* NSCollectionViewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCollectionViewWrapper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +75,7 @@
 		1D4A87B3298EE5390062686C /* TestSwiftUI */ = {
 			isa = PBXGroup;
 			children = (
+				1DE4F5E929AFCAFE00ADD3C9 /* GPT */,
 				1D3F730429ACE65600DA858A /* Tmo */,
 				1D4A87B4298EE5390062686C /* TestSwiftUIApp.swift */,
 				1D4A87B6298EE5390062686C /* ContentView.swift */,
@@ -90,6 +93,14 @@
 				1D4A87BB298EE53B0062686C /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		1DE4F5E929AFCAFE00ADD3C9 /* GPT */ = {
+			isa = PBXGroup;
+			children = (
+				1DE4F5EA29AFCB2900ADD3C9 /* NSCollectionViewWrapper.swift */,
+			);
+			path = GPT;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -167,6 +178,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D4A87B7298EE5390062686C /* ContentView.swift in Sources */,
+				1DE4F5EB29AFCB2900ADD3C9 /* NSCollectionViewWrapper.swift in Sources */,
 				1D3F730C29ACF4E000DA858A /* SwiftNSCollectionView.Coordinator.swift in Sources */,
 				1D3F730A29ACEB4600DA858A /* Cell.swift in Sources */,
 				1D3F730629ACE68B00DA858A /* SwiftNSCollectionView.swift in Sources */,
