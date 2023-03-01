@@ -14,19 +14,6 @@ extension SwiftNSCollectionView {
             self.parent = parent
         }
         
-//        var selectedIndexPaths: Set<IndexPath> = Set<IndexPath>()
-        var selectedItemsInternal: [ItemType] {
-            get {
-                var selectedItemsInternal: [ItemType] = []
-                
-                for index in selections.wrappedValue {
-                    selectedItemsInternal.append(parent.items[index])
-                }
-                
-                return selectedItemsInternal
-            }
-        }
-        
         // NSCollectionViewDelegate
         // TODO: use Set<IndexPath> version
 //        func collectionView(_ collectionView: NSCollectionView, pasteboardWriterForItemAt index: Int) -> NSPasteboardWriting? {
@@ -36,9 +23,10 @@ extension SwiftNSCollectionView {
 //            return dragHandler(item)
 //        }
         
+        //CORRECT!
         // NSCollectionViewDataSource
         func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
-            return parent.items.count
+            return items.count
         }
         
         func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
