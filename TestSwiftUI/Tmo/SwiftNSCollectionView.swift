@@ -12,9 +12,9 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
     typealias ItemRenderer = (_ item: ItemType) -> Content
     var renderer: ItemRenderer
     
-    typealias DragHandler = (_ item: ItemType) -> NSPasteboardWriting?
-    var dragHandler: DragHandler?
-    
+//    typealias DragHandler = (_ item: ItemType) -> NSPasteboardWriting?
+//    var dragHandler: DragHandler?
+//
 //    typealias QuickLookHandler = (_ items: [ItemType]) -> [URL]?
 //    var quickLookHandler: QuickLookHandler?
     
@@ -54,12 +54,6 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
         collectionView.dataSource = context.coordinator
         collectionView.delegate = context.coordinator
         
-        // Drag and drop
-        // https://www.raywenderlich.com/1047-advanced-collection-views-in-os-x-tutorial#toc-anchor-011
-        if (dragHandler != nil) {
-            collectionView.setDraggingSourceOperationMask(.copy, forLocal: false)
-        }
-        
 //        collectionView.keyDownHandler = context.coordinator.handleKeyDown(_:)
         
         
@@ -76,15 +70,15 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
     }
 }
 
-extension SwiftNSCollectionView {
-    // Just do lots of copies?
-    // https://www.hackingwithswift.com/quick-start/swiftui/how-to-create-modifiers-for-a-uiviewrepresentable-struct
-    func onDrag(_ dragHandler: @escaping DragHandler) -> SwiftNSCollectionView {
-        var view = self
-        view.dragHandler = dragHandler
-        return view
-    }
-}
+//extension SwiftNSCollectionView {
+//    // Just do lots of copies?
+//    // https://www.hackingwithswift.com/quick-start/swiftui/how-to-create-modifiers-for-a-uiviewrepresentable-struct
+//    func onDrag(_ dragHandler: @escaping DragHandler) -> SwiftNSCollectionView {
+//        var view = self
+//        view.dragHandler = dragHandler
+//        return view
+//    }
+//}
 
 //extension SwiftNSCollectionView {
 //    func onQuickLook(_ quickLookHandler: @escaping QuickLookHandler) -> SwiftNSCollectionView {

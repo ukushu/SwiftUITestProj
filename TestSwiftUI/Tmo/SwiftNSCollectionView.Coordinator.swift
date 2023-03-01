@@ -27,12 +27,12 @@ extension SwiftNSCollectionView {
         
         // NSCollectionViewDelegate
         // TODO: use Set<IndexPath> version
-        func collectionView(_ collectionView: NSCollectionView, pasteboardWriterForItemAt index: Int) -> NSPasteboardWriting? {
-            guard let dragHandler = parent.dragHandler else { return nil }
-            
-            let item = parent.items[index]
-            return dragHandler(item)
-        }
+//        func collectionView(_ collectionView: NSCollectionView, pasteboardWriterForItemAt index: Int) -> NSPasteboardWriting? {
+//            guard let dragHandler = parent.dragHandler else { return nil }
+//            
+//            let item = parent.items[index]
+//            return dragHandler(item)
+//        }
         
         // NSCollectionViewDataSource
         func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
