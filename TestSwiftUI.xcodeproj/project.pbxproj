@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		1D3F730629ACE68B00DA858A /* SwiftNSCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3F730529ACE68B00DA858A /* SwiftNSCollectionView.swift */; };
 		1D3F730829ACE6AE00DA858A /* SwiftNSMenuItem.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3F730729ACE6AE00DA858A /* SwiftNSMenuItem.swift.swift */; };
-		1D3F730A29ACEB4600DA858A /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3F730929ACEB4600DA858A /* Cell.swift */; };
 		1D3F730C29ACF4E000DA858A /* SwiftNSCollectionView.Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3F730B29ACF4E000DA858A /* SwiftNSCollectionView.Coordinator.swift */; };
 		1D4A87B5298EE5390062686C /* TestSwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4A87B4298EE5390062686C /* TestSwiftUIApp.swift */; };
 		1D4A87B7298EE5390062686C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4A87B6298EE5390062686C /* ContentView.swift */; };
@@ -23,7 +22,6 @@
 /* Begin PBXFileReference section */
 		1D3F730529ACE68B00DA858A /* SwiftNSCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftNSCollectionView.swift; sourceTree = "<group>"; };
 		1D3F730729ACE6AE00DA858A /* SwiftNSMenuItem.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftNSMenuItem.swift.swift; sourceTree = "<group>"; };
-		1D3F730929ACEB4600DA858A /* Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
 		1D3F730B29ACF4E000DA858A /* SwiftNSCollectionView.Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftNSCollectionView.Coordinator.swift; sourceTree = "<group>"; };
 		1D4A87B1298EE5390062686C /* TestSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D4A87B4298EE5390062686C /* TestSwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSwiftUIApp.swift; sourceTree = "<group>"; };
@@ -51,10 +49,9 @@
 			isa = PBXGroup;
 			children = (
 				1D3F730529ACE68B00DA858A /* SwiftNSCollectionView.swift */,
-				1D3F730B29ACF4E000DA858A /* SwiftNSCollectionView.Coordinator.swift */,
-				1D3F730729ACE6AE00DA858A /* SwiftNSMenuItem.swift.swift */,
-				1D3F730929ACEB4600DA858A /* Cell.swift */,
 				1DE4F5EC29B00EDD00ADD3C9 /* CollectionViewCell.swift */,
+				1D3F730B29ACF4E000DA858A /* SwiftNSCollectionView.Coordinator.swift */,
+				1DE4F5EE29B00F4200ADD3C9 /* Delete  pretendents */,
 			);
 			path = Tmo;
 			sourceTree = "<group>";
@@ -104,6 +101,14 @@
 				1DE4F5EA29AFCB2900ADD3C9 /* NSCollectionViewWrapper.swift */,
 			);
 			path = GPT;
+			sourceTree = "<group>";
+		};
+		1DE4F5EE29B00F4200ADD3C9 /* Delete  pretendents */ = {
+			isa = PBXGroup;
+			children = (
+				1D3F730729ACE6AE00DA858A /* SwiftNSMenuItem.swift.swift */,
+			);
+			path = "Delete  pretendents";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -184,7 +189,6 @@
 				1DE4F5EB29AFCB2900ADD3C9 /* NSCollectionViewWrapper.swift in Sources */,
 				1DE4F5ED29B00EDD00ADD3C9 /* CollectionViewCell.swift in Sources */,
 				1D3F730C29ACF4E000DA858A /* SwiftNSCollectionView.Coordinator.swift in Sources */,
-				1D3F730A29ACEB4600DA858A /* Cell.swift in Sources */,
 				1D3F730629ACE68B00DA858A /* SwiftNSCollectionView.swift in Sources */,
 				1D3F730829ACE6AE00DA858A /* SwiftNSMenuItem.swift.swift in Sources */,
 				1D4A87B5298EE5390062686C /* TestSwiftUIApp.swift in Sources */,
