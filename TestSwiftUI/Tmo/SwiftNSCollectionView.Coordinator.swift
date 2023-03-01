@@ -28,11 +28,10 @@ extension SwiftNSCollectionView {
             
             cell.representedObject = currentItem
             
-            for view in cell.container.views {
-                cell.container.removeView(view)
-            }
+            cell.container.removeViewsAll()
             
             let hostedView = NSHostingView(rootView: parent.renderer(currentItem) )
+            
             cell.contents = hostedView
             cell.container.addView(cell.contents!, in: .center)
             
@@ -50,6 +49,13 @@ fileprivate extension SwiftNSCollectionView {
     }
 }
 
+fileprivate extension NSStackView {
+    func removeViewsAll() {
+        for view in self.views {
+            self.removeView(view)
+        }
+    }
+}
 
 
 
