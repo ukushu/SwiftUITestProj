@@ -29,14 +29,13 @@ extension SwiftNSCollectionView {
         // TODO: use Set<IndexPath> version
 //        func collectionView(_ collectionView: NSCollectionView, pasteboardWriterForItemAt index: Int) -> NSPasteboardWriting? {
 //            guard let dragHandler = parent.dragHandler else { return nil }
-//            
+//
 //            let item = parent.items[index]
 //            return dragHandler(item)
 //        }
         
         // NSCollectionViewDataSource
         func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
-            // Assume collectionView is the current collectionView.
             return parent.items.count
         }
         
@@ -46,30 +45,15 @@ extension SwiftNSCollectionView {
             
             let currentItem = parent.getItem(for: indexPath)
             
-            // cell.representedObject = currentItem
-            // print(cell.identifier)
+            cell.representedObject = currentItem
             
-            // print("Getting representation \(currentItem)")
-            
-            // cell.view = self.renderer(currentItem)
             for view in cell.container.views {
                 cell.container.removeView(view)
             }
             
-            let hostedView = NSHostingView<Content>(rootView:parent.renderer(currentItem))
+            let hostedView = NSHostingView(rootView: parent.renderer(currentItem) )
             cell.contents = hostedView
             cell.container.addView(cell.contents!, in: .center)
-            // print(cell.container.frame)
-            // // hostedView.frame = cell.container.frame
-            //
-            // if (cell.contents == nil) {
-            //     cell.contents = hostedView
-            //     cell.container.addView(cell.contents!, in: .center)
-            //     // cell.container.frame = NSRect(origin: cell.container.frame.origin, size: NSSize(width: 50, height: 50))
-            // }
-            //
-            // cell.contents?.frame = cell.container.frame
-            // // cell.label.isSelectable = false
             
             return cell
         }
