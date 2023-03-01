@@ -14,15 +14,6 @@ extension SwiftNSCollectionView {
             self.parent = parent
         }
         
-        // NSCollectionViewDelegate
-        // TODO: use Set<IndexPath> version
-//        func collectionView(_ collectionView: NSCollectionView, pasteboardWriterForItemAt index: Int) -> NSPasteboardWriting? {
-//            guard let dragHandler = parent.dragHandler else { return nil }
-//
-//            let item = parent.items[index]
-//            return dragHandler(item)
-//        }
-        
         //CORRECT!
         // NSCollectionViewDataSource
         func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -47,15 +38,6 @@ extension SwiftNSCollectionView {
             
             return cell
         }
-        
-        // NSCollectionViewDelegateFlowLayout
-        // func collectionView(_ collectionView: NSCollectionView, layout collectionViewLayout: NSCollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> NSSize {
-        //     print("Sizing")
-        //     return NSSize(
-        //         width: itemWidth ?? 400,
-        //         height: itemWidth ?? 400
-        //     )
-        // }
     }
 }
 
