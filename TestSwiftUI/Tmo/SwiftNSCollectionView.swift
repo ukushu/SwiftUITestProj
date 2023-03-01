@@ -8,14 +8,14 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
     private let scrollView = NSScrollView()
     private let collectionView = InternalCollectionView()
     
-    @Binding var items: [ItemType]
+    var items: [ItemType]
     @Binding var selectedItems: Set<Int>
     
     typealias ItemRenderer = (_ item: ItemType) -> Content
     var renderer: ItemRenderer
     
-    init(items: Binding<[ItemType]>, selectedItems: Binding<Set<Int>>, layout: NSCollectionViewFlowLayout, renderer: @escaping (_ item: ItemType) -> Content) {
-        self._items = items
+    init(items: [ItemType], selectedItems: Binding<Set<Int>>, layout: NSCollectionViewFlowLayout, renderer: @escaping (_ item: ItemType) -> Content) {
+        self.items = items
         self._selectedItems = selectedItems
         self.renderer = renderer
         self.layout = layout
@@ -24,7 +24,7 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator(self, items: $items, selections: $selectedItems)
+        Coordinator(self, items: items, selections: $selectedItems)
     }
     
     func makeNSView(context: Context) -> NSScrollView {
@@ -35,7 +35,7 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
     
     func updateNSView(_ scrollView: NSScrollView, context: Context) {
         print("Update")
-//        let collectionView = scrollView.documentView as! InternalCollectionView
+        
         collectionView.dataSource = context.coordinator
         collectionView.delegate = context.coordinator
         

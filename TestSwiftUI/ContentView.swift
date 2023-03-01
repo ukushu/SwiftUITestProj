@@ -26,9 +26,9 @@ struct ContentView: View {
 //            NSCollectionViewWrapper(dataSource: dataSource, selectedItems: $selected)
 //                .frame(width: 300, height: 300)
             
-            SwiftNSCollectionView(items: $filesLst, selectedItems: $selectedItems, layout: layout) { item in
-                        Text(item.lastPathComponent )
-                    }
+            SwiftNSCollectionView(items: filesLst, selectedItems: $selectedItems, layout: layout) { item in
+                Text(item.lastPathComponent )
+            }
         }
     }
 }
