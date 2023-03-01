@@ -60,7 +60,7 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
             collectionView.setDraggingSourceOperationMask(.copy, forLocal: false)
         }
         
-        collectionView.keyDownHandler = context.coordinator.handleKeyDown(_:)
+//        collectionView.keyDownHandler = context.coordinator.handleKeyDown(_:)
         
         
         
