@@ -3,8 +3,7 @@ import Quartz
 
 // TODO: ItemType extends identifiable?
 // TODO: Move the delegates to a coordinator.
-struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRepresentable /* NSCollectionViewDataSource, NSCollectionViewDelegateFlowLayout */ {
-    var itemWidth: Double?
+struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRepresentable /* NSCollectionViewDataSource, NSCollectionViewDelegateFlowLayout */ { 
     var layout: NSCollectionViewFlowLayout
     
     @Binding var items: [ItemType]
@@ -24,8 +23,7 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
     
     var collectionView: NSCollectionView? = nil
     
-    init(items: Binding<[ItemType]>, selectedItems: Binding<Set<Int>>, itemSize: Double? = nil, layout: NSCollectionViewFlowLayout, renderer: @escaping (_ item: ItemType) -> Content) {
-        self.itemWidth = itemSize
+    init(items: Binding<[ItemType]>, selectedItems: Binding<Set<Int>>, layout: NSCollectionViewFlowLayout, renderer: @escaping (_ item: ItemType) -> Content) {
         self._items = items
         self._selectedItems = selectedItems
         self.renderer = renderer
@@ -64,29 +62,12 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
         
         collectionView.keyDownHandler = context.coordinator.handleKeyDown(_:)
         
-        // let layout = NSCollectionViewFlowLayout()
-        // layout.minimumLineSpacing = 200
-        // layout.scrollDirection = .vertical
-        // // layout.itemSize = NSSize(width: 1000, height: 300)
-        // collectionView.collectionViewLayout = layout
         
-        let widthDimension = (itemWidth == nil)
-        ? NSCollectionLayoutDimension.fractionalWidth(1.0)
-        : NSCollectionLayoutDimension.absolute(CGFloat(self.itemWidth!))
-        let itemSize = NSCollectionLayoutSize(widthDimension: widthDimension, heightDimension: .fractionalHeight(1.0))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
-        let heightDimension = (itemWidth == nil)
-        ? NSCollectionLayoutDimension.fractionalHeight(1.0)
-        : NSCollectionLayoutDimension.absolute(CGFloat(self.itemWidth!))
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: heightDimension)
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let configuration = NSCollectionViewCompositionalLayoutConfiguration()
         configuration.scrollDirection = .vertical
         
         collectionView.collectionViewLayout = layout
-        
         collectionView.backgroundColors = [.clear]
         collectionView.isSelectable = true
         collectionView.allowsMultipleSelection = true

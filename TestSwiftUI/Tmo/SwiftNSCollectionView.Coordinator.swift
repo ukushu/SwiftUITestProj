@@ -43,6 +43,7 @@ extension SwiftNSCollectionView {
         func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
             // Assume collectionView is the current collectionView.
             let cell = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier("Cell"), for: indexPath) as! CollectionViewCell<Content>
+            
             let currentItem = parent.getItem(for: indexPath)
             
             // cell.representedObject = currentItem
