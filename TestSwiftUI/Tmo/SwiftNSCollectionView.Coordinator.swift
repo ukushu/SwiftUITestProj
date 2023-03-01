@@ -1,11 +1,12 @@
 import SwiftUI
-import Quartz
+//import Quartz
 
 extension SwiftNSCollectionView {
     internal class Coordinator: NSObject, NSCollectionViewDelegate, NSCollectionViewDataSource { // QLPreviewPanelDelegate, QLPreviewPanelDataSource,
         var parent: SwiftNSCollectionView<ItemType, Content>
         
         var items: Binding<[ItemType]>
+        
         var selections: Binding<Set<Int>>
         
         init(_ parent: SwiftNSCollectionView<ItemType, Content>, items: Binding<[ItemType]>, selections: Binding<Set<Int>>) {
@@ -21,22 +22,18 @@ extension SwiftNSCollectionView {
         }
         
         func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
-            // Assume collectionView is the current collectionView.
-            let cell = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier("Cell"), for: indexPath) as! CollectionViewCell<Content>
-            
             let currentItem = parent.getItem(for: indexPath)
             
+            // Assume collectionView is the current collectionView.
+            let cell = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier("Cell"), for: indexPath) as! CollectionViewCell<Content>
             cell.representedObject = currentItem
-            
             cell.container.removeViewsAll()
-            
-            let hostedView = NSHostingView(rootView: parent.renderer(currentItem) )
-            
-            cell.contents = hostedView
+            cell.contents = NSHostingView(rootView: parent.renderer(currentItem) )
             cell.container.addView(cell.contents!, in: .center)
             
             return cell
         }
+        
     }
 }
 
@@ -63,13 +60,13 @@ fileprivate extension NSStackView {
 ////////////////////////////
 ///QucickLook
 ///////////////////////////
-
-fileprivate extension SwiftNSCollectionView.Coordinator {
-    var isQuickLookEnabled: Bool {
-        false
-        //return parent.quickLookHandler != nil
-    }
-}
+//
+//fileprivate extension SwiftNSCollectionView.Coordinator {
+//    var isQuickLookEnabled: Bool {
+//        false
+//        //return parent.quickLookHandler != nil
+//    }
+//}
 
 //extension SwiftNSCollectionView.Coordinator {
 //    func handleKeyDown(_ event: NSEvent) -> Bool {
