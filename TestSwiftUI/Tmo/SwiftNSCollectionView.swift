@@ -31,7 +31,7 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator(self, selectedItems: $selectedItems)
+        Coordinator(self, items: $items, selections: $selectedItems)
     }
     
     typealias NSViewType = NSScrollView
@@ -119,20 +119,6 @@ final class CollectionViewCell<Content: View>: NSCollectionViewItem {
         
         self.view = container
     }
-    
-    // TODO: Double-tap to activate inspector.
-    // typealias DoubleTapHandler = (_ event: NSEvent) -> Bool
-    // var doubleTapHandler: DoubleTapHandler?
-    // override func mouseDown(with event: NSEvent) {
-    //     print(event.clickCount)
-    //     if event.clickCount == 2, let handler = doubleTapHandler {
-    //         if (handler(event)) {
-    //             return
-    //         }
-    //     }
-    //
-    //     super.mouseDown(with: event)
-    // }
 }
 
 private final class InternalCollectionView: NSCollectionView {

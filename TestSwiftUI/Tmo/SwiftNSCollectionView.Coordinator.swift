@@ -5,10 +5,12 @@ extension SwiftNSCollectionView {
     internal class Coordinator: NSObject, NSCollectionViewDelegate, NSCollectionViewDataSource { // QLPreviewPanelDelegate, QLPreviewPanelDataSource,
         var parent: SwiftNSCollectionView<ItemType, Content>
         
-        var selectedItems: Binding<Set<Int>>
+        var items: Binding<[ItemType]>
+        var selections: Binding<Set<Int>>
         
-        init(_ parent: SwiftNSCollectionView<ItemType, Content>, selectedItems: Binding<Set<Int>>) {
-            self.selectedItems = selectedItems
+        init(_ parent: SwiftNSCollectionView<ItemType, Content>, items: Binding<[ItemType]>, selections: Binding<Set<Int>>) {
+            self.items = items
+            self.selections = selections
             self.parent = parent
         }
         
@@ -17,7 +19,7 @@ extension SwiftNSCollectionView {
             get {
                 var selectedItemsInternal: [ItemType] = []
                 
-                for index in selectedItems.wrappedValue {
+                for index in selections.wrappedValue {
                     selectedItemsInternal.append(parent.items[index])
                 }
                 
