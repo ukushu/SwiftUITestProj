@@ -21,8 +21,6 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
 //    typealias ContextMenuItemsGenerator = (_ items: [ItemType]) -> [NSMenuItemProxy]
 //    var contextMenuItemsGenerator: ContextMenuItemsGenerator? = nil
     
-    var collectionView: NSCollectionView? = nil
-    
     init(items: Binding<[ItemType]>, selectedItems: Binding<Set<Int>>, layout: NSCollectionViewFlowLayout, renderer: @escaping (_ item: ItemType) -> Content) {
         self._items = items
         self._selectedItems = selectedItems
@@ -33,8 +31,6 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
     func makeCoordinator() -> Coordinator {
         Coordinator(self, items: $items, selections: $selectedItems)
     }
-    
-    typealias NSViewType = NSScrollView
     
     func makeNSView(context: Context) -> NSScrollView {
         let scrollView = NSScrollView()
@@ -50,13 +46,10 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
         
         print("Update")
         let collectionView = scrollView.documentView as! InternalCollectionView
-        // self.collection = collectionView
         collectionView.dataSource = context.coordinator
         collectionView.delegate = context.coordinator
         
 //        collectionView.keyDownHandler = context.coordinator.handleKeyDown(_:)
-        
-        
         
         let configuration = NSCollectionViewCompositionalLayoutConfiguration()
         configuration.scrollDirection = .vertical
@@ -92,43 +85,15 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
 ///HELPERS
 /////////////////////////////
 
-final class CollectionViewCell<Content: View>: NSCollectionViewItem {
-    var selectedCGColor: CGColor { NSColor.selectedControlColor.cgColor }
-    var nonSelectedCGColor: CGColor { NSColor.clear.cgColor }
-    
-    // TODO: also highlight/hover state!
-    // TODO: pass to Content
-    override var isSelected: Bool {
-        didSet {
-            if isSelected {
-                view.layer?.borderColor = selectedCGColor
-                view.layer?.borderWidth = 3
-            } else {
-                view.layer?.borderColor = nonSelectedCGColor
-                view.layer?.borderWidth = 0
-            }
-        }
-    }
-    
-    var contents: NSView?
-    let container = NSStackView()
-    
-    override func loadView() {
-        container.orientation = NSUserInterfaceLayoutOrientation.vertical
-        container.wantsLayer = true
-        
-        self.view = container
-    }
-}
 
 private final class InternalCollectionView: NSCollectionView {
     // Return whether or not you handled the event
     typealias KeyDownHandler = (_ event: NSEvent) -> Bool
     var keyDownHandler: KeyDownHandler? = nil
     
-    typealias ContextMenuItemsGenerator = (_ items: [IndexPath]) -> [NSMenuItemProxy]
-    var contextMenuItemsGenerator: ContextMenuItemsGenerator? = nil
-    var currentContextMenuItemProxies: [NSMenuItemProxy] = []
+//    typealias ContextMenuItemsGenerator = (_ items: [IndexPath]) -> [NSMenuItemProxy]
+//    var contextMenuItemsGenerator: ContextMenuItemsGenerator? = nil
+//    var currentContextMenuItemProxies: [NSMenuItemProxy] = []
     
     override func keyDown(with event: NSEvent) {
         if let keyDownHandler = keyDownHandler {
