@@ -34,7 +34,9 @@ struct ContentView: View {
 
 func getDirContents(url: URL) -> [URL] {
     let fileManager = FileManager.default
+    
     let documentsUrl = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    
     do {
         let directoryContents = try fileManager.contentsOfDirectory(at: documentsUrl, includingPropertiesForKeys: nil, options: [])
         
@@ -46,7 +48,6 @@ func getDirContents(url: URL) -> [URL] {
     return []
 }
 
-
 func flowLayout() -> NSCollectionViewFlowLayout{
     let flowLayout = NSCollectionViewFlowLayout()
             flowLayout.itemSize = NSSize(width: 160.0, height: 140.0)
@@ -54,5 +55,6 @@ func flowLayout() -> NSCollectionViewFlowLayout{
             flowLayout.minimumInteritemSpacing = 20.0
             flowLayout.minimumLineSpacing = 20.0
             flowLayout.sectionHeadersPinToVisibleBounds = true
+    
     return flowLayout
 }
