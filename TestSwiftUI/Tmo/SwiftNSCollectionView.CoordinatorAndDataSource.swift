@@ -12,12 +12,16 @@ extension SwiftNSCollectionView {
         
         private var cancellable: AnyCancellable?
         
+        var quickLookHandler: ( () -> [URL]? )!
+        
         init(_ parent: SwiftNSCollectionView<ItemType, Content>, items: Binding<[ItemType]>, selections: Binding<Set<Int>>) {
             self._items = items
             self._selections = selections
             self.parent = parent
             
             super.init()
+            
+            self.quickLookHandler = { self.items as? [URL] }
             
             self.cancellable = items.publisher.sink { [weak self] _ in
                 DispatchQueue.main.async {
@@ -56,25 +60,20 @@ extension SwiftNSCollectionView {
         /// Quick look
         /// //////////////////
         
-        func qlHandler(_ items: [ItemType]) -> [URL] {
-            self.items as? [URL] ?? []
-        }
-        
         func handleKeyDown(_ event: NSEvent) -> Bool {
             let spaceKeyCode: UInt16 = 49
             switch event {
             case _ where event.keyCode == spaceKeyCode:
-                parent.quickLookHandler = qlHandler
-                
                 guard isQuickLookEnabled else {
                     return false
                 }
                 
                 print("Space pressed & QuickLook is enabled.")
                 if let quickLook = QLPreviewPanel.shared() {
-                    quickLook.currentPreviewItemIndex = selections.first ?? 0
+                    quickLook.currentPreviewItemIndex = selections.sorted(by: <).first ?? 0
                     
                     let isQuickLookShowing = QLPreviewPanel.sharedPreviewPanelExists() && quickLook.isVisible
+                    
                     if (isQuickLookShowing) {
                         quickLook.reloadData()
                     } else {
@@ -177,12 +176,12 @@ extension SwiftNSCollectionView {
                 return nil
             }
             
-            guard let quickLookHandler = parent.quickLookHandler, let urls = quickLookHandler(items) else {
+            guard let urls = quickLookHandler() else {
                 // If no URLs, return.
                 return nil
             }
             
-            return urls[index] as QLPreviewItem?
+            return urls[safe: index] as QLPreviewItem?
         }
     }
 }
@@ -204,18 +203,30 @@ fileprivate extension NSStackView {
     }
 }
 
-
-
-
 ////////////////////////////
 ///QucickLook
 ///////////////////////////
 
 fileprivate extension SwiftNSCollectionView.CoordinatorAndDataSource {
     var isQuickLookEnabled: Bool {
-        return parent.quickLookHandler != nil
+        return quickLookHandler() != nil
     }
 }
 
-extension SwiftNSCollectionView.CoordinatorAndDataSource {
+extension Array {
+    subscript(_ indicies: Set<Int>) -> [Element] {
+        var result: [Element] = []
+        
+        for i in indicies {
+            if i > self.startIndex && i < self.endIndex {
+                result.append( self[i] )
+            }
+        }
+        
+        return result
+    }
+    
+    subscript (safe index: Index) -> Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
 }

@@ -14,9 +14,6 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
     typealias ItemRenderer = (_ item: ItemType) -> Content
     var renderer: ItemRenderer
     
-    typealias QuickLookHandler = (_ items: [ItemType]) -> [URL]?
-    var quickLookHandler: QuickLookHandler?
-    
     init(items: Binding<[ItemType]>, selectedItems: Binding<Set<Int>>, layout: NSCollectionViewFlowLayout, renderer: @escaping (_ item: ItemType) -> Content) {
         self._items = items
         self._selectedItems = selectedItems
@@ -73,14 +70,6 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
 //        return view
 //    }
 //}
-
-extension SwiftNSCollectionView {
-    func onQuickLook(_ quickLookHandler: @escaping QuickLookHandler) -> SwiftNSCollectionView {
-        var view = self
-        view.quickLookHandler = quickLookHandler
-        return view
-    }
-}
 
 //////////////////////////////
 ///HELPERS
