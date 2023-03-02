@@ -33,7 +33,6 @@ extension SwiftNSCollectionView {
             
             return cell
         }
-        
     }
 }
 

@@ -14,17 +14,12 @@ struct ContentView: View {
     
     @State var selectedItems: Set<Int> = []
     
-    let dataSource: NSCollectionViewDataSource =  MyDataSource()
-    
     var body: some View {
         VStack{
             Button("test delete") {
                 filesLst.remove(at: 0)
                 print("filesLst.count: \(filesLst.count )")
             }
-            
-//            NSCollectionViewWrapper(dataSource: dataSource, selectedItems: $selected)
-//                .frame(width: 300, height: 300)
             
             SwiftNSCollectionView(items: filesLst, selectedItems: $selectedItems, layout: layout) { item in
                 Text(item.lastPathComponent )
