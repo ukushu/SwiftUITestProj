@@ -2,9 +2,9 @@ import SwiftUI
 import Combine
 import Quartz
 
-extension SwiftNSCollectionView {
+extension UksCollectionView {
     class CoordinatorAndDataSource: NSObject, NSCollectionViewDelegate, NSCollectionViewDataSource, QLPreviewPanelDelegate, QLPreviewPanelDataSource  {
-        var parent: SwiftNSCollectionView<ItemType, Content>
+        var parent: UksCollectionView<ItemType, Content>
         
         @Binding var items: [ItemType]
         
@@ -14,7 +14,7 @@ extension SwiftNSCollectionView {
         
         var quickLookHandler: ( () -> [URL]? )!
         
-        init(_ parent: SwiftNSCollectionView<ItemType, Content>, items: Binding<[ItemType]>, selections: Binding<Set<Int>>) {
+        init(_ parent: UksCollectionView<ItemType, Content>, items: Binding<[ItemType]>, selections: Binding<Set<Int>>) {
             self._items = items
             self._selections = selections
             self.parent = parent
@@ -207,7 +207,7 @@ fileprivate extension NSStackView {
 ///QucickLook
 ///////////////////////////
 
-fileprivate extension SwiftNSCollectionView.CoordinatorAndDataSource {
+fileprivate extension UksCollectionView.CoordinatorAndDataSource {
     var isQuickLookEnabled: Bool {
         return quickLookHandler() != nil
     }

@@ -1,9 +1,38 @@
 import SwiftUI
 import Quartz
 
+/*
+ /////////////////SwiftUI usage Sample/////////////////////////////
+ 
+ @State var filesLst = [URL(), URL(), URL()]
+ @State var selectedItems: Set<Int> = []
+ 
+ let layout = flowLayout()
+ 
+ UksCollectionView(items: $filesLst, selectedItems: $selectedItems, layout: layout) { item in
+     Text(item.lastPathComponent )]
+ }
+ */
+
+/*
+/////////////////FlowLayout Sample/////////////////////////////
+ 
+ func flowLayout() -> NSCollectionViewFlowLayout{
+     let flowLayout = NSCollectionViewFlowLayout()
+             flowLayout.itemSize = NSSize(width: 160.0, height: 140.0)
+             flowLayout.sectionInset = NSEdgeInsets(top: 30.0, left: 20.0, bottom: 30.0, right: 20.0)
+             flowLayout.minimumInteritemSpacing = 20.0
+             flowLayout.minimumLineSpacing = 20.0
+             flowLayout.sectionHeadersPinToVisibleBounds = true
+     
+     return flowLayout
+ }
+ */
+
+
 // TODO: ItemType extends identifiable?
 // TODO: Move the delegates to a coordinator.
-struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRepresentable /* NSCollectionViewDataSource, NSCollectionViewDelegateFlowLayout */ { 
+struct UksCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRepresentable /* NSCollectionViewDataSource, NSCollectionViewDelegateFlowLayout */ { 
     private let layout: NSCollectionViewFlowLayout
     private let scrollView = NSScrollView()
     let collectionView = InternalCollectionView()
@@ -61,10 +90,10 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
     }
 }
 
-//extension SwiftNSCollectionView {
+//extension UksCollectionView {
 //    // Just do lots of copies?
 //    // https://www.hackingwithswift.com/quick-start/swiftui/how-to-create-modifiers-for-a-uiviewrepresentable-struct
-//    func onDrag(_ dragHandler: @escaping DragHandler) -> SwiftNSCollectionView {
+//    func onDrag(_ dragHandler: @escaping DragHandler) -> UksCollectionView {
 //        var view = self
 //        view.dragHandler = dragHandler
 //        return view
