@@ -1,4 +1,5 @@
 import SwiftUI
+import Combine
 //import Quartz
 
 extension SwiftNSCollectionView {
@@ -9,10 +10,23 @@ extension SwiftNSCollectionView {
         
         @Binding var selections: Set<Int>
         
+        
+        private var cancellable: AnyCancellable?
+        
         init(_ parent: SwiftNSCollectionView<ItemType, Content>, items: Binding<[ItemType]>, selections: Binding<Set<Int>>) {
             self._items = items
             self._selections = selections
             self.parent = parent
+            
+            super.init()
+            
+            // Observe changes to the items array using a Combine publisher
+            self.cancellable = items.publisher.sink { [weak self] _ in
+                // Update the collection view on the main thread
+                DispatchQueue.main.async {
+                    self?.parent.reload()
+                }
+            }
         }
         
         //////////////////////////////////////////////////////
@@ -27,12 +41,12 @@ extension SwiftNSCollectionView {
         func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
             let currentItem = items[indexPath.item]
             
-            // Assume collectionView is the current collectionView.
             let cell = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier("Cell"), for: indexPath) as! CollectionViewCell<Content>
-            cell.representedObject = currentItem
-            cell.container.removeViewsAll()
-            cell.contents = NSHostingView(rootView: parent.renderer(currentItem) )
-            cell.container.addView(cell.contents!, in: .center)
+            
+            cell.container.replaceViewFor(currentItem, usingRenderer: parent.renderer)
+            // is it necessary?
+//            cell.contents = cell.container.views.first
+//            cell.representedObject = currentItem
             
             return cell
         }
@@ -43,7 +57,13 @@ extension SwiftNSCollectionView {
 /// HELPERS
 ////////////////////////
 fileprivate extension NSStackView {
-    func removeViewsAll() {
+    func replaceViewFor<ItemType, Content: View>(_ currentItem: ItemType, usingRenderer renderer: (_ item: ItemType) -> Content) {
+        removeViewsAll()
+        
+        self.addView(NSHostingView(rootView: renderer(currentItem) ), in: .center)
+    }
+    
+    private func removeViewsAll() {
         for view in self.views {
             self.removeView(view)
         }
