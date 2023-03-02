@@ -21,8 +21,12 @@ struct ContentView: View {
                 print("filesLst.count: \(filesLst.count )")
             }
             
-            SwiftNSCollectionView(items: filesLst, selectedItems: $selectedItems, layout: layout) { item in
-                Text(item.lastPathComponent )
+            SwiftNSCollectionView(items: $filesLst, selectedItems: $selectedItems, layout: layout) { item in
+                VStack{
+                    Text(item.lastPathComponent )
+                }
+                .padding(30)
+                .background(Color.gray)
             }
         }
     }

@@ -2,27 +2,30 @@ import SwiftUI
 //import Quartz
 
 extension SwiftNSCollectionView {
-    internal class Coordinator: NSObject, NSCollectionViewDelegate, NSCollectionViewDataSource { // QLPreviewPanelDelegate, QLPreviewPanelDataSource,
+    class CoordinatorAndDataSource: NSObject, NSCollectionViewDelegate, NSCollectionViewDataSource { // QLPreviewPanelDelegate, QLPreviewPanelDataSource,
         var parent: SwiftNSCollectionView<ItemType, Content>
         
-        var items: [ItemType]
+        @Binding var items: [ItemType]
         
-        var selections: Binding<Set<Int>>
+        @Binding var selections: Set<Int>
         
-        init(_ parent: SwiftNSCollectionView<ItemType, Content>, items: [ItemType], selections: Binding<Set<Int>>) {
-            self.items = items
-            self.selections = selections
+        init(_ parent: SwiftNSCollectionView<ItemType, Content>, items: Binding<[ItemType]>, selections: Binding<Set<Int>>) {
+            self._items = items
+            self._selections = selections
             self.parent = parent
         }
         
+        //////////////////////////////////////////////////////
+        // Data Source implementation
+        //////////////////////////////////////////////////////
+        
         //CORRECT!
-        // NSCollectionViewDataSource
         func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
             return items.count
         }
         
         func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
-            let currentItem = parent.getItem(for: indexPath)
+            let currentItem = items[indexPath.item]
             
             // Assume collectionView is the current collectionView.
             let cell = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier("Cell"), for: indexPath) as! CollectionViewCell<Content>
@@ -39,12 +42,6 @@ extension SwiftNSCollectionView {
 /////////////////////////
 /// HELPERS
 ////////////////////////
-fileprivate extension SwiftNSCollectionView {
-    func getItem(for indexPath: IndexPath) -> ItemType {
-        return items[indexPath.item]
-    }
-}
-
 fileprivate extension NSStackView {
     func removeViewsAll() {
         for view in self.views {
