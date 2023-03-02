@@ -9,17 +9,22 @@ import SwiftUI
 
 @available(macOS 12.0, *)
 struct ContentView: View {
-    @State var filesLst = getDirContents(url: URL(fileURLWithPath: "/Users/uks/Desktop/DoublePen"))
+    @State var filesLst = getDirContents(url: URL(fileURLWithPath: "/Users/uks/Documents/ToBPC/pix/Anime"))
     let layout = flowLayout()
     
     @State var selectedItems: Set<Int> = []
     
     var body: some View {
         VStack{
-            Button("test delete") {
-                filesLst.remove(at: 0)
-                print("filesLst.count: \(filesLst.count )")
-            }
+//            Button("test delete") {
+//                filesLst.remove(at: 0)
+//                print("filesLst.count: \(filesLst.count )")
+//            }
+//
+//            Button("test append") {
+//                filesLst.insert(URL(fileURLWithPath: "/Users/uks/Desktop/DoublePen"), at: 0)
+//                print("filesLst.count: \(filesLst.count )")
+//            }
             
             SwiftNSCollectionView(items: $filesLst, selectedItems: $selectedItems, layout: layout) { item in
                 VStack{
