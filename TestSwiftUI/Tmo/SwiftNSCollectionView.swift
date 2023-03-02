@@ -6,13 +6,16 @@ import Quartz
 struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRepresentable /* NSCollectionViewDataSource, NSCollectionViewDelegateFlowLayout */ { 
     private let layout: NSCollectionViewFlowLayout
     private let scrollView = NSScrollView()
-    private let collectionView = InternalCollectionView()
+    let collectionView = InternalCollectionView()
     
     @Binding var items: [ItemType]
     @Binding var selectedItems: Set<Int>
     
     typealias ItemRenderer = (_ item: ItemType) -> Content
     var renderer: ItemRenderer
+    
+    typealias QuickLookHandler = (_ items: [ItemType]) -> [URL]?
+    var quickLookHandler: QuickLookHandler?
     
     init(items: Binding<[ItemType]>, selectedItems: Binding<Set<Int>>, layout: NSCollectionViewFlowLayout, renderer: @escaping (_ item: ItemType) -> Content) {
         self._items = items
@@ -40,17 +43,17 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
         
         updateNSView(scrollView, context: context)
         
+        if let item = items.first, type(of: item) == URL.self {
+            collectionView.keyDownHandler = context.coordinator.handleKeyDown(_:)
+            print("ItemType.Type is URL")
+        }
+        
         return scrollView
     }
     
     func updateNSView(_ scrollView: NSScrollView, context: Context) {
         print("Update")
-        
-        layout.invalidateLayout()
         reload()
-        
-        
-//        collectionView.keyDownHandler = context.coordinator.handleKeyDown(_:)
     }
     
     func reload() {
@@ -71,20 +74,19 @@ struct SwiftNSCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRep
 //    }
 //}
 
-//extension SwiftNSCollectionView {
-//    func onQuickLook(_ quickLookHandler: @escaping QuickLookHandler) -> SwiftNSCollectionView {
-//        var view = self
-//        view.quickLookHandler = quickLookHandler
-//        return view
-//    }
-//}
+extension SwiftNSCollectionView {
+    func onQuickLook(_ quickLookHandler: @escaping QuickLookHandler) -> SwiftNSCollectionView {
+        var view = self
+        view.quickLookHandler = quickLookHandler
+        return view
+    }
+}
 
 //////////////////////////////
 ///HELPERS
 /////////////////////////////
 
-
-private final class InternalCollectionView: NSCollectionView {
+final class InternalCollectionView: NSCollectionView {
     // Return whether or not you handled the event
     typealias KeyDownHandler = (_ event: NSEvent) -> Bool
     var keyDownHandler: KeyDownHandler? = nil

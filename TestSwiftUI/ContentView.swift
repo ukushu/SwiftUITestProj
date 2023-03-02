@@ -16,15 +16,15 @@ struct ContentView: View {
     
     var body: some View {
         VStack{
-//            Button("test delete") {
-//                filesLst.remove(at: 0)
-//                print("filesLst.count: \(filesLst.count )")
-//            }
-//
-//            Button("test append") {
-//                filesLst.insert(URL(fileURLWithPath: "/Users/uks/Desktop/DoublePen"), at: 0)
-//                print("filesLst.count: \(filesLst.count )")
-//            }
+            Button("test delete") {
+                filesLst.remove(at: 0)
+                print("filesLst.count: \(filesLst.count )")
+            }
+
+            Button("test append") {
+                filesLst.insert(URL(fileURLWithPath: "/Users/uks/Desktop/DoublePen"), at: 0)
+                print("filesLst.count: \(filesLst.count )")
+            }
             
             SwiftNSCollectionView(items: $filesLst, selectedItems: $selectedItems, layout: layout) { item in
                 VStack{
