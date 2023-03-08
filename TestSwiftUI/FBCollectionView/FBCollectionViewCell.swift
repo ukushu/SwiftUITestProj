@@ -1,16 +1,9 @@
-//
-//  CollectionViewCell.swift
-//  TestSwiftUI
-//
-//  Created by UKS on 02.03.2023.
-//
-
 import Foundation
 import AppKit
 import SwiftUI
 
-final class CollectionViewCell<Content: View>: NSCollectionViewItem {
-    var selectedCGColor: CGColor { NSColor.selectedControlColor.cgColor }
+final class FBCollectionViewCell<Content: View>: NSCollectionViewItem {
+    var selectedCGColor: CGColor    { Color(rgbaHex: 0x70707050).cgColor! }
     var nonSelectedCGColor: CGColor { NSColor.clear.cgColor }
     
     // TODO: also highlight/hover state!
@@ -18,11 +11,12 @@ final class CollectionViewCell<Content: View>: NSCollectionViewItem {
     override var isSelected: Bool {
         didSet {
             if isSelected {
-                view.layer?.borderColor = selectedCGColor
-                view.layer?.borderWidth = 3
+                view.layer?.backgroundColor = selectedCGColor
+                view.layer?.masksToBounds = true
+                view.layer?.cornerRadius = 5.0
             } else {
-                view.layer?.borderColor = nonSelectedCGColor
-                view.layer?.borderWidth = 0
+                view.layer?.backgroundColor = nonSelectedCGColor
+                view.layer?.masksToBounds = false
             }
         }
     }

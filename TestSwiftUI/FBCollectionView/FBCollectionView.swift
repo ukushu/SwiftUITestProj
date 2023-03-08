@@ -1,5 +1,6 @@
 import SwiftUI
 import Quartz
+import Combine
 
 /*
  /////////////////SwiftUI usage Sample/////////////////////////////
@@ -9,7 +10,7 @@ import Quartz
  
  let layout = flowLayout()
  
- UksCollectionView(items: $filesLst, selectedItems: $selectedItems, layout: layout) { item in
+ FBCollectionView(items: $filesLst, selectedItems: $selectedItems, layout: layout) { item in
      Text(item.lastPathComponent )]
  }
  */
@@ -32,68 +33,92 @@ import Quartz
 
 // TODO: ItemType extends identifiable?
 // TODO: Move the delegates to a coordinator.
-struct UksCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRepresentable /* NSCollectionViewDataSource, NSCollectionViewDelegateFlowLayout */ { 
+struct FBCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRepresentable /* NSCollectionViewDataSource, NSCollectionViewDelegateFlowLayout */ {
     private let layout: NSCollectionViewFlowLayout
-    private let scrollView = NSScrollView()
+    let scrollView = NSScrollView()
     let collectionView = InternalCollectionView()
     
-    @Binding var items: [ItemType]
+    @Binding var items: [ItemType] {
+        didSet {
+            self.reload()
+        }
+    }
+    
     @Binding var selectedItems: Set<Int>
+    @State var selectedItemsOld: Set<Int> = []
     
     typealias ItemRenderer = (_ item: ItemType) -> Content
     var renderer: ItemRenderer
     
-    init(items: Binding<[ItemType]>, selectedItems: Binding<Set<Int>>, layout: NSCollectionViewFlowLayout, renderer: @escaping (_ item: ItemType) -> Content) {
+    var scrollToTop: AnyPublisher<Void, Never>?
+    
+    init(items: Binding<[ItemType]>, selectedItems: Binding<Set<Int>>, layout: NSCollectionViewFlowLayout, scrollToTop: AnyPublisher<Void, Never>? = nil, renderer: @escaping (_ item: ItemType) -> Content) {
+        
         self._items = items
         self._selectedItems = selectedItems
         self.renderer = renderer
         self.layout = layout
+        self.scrollToTop = scrollToTop
         
         self.scrollView.documentView = collectionView
+        
+        if let superview = scrollView.superview {
+            scrollView.frame = superview.frame
+        }
     }
     
     func makeCoordinator() -> CoordinatorAndDataSource {
-        CoordinatorAndDataSource(self, items: $items, selections: $selectedItems)
+        CoordinatorAndDataSource(self)
     }
     
     func makeNSView(context: Context) -> NSScrollView {
         collectionView.dataSource = context.coordinator
-        collectionView.delegate = context.coordinator
+        collectionView.delegate = context.coordinator // NSCollectionViewDelegate
         
         collectionView.collectionViewLayout = layout
         collectionView.backgroundColors = [.clear]
         collectionView.isSelectable = true
         collectionView.allowsMultipleSelection = true
+        collectionView.allowsEmptySelection = false
         
-        collectionView.register(CollectionViewCell<Content>.self, forItemWithIdentifier: NSUserInterfaceItemIdentifier("Cell"))
+        collectionView.register(FBCollectionViewCell<Content>.self, forItemWithIdentifier: NSUserInterfaceItemIdentifier("Cell"))
         
         updateNSView(scrollView, context: context)
         
-        if let item = items.first, type(of: item) == URL.self {
+        if ItemType.self == URL.self || ItemType.self == RecentFile.self  {
+            print("ItemType.Type is URL OR RecentFile")
             collectionView.keyDownHandler = context.coordinator.handleKeyDown(_:)
-            print("ItemType.Type is URL")
         }
         
         return scrollView
     }
     
     func updateNSView(_ scrollView: NSScrollView, context: Context) {
-        print("Update")
+        if selectedItemsOld != selectedItems {
+            selectedItemsOld = selectedItems
+            self.reload()
+        }
+        
+        
+        print("Update: \n| items.count: \(items.count) \n| selectedItems: \(selectedItems) \n| collectionView.selectionIndexPaths \( collectionView.selectionIndexPaths )")
+        
         reload()
     }
     
     func reload() {
         // Reload the collection view data when the items array is changed.
         DispatchQueue.main.async {
+//hang UI
+//            collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems() )
             collectionView.reloadData()
         }
     }
 }
 
-//extension UksCollectionView {
+//extension FBCollectionView {
 //    // Just do lots of copies?
 //    // https://www.hackingwithswift.com/quick-start/swiftui/how-to-create-modifiers-for-a-uiviewrepresentable-struct
-//    func onDrag(_ dragHandler: @escaping DragHandler) -> UksCollectionView {
+//    func onDrag(_ dragHandler: @escaping DragHandler) -> FBCollectionView {
 //        var view = self
 //        view.dragHandler = dragHandler
 //        return view
@@ -105,13 +130,8 @@ struct UksCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewReprese
 /////////////////////////////
 
 final class InternalCollectionView: NSCollectionView {
-    // Return whether or not you handled the event
     typealias KeyDownHandler = (_ event: NSEvent) -> Bool
     var keyDownHandler: KeyDownHandler? = nil
-    
-//    typealias ContextMenuItemsGenerator = (_ items: [IndexPath]) -> [NSMenuItemProxy]
-//    var contextMenuItemsGenerator: ContextMenuItemsGenerator? = nil
-//    var currentContextMenuItemProxies: [NSMenuItemProxy] = []
     
     override func keyDown(with event: NSEvent) {
         if let keyDownHandler = keyDownHandler {
@@ -123,4 +143,9 @@ final class InternalCollectionView: NSCollectionView {
         
         super.keyDown(with: event)
     }
+    
+    ////////////////////////////////////////////////////////////////////
+//    typealias ContextMenuItemsGenerator = (_ items: [IndexPath]) -> [NSMenuItemProxy]
+//    var contextMenuItemsGenerator: ContextMenuItemsGenerator? = nil
+//    var currentContextMenuItemProxies: [NSMenuItemProxy] = []
 }

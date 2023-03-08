@@ -2,32 +2,58 @@ import SwiftUI
 import Combine
 import Quartz
 
-extension UksCollectionView {
-    class CoordinatorAndDataSource: NSObject, NSCollectionViewDelegate, NSCollectionViewDataSource, QLPreviewPanelDelegate, QLPreviewPanelDataSource  {
-        var parent: UksCollectionView<ItemType, Content>
+extension FBCollectionView {
+    class CoordinatorAndDataSource: NSObject, NSCollectionViewDelegate,
+                                    NSCollectionViewDataSource,
+                                    QLPreviewPanelDelegate, QLPreviewPanelDataSource  {
+        var parent: FBCollectionView<ItemType, Content>
         
         @Binding var items: [ItemType]
         
         @Binding var selections: Set<Int>
         
         private var cancellable: AnyCancellable?
+        private var cancellable2: AnyCancellable?
         
         var quickLookHandler: ( () -> [URL]? )!
         
-        init(_ parent: UksCollectionView<ItemType, Content>, items: Binding<[ItemType]>, selections: Binding<Set<Int>>) {
-            self._items = items
-            self._selections = selections
+        private var scrollToTopCancellable: AnyCancellable?
+        
+        init(_ parent: FBCollectionView<ItemType, Content>) {
             self.parent = parent
+            self._items = parent.$items
+            self._selections = parent.$selectedItems
             
             super.init()
             
-            self.quickLookHandler = { self.items as? [URL] }
+            self.quickLookHandler = { self.items as? [URL] ?? (self.items as? [RecentFile] )?.map{ $0.url } }
             
             self.cancellable = items.publisher.sink { [weak self] _ in
+                print("items changed; reloading")
+                self?.reloadData()
+            }
+            
+            self.cancellable2 = selections.publisher.sink { [weak self] _ in
+                print("selections changed; reloading")
+                self?.reloadData()
+            }
+            
+            //WORKS!
+            self.scrollToTopCancellable = parent.scrollToTop?.sink { [weak self] _ in
+//                print("scrolling to top")
                 DispatchQueue.main.async {
-                    self?.parent.reload()
+                    self?.parent.scrollView.documentView?.scroll(.zero)
                 }
             }
+        }
+        
+        func reloadData() {
+            self._items = parent.$items
+            self._selections = parent.$selectedItems
+            
+            // this method already in DispatchQueue.main
+            self.parent.reload()
+//            self.parent.updateNSView(<#T##NSScrollView#>, context: <#T##Context#>)
         }
         
         //////////////////////////////////////////////////////
@@ -38,11 +64,14 @@ extension UksCollectionView {
         func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
             return items.count
         }
-        
+             
+        //NSCollectionViewDataSource
         func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
             let currentItem = items[indexPath.item]
             
-            let cell = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier("Cell"), for: indexPath) as! CollectionViewCell<Content>
+            let cell = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier("Cell"), for: indexPath) as! FBCollectionViewCell<Content>
+            
+//            cell.prepareForReuse()
             
             cell.container.replaceViewFor(currentItem, usingRenderer: parent.renderer)
             cell.contents = cell.container.views.first
@@ -51,8 +80,46 @@ extension UksCollectionView {
             return cell
         }
         
+        ////////////////////////
+        ///SELECTION + QuickLook
+        ////////////////////////
         
+//        func collectionView(_ collectionView: NSCollectionView, didEndDisplaying item: NSCollectionViewItem, forRepresentedObjectAt indexPath: IndexPath) {
+//            // Unsure if necessary to queue:
+//            DispatchQueue.main.async {
+//                // TODO: this fires too much (like when we resize the view). I think that matches actual selection behavior, but I'd like to do better.
+//                self.$selections.wrappedValue.subtract([indexPath.item])
+//                print("Selected items: \(self.$selections.wrappedValue) (removed \(indexPath) because item removed)")
+//            }
+//        }
         
+        func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
+            // Unsure if necessary to queue:
+            DispatchQueue.main.async {
+                self.selections.formUnion(indexPaths.map{ $0.item })
+                print("Selected items: \(self.selections) \n\t| added: \(indexPaths)")
+                
+                if let quickLook = QLPreviewPanel.shared() {
+                    if (quickLook.isVisible) {
+                        quickLook.reloadData()
+                    }
+                }
+            }
+        }
+        
+        func collectionView(_ collectionView: NSCollectionView, didDeselectItemsAt indexPaths: Set<IndexPath>) {
+            // Unsure if necessary to queue:
+            DispatchQueue.main.async {
+                self.$selections.wrappedValue.subtract(indexPaths.map{ $0.item })
+                print("Selected items: \(self.$selections.wrappedValue) (removed \(indexPaths))")
+                
+                if let quickLook = QLPreviewPanel.shared() {
+                    if (quickLook.isVisible) {
+                        quickLook.reloadData()
+                    }
+                }
+            }
+        }
         
         
         
@@ -71,6 +138,8 @@ extension UksCollectionView {
                 print("Space pressed & QuickLook is enabled.")
                 if let quickLook = QLPreviewPanel.shared() {
                     quickLook.currentPreviewItemIndex = selections.sorted(by: <).first ?? 0
+                    
+                    print("preview idx: \(quickLook.currentPreviewItemIndex)")
                     
                     let isQuickLookShowing = QLPreviewPanel.sharedPreviewPanelExists() && quickLook.isVisible
                     
@@ -92,11 +161,7 @@ extension UksCollectionView {
         
         // QLPreviewPanelDataSource
         func numberOfPreviewItems(in panel: QLPreviewPanel!) -> Int {
-            guard isQuickLookEnabled else {
-                return 0
-            }
-            
-            return items.count
+            return isQuickLookEnabled ? items.count : 0
         }
         
         // QLPreviewPanelDelegate
@@ -132,43 +197,6 @@ extension UksCollectionView {
             }
             
             return false
-        }
-        
-        func collectionView(_ collectionView: NSCollectionView, didDeselectItemsAt indexPaths: Set<IndexPath>) {
-            // Unsure if necessary to queue:
-            DispatchQueue.main.async {
-                self.$selections.wrappedValue.subtract(indexPaths.map{ $0.item })
-                print("Selected items: \(self.$selections.wrappedValue) (removed \(indexPaths))")
-                
-                if let quickLook = QLPreviewPanel.shared() {
-                    if (quickLook.isVisible) {
-                        quickLook.reloadData()
-                    }
-                }
-            }
-        }
-        
-        func collectionView(_ collectionView: NSCollectionView, didEndDisplaying item: NSCollectionViewItem, forRepresentedObjectAt indexPath: IndexPath) {
-            // Unsure if necessary to queue:
-            DispatchQueue.main.async {
-                // TODO: this fires too much (like when we resize the view). I think that matches actual selection behavior, but I'd like to do better.
-                self.$selections.wrappedValue.subtract([indexPath.item])
-                print("Selected items: \(self.$selections.wrappedValue) (removed \(indexPath) because item removed)")
-            }
-        }
-        
-        func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
-            // Unsure if necessary to queue:
-            DispatchQueue.main.async {
-                self.selections.formUnion(indexPaths.map{ $0.item })
-                print("Selected items: \(self.selections) (added \(indexPaths))")
-                
-                if let quickLook = QLPreviewPanel.shared() {
-                    if (quickLook.isVisible) {
-                        quickLook.reloadData()
-                    }
-                }
-            }
         }
         
         func previewPanel(_ panel: QLPreviewPanel!, previewItemAt index: Int) -> QLPreviewItem! {
@@ -207,7 +235,7 @@ fileprivate extension NSStackView {
 ///QucickLook
 ///////////////////////////
 
-fileprivate extension UksCollectionView.CoordinatorAndDataSource {
+fileprivate extension FBCollectionView.CoordinatorAndDataSource {
     var isQuickLookEnabled: Bool {
         return quickLookHandler() != nil
     }
