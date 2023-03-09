@@ -9,70 +9,68 @@ import SwiftUI
 
 @available(macOS 12.0, *)
 struct ContentView: View {
-//    @State var filesLst = getDirContents(url: URL(fileURLWithPath: "/Users/uks/Documents/ToBPC/pix/Anime"))
-    
     let layout = flowLayout()
     
     @State var filesList: [RecentFile] = getDirContents1()
     @State var selectedItems: Set<Int> = []
     
-    
     var body: some View {
-        VStack{
-            HStack {
-                Button("delete first") {
-                    filesList.remove(at: 0)
-                    print("filesLst.count: \(filesList.count )")
-                }
-                
-                Button("append at 0") {
-                    filesList.append(RecentFile(MDItemCreate(nil, "/Users" as CFString))! )
-                    print("filesLst.count: \(filesList.count )")
-                }
-                
-                Button("Desktop") {
-                    filesList = getDirContents1()
-                }
-                
-                Button("Documents") {
-                    filesList = getDirContents2()
-                }
-                
-                Button("Select 1") {
-                    selectedItems = [1]
-                }
-                
-                Button("Select 1-3") {
-                    selectedItems = [1,2,3]
-                }
-                
-                Button("Select 4") {
-                    selectedItems = [4]
-                }
-            }
+        VStack {
+            ButtonsPanel()
             
             FBCollectionView(items: $filesList, selectedItems: $selectedItems, layout: layout) { recent -> AnyView in
                 let isSelected = selectedItems.contains( filesList.firstIndex{ $0.url == recent.url }! )
                 
                 return AnyView( AppTile(app: recent, isSelected: isSelected) )
             }
+        }
+    }
+    
+    @ViewBuilder
+    func ButtonsPanel() -> some View {
+        HStack {
+            Button("delete first") {
+                filesList.remove(at: 0)
+                print("filesLst.count: \(filesList.count )")
+            }
             
-//            UksCollectionView(items: $filesLst, selectedItems: $selectedItems, layout: layout) { item in
-//                Text(item.lastPathComponent )
-//            }
+            Button("append at 0") {
+                filesList.append(RecentFile(MDItemCreate(nil, "/Users" as CFString))! )
+                print("filesLst.count: \(filesList.count )")
+            }
+            
+            Button("Desktop") {
+                filesList = getDirContents1()
+            }
+            
+            Button("Documents") {
+                filesList = getDirContents2()
+            }
+            
+            Button("Select 1") {
+                selectedItems = [1]
+            }
+            
+            Button("Select 1-3") {
+                selectedItems = [1,2,3]
+            }
+            
+            Button("Select 4") {
+                selectedItems = [4]
+            }
         }
     }
 }
 
 func getDirContents1() -> [RecentFile] {
-    getDirContentsFor(url: "/Users/uks/Desktop".asURL() )
+    getDirContentsFor(url: "/Users/".asURL() )
         .map { $0.path }
         .compactMap { MDItemCreate(nil, $0 as CFString) }
         .compactMap { RecentFile($0) }
 }
 
 func getDirContents2() -> [RecentFile] {
-    getDirContentsFor(url: "/Users/uks/Documents".asURL() )
+    getDirContentsFor(url: "/Users/Shared".asURL() )
         .map { $0.path }
         .compactMap { MDItemCreate(nil, $0 as CFString) }
         .compactMap { RecentFile($0) }

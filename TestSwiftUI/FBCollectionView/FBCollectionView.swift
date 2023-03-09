@@ -33,16 +33,12 @@ import Combine
 
 // TODO: ItemType extends identifiable?
 // TODO: Move the delegates to a coordinator.
-struct FBCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRepresentable /* NSCollectionViewDataSource, NSCollectionViewDelegateFlowLayout */ {
+struct FBCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewControllerRepresentable /* NSCollectionViewDataSource, NSCollectionViewDelegateFlowLayout */ {
     private let layout: NSCollectionViewFlowLayout
     let scrollView = NSScrollView()
     let collectionView = InternalCollectionView()
     
-    @Binding var items: [ItemType] {
-        didSet {
-            self.reload()
-        }
-    }
+    @Binding var items: [ItemType]
     
     @Binding var selectedItems: Set<Int>
     @State var selectedItemsOld: Set<Int> = []
@@ -71,34 +67,29 @@ struct FBCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRepresen
         CoordinatorAndDataSource(self)
     }
     
-    func makeNSView(context: Context) -> NSScrollView {
-        collectionView.dataSource = context.coordinator
-        collectionView.delegate = context.coordinator // NSCollectionViewDelegate
-        
-        collectionView.collectionViewLayout = layout
-        collectionView.backgroundColors = [.clear]
-        collectionView.isSelectable = true
-        collectionView.allowsMultipleSelection = true
-        collectionView.allowsEmptySelection = false
-        
-        collectionView.register(FBCollectionViewCell<Content>.self, forItemWithIdentifier: NSUserInterfaceItemIdentifier("Cell"))
-        
-        updateNSView(scrollView, context: context)
-        
-        if ItemType.self == URL.self || ItemType.self == RecentFile.self  {
-            print("ItemType.Type is URL OR RecentFile")
-            collectionView.keyDownHandler = context.coordinator.handleKeyDown(_:)
+    func makeNSViewController(context: Context) -> NSViewController {
+            let viewController = NSViewController()
+            viewController.view = scrollView
+            
+            collectionView.dataSource = makeCoordinator()// context.coordinator
+            collectionView.delegate = collectionView.dataSource as? any NSCollectionViewDelegate//context.coordinator // NSCollectionViewDelegate
+            
+            collectionView.collectionViewLayout = layout
+            collectionView.backgroundColors = [.clear]
+            collectionView.isSelectable = true
+            collectionView.allowsMultipleSelection = true
+            collectionView.allowsEmptySelection = false
+            
+            collectionView.register(FBCollectionViewCell<Content>.self, forItemWithIdentifier: NSUserInterfaceItemIdentifier("Cell"))
+            
+            if ItemType.self == URL.self || ItemType.self == RecentFile.self {
+                collectionView.keyDownHandler = context.coordinator.handleKeyDown(_:)
+            }
+            
+            return viewController
         }
-        
-        if selectedItemsOld != selectedItems {
-            selectedItemsOld = selectedItems
-            self.reload()
-        }
-        
-        return scrollView
-    }
     
-    func updateNSView(_ scrollView: NSScrollView, context: Context) {
+    func updateNSViewController(_ viewController: NSViewController, context: Context) {
         print("Update: \n| items.count: \(items.count) \n| selectedItems: \(selectedItems) \n| collectionView.selectionIndexPaths \( collectionView.selectionIndexPaths )")
         
         reload()
@@ -112,6 +103,7 @@ struct FBCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRepresen
             collectionView.reloadData()
         }
     }
+    
 }
 
 //extension FBCollectionView {

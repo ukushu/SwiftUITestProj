@@ -3,7 +3,7 @@ import AppKit
 import SwiftUI
 
 final class FBCollectionViewCell<Content: View>: NSCollectionViewItem {
-    var selectedCGColor: CGColor    { Color(rgbaHex: 0x70707050).cgColor! }
+    var selectedCGColor: CGColor    { Color(rgbaHex: 0x00900050).cgColor! }
     var nonSelectedCGColor: CGColor { NSColor.clear.cgColor }
     
     // TODO: also highlight/hover state!
