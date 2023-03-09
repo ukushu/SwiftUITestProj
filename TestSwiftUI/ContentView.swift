@@ -33,9 +33,20 @@ struct ContentView: View {
                     filesList = getDirContents1()
                 }
                 
-                
                 Button("Documents") {
                     filesList = getDirContents2()
+                }
+                
+                Button("Select 1") {
+                    selectedItems = [1]
+                }
+                
+                Button("Select 1-3") {
+                    selectedItems = [1,2,3]
+                }
+                
+                Button("Select 4") {
+                    selectedItems = [4]
                 }
             }
             
