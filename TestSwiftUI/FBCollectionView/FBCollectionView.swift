@@ -90,16 +90,15 @@ struct FBCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewRepresen
             collectionView.keyDownHandler = context.coordinator.handleKeyDown(_:)
         }
         
-        return scrollView
-    }
-    
-    func updateNSView(_ scrollView: NSScrollView, context: Context) {
         if selectedItemsOld != selectedItems {
             selectedItemsOld = selectedItems
             self.reload()
         }
         
-        
+        return scrollView
+    }
+    
+    func updateNSView(_ scrollView: NSScrollView, context: Context) {
         print("Update: \n| items.count: \(items.count) \n| selectedItems: \(selectedItems) \n| collectionView.selectionIndexPaths \( collectionView.selectionIndexPaths )")
         
         reload()

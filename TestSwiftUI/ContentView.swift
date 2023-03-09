@@ -26,6 +26,7 @@ struct ContentView: View {
                 }
                 
                 Button("append at 0") {
+                    filesList.append(RecentFile(MDItemCreate(nil, "/Users" as CFString))! )
                     print("filesLst.count: \(filesList.count )")
                 }
                 
