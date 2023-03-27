@@ -29,6 +29,7 @@
 		1DDDEDBC29B7632E00C48216 /* UksImagePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDDEDBB29B7632E00C48216 /* UksImagePath.swift */; };
 		1DDDEDBF29B7639400C48216 /* AsyncNinja in Frameworks */ = {isa = PBXBuildFile; productRef = 1DDDEDBE29B7639400C48216 /* AsyncNinja */; };
 		1DDDEDC129B764B200C48216 /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDDEDC029B764B200C48216 /* Date+Ext.swift */; };
+		E6CBE36029D21BA2006373E2 /* FBCollectionViewConroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CBE35F29D21BA2006373E2 /* FBCollectionViewConroller.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +56,7 @@
 		1DDDEDB929B762F800C48216 /* Space.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Space.swift; sourceTree = "<group>"; };
 		1DDDEDBB29B7632E00C48216 /* UksImagePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UksImagePath.swift; sourceTree = "<group>"; };
 		1DDDEDC029B764B200C48216 /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
+		E6CBE35F29D21BA2006373E2 /* FBCollectionViewConroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBCollectionViewConroller.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 			children = (
 				1DDDED9929B75DE300C48216 /* FBCollectionViewCell.swift */,
 				1DDDED9A29B75DE300C48216 /* FBCollectionView.swift */,
+				E6CBE35F29D21BA2006373E2 /* FBCollectionViewConroller.swift */,
 				1DDDED9B29B75DE300C48216 /* FBCollectionView.CoordinatorAndDataSource.swift */,
 			);
 			path = FBCollectionView;
@@ -231,6 +234,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1DDDED9D29B75DE300C48216 /* FBCollectionView.swift in Sources */,
+				E6CBE36029D21BA2006373E2 /* FBCollectionViewConroller.swift in Sources */,
 				1DDDEDB329B760A300C48216 /* Color+Ext.swift in Sources */,
 				1D4A87B7298EE5390062686C /* ContentView.swift in Sources */,
 				1DDDEDAC29B75FD900C48216 /* FS.swift in Sources */,

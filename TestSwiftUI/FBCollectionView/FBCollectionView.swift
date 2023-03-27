@@ -96,24 +96,8 @@ struct FBCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewControll
         guard let collectionView = scrollView.documentView as? NSCollectionView else { return }
         
         collectionView.reloadData()
-        
-        //viewController
-        //self.scrollView.documentView = collectionView
-        
-        //viewController.relo
-        
-        //reload()
     }
-    
-    func reload() {
-        // Reload the collection view data when the items array is changed.
-        DispatchQueue.main.async {
-//hang UI
-//            collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems() )
-            collectionView.reloadData()
-        }
-    }
-    
+        
 }
 
 //extension FBCollectionView {

@@ -21,22 +21,22 @@ extension FBCollectionView {
         
         init(_ parent: FBCollectionView<ItemType, Content>) {
             self.parent = parent
-            self._items = parent.$items
+            self._items = Binding<[ItemType]>( get: { parent.items }, set: { _ in })
             self._selections = parent.$selectedItems
             
             super.init()
             
             self.quickLookHandler = { self.items as? [URL] ?? (self.items as? [RecentFile] )?.map{ $0.url } }
             
-            self.cancellable = items.publisher.sink { [weak self] _ in
-                print("items changed; reloading")
-                self?.reloadData()
-            }
-            
-            self.cancellable2 = selections.publisher.sink { [weak self] _ in
-                print("selections changed; reloading")
-                self?.reloadData()
-            }
+//            self.cancellable = items.publisher.sink { [weak self] _ in
+//                print("items changed; reloading")
+//                self?.reloadData()
+//            }
+//            
+//            self.cancellable2 = selections.publisher.sink { [weak self] _ in
+//                print("selections changed; reloading")
+//                self?.reloadData()
+//            }
             
             //WORKS!
             self.scrollToTopCancellable = parent.scrollToTop?.sink { [weak self] _ in
@@ -45,19 +45,6 @@ extension FBCollectionView {
                     self?.parent.scrollView.documentView?.scroll(.zero)
                 }
             }
-        }
-        
-        deinit {
-            print("deinit")
-        }
-        
-        func reloadData() {
-            self._items = parent.$items
-            self._selections = parent.$selectedItems
-            
-            // this method already in DispatchQueue.main
-            self.parent.reload()
-//            self.parent.updateNSView(<#T##NSScrollView#>, context: <#T##Context#>)
         }
         
         //////////////////////////////////////////////////////
