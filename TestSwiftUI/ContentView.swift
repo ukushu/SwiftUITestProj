@@ -20,13 +20,7 @@ struct ContentView: View {
             
             Image(systemName: "homekit")
             FBCollectionView(items: filesList, selection: selectedItems, layout: layout) { item, indexPath in
-//                Image(systemName: "homekit")
-                //VStack {
-                VStack {
-                    Text(item.name)
-                    Image(nsImage: item.url.path.FS.info.hiresIcon(size: 30))
-                    
-                }.frame(width: 50, height: 50)
+                AppTile(app: item, isSelected: selectedItems.contains((filesList.firstIndex { $0.url == item.url }!)) )
             }
         }
     }
