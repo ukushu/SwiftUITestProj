@@ -2,6 +2,16 @@ import Foundation
 import AppKit
 import SwiftUI
 
+final class CollectionViewItem : NSCollectionViewItem {
+    let container = NSStackView()
+    
+    override func loadView() {
+        container.orientation = NSUserInterfaceLayoutOrientation.vertical
+        container.wantsLayer = true
+        self.view = container
+    }
+}
+
 final class FBCollectionViewCell<Content: View>: NSCollectionViewItem {
     var selectedCGColor: CGColor    { Color(rgbaHex: 0x00900050).cgColor! }
     var nonSelectedCGColor: CGColor { NSColor.clear.cgColor }

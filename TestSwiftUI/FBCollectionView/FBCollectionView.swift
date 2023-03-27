@@ -35,65 +35,76 @@ import Combine
 // TODO: Move the delegates to a coordinator.
 struct FBCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewControllerRepresentable /* NSCollectionViewDataSource, NSCollectionViewDelegateFlowLayout */ {
     private let layout: NSCollectionViewFlowLayout
-    let scrollView = NSScrollView()
-    let collectionView = InternalCollectionView()
-    
-    @Binding var items: [ItemType]
-    
-    @Binding var selectedItems: Set<Int>
-    @State var selectedItemsOld: Set<Int> = []
-    
-    typealias ItemRenderer = (_ item: ItemType) -> Content
-    var renderer: ItemRenderer
-    
+
+    let items: [ItemType]
+    let selectedItems: Set<Int>
     var scrollToTop: AnyPublisher<Void, Never>?
     
-    init(items: Binding<[ItemType]>, selectedItems: Binding<Set<Int>>, layout: NSCollectionViewFlowLayout, scrollToTop: AnyPublisher<Void, Never>? = nil, renderer: @escaping (_ item: ItemType) -> Content) {
-        
-        self._items = items
-        self._selectedItems = selectedItems
-        self.renderer = renderer
+//    init(items: Binding<[ItemType]>, selectedItems: Binding<Set<Int>>, layout: NSCollectionViewFlowLayout, scrollToTop: AnyPublisher<Void, Never>? = nil, renderer: @escaping (_ item: ItemType) -> Content) {
+//
+//        self._items = items
+//        self._selectedItems = selectedItems
+//        self.renderer = renderer
+//        self.layout = layout
+//        self.scrollToTop = scrollToTop
+//
+//        self.scrollView.documentView = collectionView
+//
+//        if let superview = scrollView.superview {
+//            scrollView.frame = superview.frame
+//        }
+//    }
+    
+    let factory: (ItemType, IndexPath) -> Content
+    
+    init(items: [ItemType], selection: Set<Int>, layout: NSCollectionViewFlowLayout, factory: @escaping (ItemType, IndexPath) -> Content) {
+        self.items = items
+        self.selectedItems = selection
         self.layout = layout
-        self.scrollToTop = scrollToTop
+        self.factory = factory
         
-        self.scrollView.documentView = collectionView
-        
-        if let superview = scrollView.superview {
-            scrollView.frame = superview.frame
-        }
     }
     
-    func makeCoordinator() -> CoordinatorAndDataSource {
-        CoordinatorAndDataSource(self)
-    }
+//    func makeCoordinator() -> CoordinatorAndDataSource {
+//        CoordinatorAndDataSource(self)
+//    }
     
     func makeNSViewController(context: Context) -> NSViewController {
-            let viewController = NSViewController()
-            viewController.view = scrollView
-            
-            collectionView.dataSource = makeCoordinator()// context.coordinator
-            collectionView.delegate = collectionView.dataSource as? any NSCollectionViewDelegate//context.coordinator // NSCollectionViewDelegate
-            
-            collectionView.collectionViewLayout = layout
-            collectionView.backgroundColors = [.clear]
-            collectionView.isSelectable = true
-            collectionView.allowsMultipleSelection = true
-            collectionView.allowsEmptySelection = false
-            
-            collectionView.register(FBCollectionViewCell<Content>.self, forItemWithIdentifier: NSUserInterfaceItemIdentifier("Cell"))
-            
-            if ItemType.self == URL.self || ItemType.self == RecentFile.self {
-                collectionView.keyDownHandler = context.coordinator.handleKeyDown(_:)
-            }
-            
-            return viewController
+        let scrollView = NSScrollView()
+        let collectionView = InternalCollectionView()
+        scrollView.documentView = collectionView
+        
+        let viewController = NSCollectionController(collection: self.items, factory: factory, selection: selectedItems)
+        viewController.view = scrollView
+        scrollView.documentView = collectionView
+        
+        collectionView.dataSource = viewController // context.coordinator
+        collectionView.delegate = viewController   //collectionView.dataSource as? any NSCollectionViewDelegate//context.coordinator // NSCollectionViewDelegate
+        
+        collectionView.collectionViewLayout = layout
+        collectionView.backgroundColors = [.clear]
+        collectionView.isSelectable = true
+        collectionView.allowsMultipleSelection = true
+        collectionView.allowsEmptySelection = false
+        
+        collectionView.register(CollectionViewItem.self, forItemWithIdentifier: NSUserInterfaceItemIdentifier("NSCollectionViewItem"))
+//        collectionView.register(FBCollectionViewCell<Content>.self, forItemWithIdentifier: NSUserInterfaceItemIdentifier("Cell"))
+        
+        if ItemType.self == URL.self || ItemType.self == RecentFile.self {
+            //collectionView.keyDownHandler = context.coordinator.handleKeyDown(_:)
         }
+        
+        return viewController
+    }
     
     func updateNSViewController(_ viewController: NSViewController, context: Context) {
-        print("Update: \n| items.count: \(items.count) \n| selectedItems: \(selectedItems) \n| collectionView.selectionIndexPaths \( collectionView.selectionIndexPaths )")
-        
         guard let scrollView = viewController.view as? NSScrollView else { return }
         guard let collectionView = scrollView.documentView as? NSCollectionView else { return }
+        guard let controller = viewController as? NSCollectionController<[ItemType],Content> else { return }
+        
+        print("Update: \n| items.count: \(items.count) \n| selectedItems: \(selectedItems) \n| collectionView.selectionIndexPaths \( collectionView.selectionIndexPaths )")
+        
+        controller.collection = self.items
         
         collectionView.reloadData()
     }

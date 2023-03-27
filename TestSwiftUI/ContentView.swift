@@ -11,17 +11,23 @@ import SwiftUI
 struct ContentView: View {
     let layout = flowLayout()
     
-    @State var filesList: [RecentFile] = getDirContents1()
+    @State var filesList: [RecentFile] = getDirContents1().sorted { $0.name < $1.name }
     @State var selectedItems: Set<Int> = []
     
     var body: some View {
         VStack {
             ButtonsPanel()
             
-            FBCollectionView(items: $filesList, selectedItems: $selectedItems, layout: layout) { recent -> AnyView in
-                let isSelected = selectedItems.contains( filesList.firstIndex{ $0.url == recent.url }! )
-                
-                return AnyView( AppTile(app: recent, isSelected: isSelected) )
+            
+            Image(systemName: "homekit")
+            FBCollectionView(items: filesList, selection: selectedItems, layout: layout) { item, indexPath in
+//                Image(systemName: "homekit")
+                //VStack {
+                VStack {
+                    Text(item.name)
+                    Image(nsImage: item.url.path.FS.info.hiresIcon(size: 30))
+                    
+                }.frame(width: 50, height: 50)
             }
         }
     }
@@ -37,7 +43,10 @@ struct ContentView: View {
             }
             
             Button("append at 0") {
-                filesList.append(RecentFile(MDItemCreate(nil, "/Users" as CFString))! )
+                let e = RecentFile(MDItemCreate(nil, "/Users" as CFString))!
+                filesList.insert(e, at: 0)
+                //filesList.append(RecentFile(MDItemCreate(nil, "/Users" as CFString))! )
+                //filesList.sort { $0.name < $1.name }
                 print("filesLst.count: \(filesList.count )")
             }
             
