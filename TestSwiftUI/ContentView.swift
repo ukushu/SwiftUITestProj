@@ -30,7 +30,9 @@ struct ContentView: View {
     func ButtonsPanel() -> some View {
         HStack {
             Button("delete first") {
-                filesList.remove(at: 0)
+                if !filesList.isEmpty {
+                    filesList.remove(at: 0)
+                }
                 print("filesLst.count: \(filesList.count )")
             }
             

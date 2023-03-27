@@ -92,7 +92,17 @@ struct FBCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewControll
     func updateNSViewController(_ viewController: NSViewController, context: Context) {
         print("Update: \n| items.count: \(items.count) \n| selectedItems: \(selectedItems) \n| collectionView.selectionIndexPaths \( collectionView.selectionIndexPaths )")
         
-        reload()
+        guard let scrollView = viewController.view as? NSScrollView else { return }
+        guard let collectionView = scrollView.documentView as? NSCollectionView else { return }
+        
+        collectionView.reloadData()
+        
+        //viewController
+        //self.scrollView.documentView = collectionView
+        
+        //viewController.relo
+        
+        //reload()
     }
     
     func reload() {

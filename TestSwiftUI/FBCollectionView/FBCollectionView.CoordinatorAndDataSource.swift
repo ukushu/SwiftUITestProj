@@ -47,6 +47,10 @@ extension FBCollectionView {
             }
         }
         
+        deinit {
+            print("deinit")
+        }
+        
         func reloadData() {
             self._items = parent.$items
             self._selections = parent.$selectedItems
