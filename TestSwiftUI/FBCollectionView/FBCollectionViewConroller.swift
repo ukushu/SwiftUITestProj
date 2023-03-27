@@ -3,21 +3,22 @@ import Cocoa
 import SwiftUI
 import AppKit
 
-public class NSCollectionController<T: RandomAccessCollection, RowView: View>:
-    NSViewController, NSCollectionViewDelegate, NSCollectionViewDataSource where T.Index == Int {
-    
+public class NSCollectionController<T: RandomAccessCollection, Content: View>:
+    NSViewController, NSCollectionViewDelegate, NSCollectionViewDataSource
+        where T.Index == Int {
 
+    let factory: (T.Element,IndexPath) -> Content
+    
     let         id : String
     let         collection : T
-    let         factory: (T.Element, IndexPath) -> RowView
-    weak var    tableView: NSTableView?
+    weak var    collectionView: NSCollectionView?
     let         selection : Set<Int>?
     
-    init(id: String, collection: T, factory: @escaping (T.Element, IndexPath) -> RowView, tableView: NSTableView? = nil, selection: Set<Int>?) {
+    init(id: String, collection: T, factory: @escaping (T.Element, IndexPath) -> Content, collectionView: NSCollectionView? = nil, selection: Set<Int>?) {
         self.id = id
         self.collection = collection
         self.factory = factory
-        self.tableView = tableView
+        self.collectionView = collectionView
         self.selection = selection
         super.init(nibName: nil, bundle: nil)
     }
