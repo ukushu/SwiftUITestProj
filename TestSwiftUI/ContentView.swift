@@ -74,14 +74,14 @@ struct ContentView: View {
 }
 
 func getDirContents1() -> [RecentFile] {
-    getDirContentsFor(url: "/Users/".asURL() )
+    getDirContentsFor(url: "/Users/uks/Desktop".asURL() )
         .map { $0.path }
         .compactMap { MDItemCreate(nil, $0 as CFString) }
         .compactMap { RecentFile($0) }
 }
 
 func getDirContents2() -> [RecentFile] {
-    getDirContentsFor(url: "/Users/Shared".asURL() )
+    getDirContentsFor(url: "/Users/uks/Documents".asURL() )
         .map { $0.path }
         .compactMap { MDItemCreate(nil, $0 as CFString) }
         .compactMap { RecentFile($0) }
@@ -89,15 +89,13 @@ func getDirContents2() -> [RecentFile] {
 
 func getDirContentsFor(url: URL) -> [URL] {
     let fileManager = FileManager.default
-
-    let documentsUrl = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-
+    
     do {
-        let directoryContents = try fileManager.contentsOfDirectory(at: documentsUrl, includingPropertiesForKeys: nil, options: [])
-
+        let directoryContents = try fileManager.contentsOfDirectory(at: url, includingPropertiesForKeys: nil, options: [])
+        
         return directoryContents
     } catch {
-        print("Error while enumerating files \(documentsUrl.path): \(error.localizedDescription)")
+        print("Error while enumerating files \(url.path): \(error.localizedDescription)")
     }
 
     return []
