@@ -6,7 +6,7 @@ import AppKit
 public class NSCollectionController<T: RandomAccessCollection, Content: View>:
     NSViewController, NSCollectionViewDelegate, NSCollectionViewDataSource
         where T.Index == Int {
-
+    
     let factory: (T.Element,IndexPath) -> Content
     
     let         id : String
@@ -29,12 +29,12 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
     
     public func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
         //fatalError()
-
+        
         let item = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier("NSCollectionViewItem"), for: indexPath)
         
         if let item = item as? CollectionViewItem {
             let hosting = NSHostingView(rootView: factory(collection[indexPath.item],indexPath))
-
+            
             item.container.views.forEach { item.container.removeView($0) }
             item.container.addView(hosting, in: .center)
             //item.nsView.needsDisplay = true
@@ -53,5 +53,3 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
 //        NSHostingView(rootView: factory(collection[indexPath.item],indexPath))
 //    }
 }
-
-

@@ -18,7 +18,6 @@ struct ContentView: View {
         VStack {
             ButtonsPanel()
             
-            
             Image(systemName: "homekit")
             FBCollectionView(items: filesList, selection: selectedItems, layout: layout) { item, indexPath in
 //                Image(systemName: "homekit")
@@ -97,10 +96,9 @@ func getDirContentsFor(url: URL) -> [URL] {
     } catch {
         print("Error while enumerating files \(url.path): \(error.localizedDescription)")
     }
-
+    
     return []
 }
-
 
 func flowLayout() -> NSCollectionViewFlowLayout{
     let flowLayout = NSCollectionViewFlowLayout()
