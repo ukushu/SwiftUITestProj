@@ -18,7 +18,6 @@ struct ContentView: View {
         VStack {
             ButtonsPanel()
             
-            Image(systemName: "homekit")
             FBCollectionView(items: filesList, selection: selectedItems, layout: layout) { item, indexPath in
                 AppTile(app: item, isSelected: selectedItems.contains((filesList.firstIndex { $0.url == item.url }!)) )
             }
