@@ -13,9 +13,7 @@ import Combine
  FBCollectionView(items: $filesLst, selectedItems: $selectedItems, layout: layout) { item in
      Text(item.lastPathComponent )]
  }
- */
-
-/*
+ 
 /////////////////FlowLayout Sample/////////////////////////////
  
  func flowLayout() -> NSCollectionViewFlowLayout{
@@ -30,30 +28,14 @@ import Combine
  }
  */
 
-
 // TODO: ItemType extends identifiable?
 // TODO: Move the delegates to a coordinator.
 struct FBCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewControllerRepresentable /* NSCollectionViewDataSource, NSCollectionViewDelegateFlowLayout */ {
     private let layout: NSCollectionViewFlowLayout
-
+    
     let items: [ItemType]
     let selectedItems: Set<Int>
     var scrollToTop: AnyPublisher<Void, Never>?
-    
-//    init(items: Binding<[ItemType]>, selectedItems: Binding<Set<Int>>, layout: NSCollectionViewFlowLayout, scrollToTop: AnyPublisher<Void, Never>? = nil, renderer: @escaping (_ item: ItemType) -> Content) {
-//
-//        self._items = items
-//        self._selectedItems = selectedItems
-//        self.renderer = renderer
-//        self.layout = layout
-//        self.scrollToTop = scrollToTop
-//
-//        self.scrollView.documentView = collectionView
-//
-//        if let superview = scrollView.superview {
-//            scrollView.frame = superview.frame
-//        }
-//    }
     
     let factory: (ItemType, IndexPath) -> Content
     
@@ -62,12 +44,7 @@ struct FBCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewControll
         self.selectedItems = selection
         self.layout = layout
         self.factory = factory
-        
     }
-    
-//    func makeCoordinator() -> CoordinatorAndDataSource {
-//        CoordinatorAndDataSource(self)
-//    }
     
     func makeNSViewController(context: Context) -> NSViewController {
         let scrollView = NSScrollView()
@@ -78,8 +55,8 @@ struct FBCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewControll
         viewController.view = scrollView
         scrollView.documentView = collectionView
         
-        collectionView.dataSource = viewController // context.coordinator
-        collectionView.delegate = viewController   //collectionView.dataSource as? any NSCollectionViewDelegate//context.coordinator // NSCollectionViewDelegate
+        collectionView.dataSource = viewController
+        collectionView.delegate = viewController
         
         collectionView.collectionViewLayout = layout
         collectionView.backgroundColors = [.clear]
@@ -88,7 +65,6 @@ struct FBCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewControll
         collectionView.allowsEmptySelection = false
         
         collectionView.register(CollectionViewItem.self, forItemWithIdentifier: NSUserInterfaceItemIdentifier("NSCollectionViewItem"))
-//        collectionView.register(FBCollectionViewCell<Content>.self, forItemWithIdentifier: NSUserInterfaceItemIdentifier("Cell"))
         
         if ItemType.self == URL.self || ItemType.self == RecentFile.self {
             //collectionView.keyDownHandler = context.coordinator.handleKeyDown(_:)

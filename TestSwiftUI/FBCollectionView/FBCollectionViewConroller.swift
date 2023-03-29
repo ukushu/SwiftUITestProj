@@ -28,8 +28,6 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
     }
     
     public func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
-        //fatalError()
-        
         let item = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier("NSCollectionViewItem"), for: indexPath)
         
         if let item = item as? CollectionViewItem {
@@ -48,8 +46,4 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
     public func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
         collection.count
     }
-    
-//    public func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSView {
-//        NSHostingView(rootView: factory(collection[indexPath.item],indexPath))
-//    }
 }
