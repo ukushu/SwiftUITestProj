@@ -31,6 +31,8 @@ import Combine
 // TODO: ItemType extends identifiable?
 // TODO: Move the delegates to a coordinator.
 struct FBCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewControllerRepresentable /* NSCollectionViewDataSource, NSCollectionViewDelegateFlowLayout */ {
+    
+    //Need to locate here for topScroller
     private var scrollView: NSScrollView = NSScrollView()
     
     private let layout: NSCollectionViewFlowLayout
@@ -138,4 +140,10 @@ final class InternalCollectionView: NSCollectionView {
 //    typealias ContextMenuItemsGenerator = (_ items: [IndexPath]) -> [NSMenuItemProxy]
 //    var contextMenuItemsGenerator: ContextMenuItemsGenerator? = nil
 //    var currentContextMenuItemProxies: [NSMenuItemProxy] = []
+}
+
+public extension IndexPath {
+    var intValue: Int {
+        self.item
+    }
 }

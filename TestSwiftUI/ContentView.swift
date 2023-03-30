@@ -22,7 +22,7 @@ struct ContentView: View {
                              topScroller: model.topScroller.eraseToAnyPublisher()
             ) { item, indexPath in
                 
-                AppTile(app: item, isSelected: model.checkIsSelected(item: item) )
+                AppTile(app: item, isSelected: model.selectedItems.contains(indexPath.intValue) )
                 
             }
         }
@@ -109,10 +109,6 @@ class SuperViewModel: ObservableObject {
     let layout = flowLayout()
     
     @Published var filesList: [RecentFile] = getDirContents1().sorted { $0.name < $1.name }
-    
-    func checkIsSelected(item: RecentFile) -> Bool {
-        selectedItems.contains( (filesList.firstIndex { $0.url == item.url }! ) )
-    }
 }
 
 func flowLayout() -> NSCollectionViewFlowLayout{

@@ -8,7 +8,7 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
     NSViewController, NSCollectionViewDelegate, NSCollectionViewDataSource
         where T.Index == Int {
     
-    let factory: (T.Element,IndexPath) -> Content
+    let factory: (T.Element, IndexPath) -> Content
     
     let         id : String
     var         collection : T
@@ -26,14 +26,13 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
         self.scrollToTopCancellable = scrollToTopCancellable
         
         super.init(nibName: nil, bundle: nil)
-        
     }
     
     public func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
         let item = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier("NSCollectionViewItem"), for: indexPath)
         
         if let item = item as? CollectionViewItem {
-            let hosting = NSHostingView(rootView: factory(collection[indexPath.item],indexPath))
+            let hosting = NSHostingView(rootView: factory(collection[indexPath.item], indexPath))
             
             item.container.views.forEach { item.container.removeView($0) }
             item.container.addView(hosting, in: .center)
