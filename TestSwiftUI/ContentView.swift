@@ -104,7 +104,7 @@ func getDirContentsFor(url: URL) -> [URL] {
 class SuperViewModel: ObservableObject {
     let topScroller = PassthroughSubject<Void, Never>()
     
-    @Published var selectedItems: Set<Int> = []
+    @Published var selectedItems: Set<Int> = [] { didSet { print("selection changed! Yo!")} }
     
     let layout = flowLayout()
     

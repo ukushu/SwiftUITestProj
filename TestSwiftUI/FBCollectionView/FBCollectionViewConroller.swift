@@ -42,9 +42,16 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
     }
     
     
+    ///////////////////////////////
+    // HELPERS Drag
+    ///////////////////////////////
+    public func collectionView(_ collectionView: NSCollectionView, updateDraggingItemsForDrag draggingInfo: NSDraggingInfo) {
+        print("collectionView")
+    }
     
-    
-    
+    public func collectionView(_ collectionView: NSCollectionView, draggingImageForItemsAt indexPaths: Set<IndexPath>, with event: NSEvent, offset dragImageOffset: NSPointPointer) -> NSImage {
+        NSImage(named: "square.and.arrow.down.on.square.fill")!
+    }
     
     ///////////////////////////////
     // HELPERS
