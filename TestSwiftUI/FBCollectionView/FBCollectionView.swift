@@ -5,14 +5,23 @@ import Combine
 /*
  /////////////////SwiftUI usage Sample/////////////////////////////
  
- @State var filesLst = [URL(), URL(), URL()]
- @State var selectedItems: Set<Int> = []
+ var filesLst = [URL(), URL(), URL()]
+ var selectedItems: Set<Int> = []
  
  let layout = flowLayout()
  
- FBCollectionView(items: $filesLst, selectedItems: $selectedItems, layout: layout) { item in
-     Text(item.lastPathComponent )]
+ FBCollectionView(items: model.filesList,
+                  selection: model.selectedItems,
+                  layout: model.layout,
+                  topScroller: model.topScroller.eraseToAnyPublisher()
+ ) { item, indexPath in
+     
+     AppTile(app: item, isSelected: model.selectedItems.contains(indexPath.intValue) )
+     
  }
+ 
+ 
+ 
  
 /////////////////FlowLayout Sample/////////////////////////////
  
