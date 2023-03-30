@@ -31,27 +31,34 @@ import Combine
 // TODO: ItemType extends identifiable?
 // TODO: Move the delegates to a coordinator.
 struct FBCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewControllerRepresentable /* NSCollectionViewDataSource, NSCollectionViewDelegateFlowLayout */ {
+    private var scrollView: NSScrollView = NSScrollView()
+    
     private let layout: NSCollectionViewFlowLayout
     
     let items: [ItemType]
     let selectedItems: Set<Int>
-    var scrollToTop: AnyPublisher<Void, Never>?
+    
+    let topScroller: AnyPublisher<Void, Never>?
     
     let factory: (ItemType, IndexPath) -> Content
     
-    init(items: [ItemType], selection: Set<Int>, layout: NSCollectionViewFlowLayout, factory: @escaping (ItemType, IndexPath) -> Content) {
+    init(items: [ItemType], selection: Set<Int>, layout: NSCollectionViewFlowLayout, topScroller: AnyPublisher<Void, Never>? = nil, factory: @escaping (ItemType, IndexPath) -> Content) {
         self.items = items
         self.selectedItems = selection
         self.layout = layout
+        self.topScroller = topScroller
         self.factory = factory
     }
     
     func makeNSViewController(context: Context) -> NSViewController {
-        let scrollView = NSScrollView()
         let collectionView = InternalCollectionView()
         scrollView.documentView = collectionView
         
-        let viewController = NSCollectionController(collection: self.items, factory: factory, selection: selectedItems)
+        let viewController = NSCollectionController(collection: self.items,
+                                                    factory: factory,
+                                                    selection: selectedItems,
+                                                    scrollToTopCancellable: getScrollToTopCancellable() )
+        
         viewController.view = scrollView
         scrollView.documentView = collectionView
         
@@ -84,6 +91,7 @@ struct FBCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewControll
         
         collectionView.reloadData()
     }
+    
 }
 
 //extension FBCollectionView {
@@ -99,6 +107,17 @@ struct FBCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewControll
 //////////////////////////////
 ///HELPERS
 /////////////////////////////
+extension FBCollectionView {
+    func getScrollToTopCancellable() -> AnyCancellable? {
+        topScroller?.sink { [self] _ in
+            print("scrolling to top")
+            
+            DispatchQueue.main.async {
+                scrollView.documentView?.scroll(.zero)
+            }
+        }
+    }
+}
 
 final class InternalCollectionView: NSCollectionView {
     typealias KeyDownHandler = (_ event: NSEvent) -> Bool

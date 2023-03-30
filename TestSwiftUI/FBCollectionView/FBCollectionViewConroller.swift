@@ -2,6 +2,7 @@ import Foundation
 import Cocoa
 import SwiftUI
 import AppKit
+import Combine
 
 public class NSCollectionController<T: RandomAccessCollection, Content: View>:
     NSViewController, NSCollectionViewDelegate, NSCollectionViewDataSource
@@ -14,17 +15,18 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
     weak var    collectionView: NSCollectionView?
     let         selection : Set<Int>?
     
-    init(id: String = "", collection: T, factory: @escaping (T.Element, IndexPath) -> Content, collectionView: NSCollectionView? = nil, selection: Set<Int>?) {
+    let scrollToTopCancellable: AnyCancellable?
+    
+    init(id: String = "", collection: T, factory: @escaping (T.Element, IndexPath) -> Content, collectionView: NSCollectionView? = nil, selection: Set<Int>?, scrollToTopCancellable: AnyCancellable?) {
         self.id = id
         self.collection = collection
         self.factory = factory
         self.collectionView = collectionView
         self.selection = selection
+        self.scrollToTopCancellable = scrollToTopCancellable
+        
         super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        
     }
     
     public func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
@@ -36,10 +38,19 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
             item.container.views.forEach { item.container.removeView($0) }
             item.container.addView(hosting, in: .center)
         }
+        
         return item
     }
     
-    public func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
-        collection.count
-    }
+    
+    
+    
+    
+    
+    ///////////////////////////////
+    // HELPERS
+    ///////////////////////////////
+    public func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int { collection.count }
+    
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 }

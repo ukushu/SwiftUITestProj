@@ -5,21 +5,25 @@
 //  Created by UKS on 04.02.2023.
 //
 
+import Combine
 import SwiftUI
 
 @available(macOS 12.0, *)
 struct ContentView: View {
-    let layout = flowLayout()
-    
-    @State var filesList: [RecentFile] = getDirContents1().sorted { $0.name < $1.name }
-    @State var selectedItems: Set<Int> = []
+    @ObservedObject var model = SuperViewModel()
     
     var body: some View {
         VStack {
             ButtonsPanel()
             
-            FBCollectionView(items: filesList, selection: selectedItems, layout: layout) { item, indexPath in
-                AppTile(app: item, isSelected: selectedItems.contains((filesList.firstIndex { $0.url == item.url }!)) )
+            FBCollectionView(items: model.filesList,
+                             selection: model.selectedItems,
+                             layout: model.layout,
+                             topScroller: model.topScroller.eraseToAnyPublisher()
+            ) { item, indexPath in
+                
+                AppTile(app: item, isSelected: model.checkIsSelected(item: item) )
+                
             }
         }
     }
@@ -28,38 +32,42 @@ struct ContentView: View {
     func ButtonsPanel() -> some View {
         HStack {
             Button("delete first") {
-                if !filesList.isEmpty {
-                    filesList.remove(at: 0)
+                if !model.filesList.isEmpty {
+                    model.filesList.remove(at: 0)
                 }
-                print("filesLst.count: \(filesList.count )")
+                print("filesLst.count: \(model.filesList.count )")
             }
             
             Button("append at 0") {
                 let e = RecentFile(MDItemCreate(nil, "/Users" as CFString))!
-                filesList.insert(e, at: 0)
+                model.filesList.insert(e, at: 0)
                 //filesList.append(RecentFile(MDItemCreate(nil, "/Users" as CFString))! )
                 //filesList.sort { $0.name < $1.name }
-                print("filesLst.count: \(filesList.count )")
+                print("filesLst.count: \(model.filesList.count )")
             }
             
             Button("Desktop") {
-                filesList = getDirContents1()
+                model.filesList = getDirContents1()
             }
             
             Button("Documents") {
-                filesList = getDirContents2()
+                model.filesList = getDirContents2()
             }
             
             Button("Select 1") {
-                selectedItems = [1]
+                model.selectedItems = [1]
             }
             
             Button("Select 1-3") {
-                selectedItems = [1,2,3]
+                model.selectedItems = [1,2,3]
             }
             
             Button("Select 4") {
-                selectedItems = [4]
+                model.selectedItems = [4]
+            }
+            
+            Button("Scroll to top") {
+                model.topScroller.send()
             }
         }
     }
@@ -91,6 +99,20 @@ func getDirContentsFor(url: URL) -> [URL] {
     }
     
     return []
+}
+
+class SuperViewModel: ObservableObject {
+    let topScroller = PassthroughSubject<Void, Never>()
+    
+    @Published var selectedItems: Set<Int> = []
+    
+    let layout = flowLayout()
+    
+    @Published var filesList: [RecentFile] = getDirContents1().sorted { $0.name < $1.name }
+    
+    func checkIsSelected(item: RecentFile) -> Bool {
+        selectedItems.contains( (filesList.firstIndex { $0.url == item.url }! ) )
+    }
 }
 
 func flowLayout() -> NSCollectionViewFlowLayout{
