@@ -84,7 +84,6 @@ struct FBCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewControll
         
         collectionView.reloadData()
     }
-        
 }
 
 //extension FBCollectionView {

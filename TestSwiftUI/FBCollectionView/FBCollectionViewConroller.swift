@@ -35,11 +35,7 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
             
             item.container.views.forEach { item.container.removeView($0) }
             item.container.addView(hosting, in: .center)
-            //item.nsView.needsDisplay = true
-            //item.nsView =
-            //NSHostingView(rootView: Text("BODY"))
         }
-        //item.view = NSHostingView(rootView: factory(collection[indexPath.item],indexPath))
         return item
     }
     
