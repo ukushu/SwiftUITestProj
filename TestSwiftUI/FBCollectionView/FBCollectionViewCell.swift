@@ -5,24 +5,24 @@ import SwiftUI
 final class CollectionViewItem : NSCollectionViewItem {
     let container = NSStackView()
     
-    var selectedCGColor: CGColor    { Color(rgbaHex: 0x00900050).cgColor! }
-    var nonSelectedCGColor: CGColor { NSColor.clear.cgColor }
+//    var selectedCGColor: CGColor    { Color(rgbaHex: 0x00900050).cgColor! }
+//    var nonSelectedCGColor: CGColor { NSColor.clear.cgColor }
     
     // TODO: also highlight/hover state!
     // TODO: pass to Content
     override var isSelected: Bool
     {
         didSet {
-            if isSelected {
-                view.layer?.backgroundColor = selectedCGColor
-                view.layer?.masksToBounds = true
-                //view.layer?.cornerRadius = 5.0
-                
-                //view.layer?.contents = Space().background(Color.red)//.frame(width: 100, height: 10)
-            } else {
-                view.layer?.backgroundColor = nonSelectedCGColor
-                view.layer?.masksToBounds = false
-            }
+//            if isSelected {
+//                view.layer?.backgroundColor = selectedCGColor
+//                view.layer?.masksToBounds = true
+//                //view.layer?.cornerRadius = 5.0
+//
+//                //view.layer?.contents = Space().background(Color.red)//.frame(width: 100, height: 10)
+//            } else {
+//                view.layer?.backgroundColor = nonSelectedCGColor
+//                view.layer?.masksToBounds = false
+//            }
         }
     }
     

@@ -41,6 +41,33 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
         return item
     }
     
+    ///////////////////////////////
+    // HELPERS Selection update
+    ///////////////////////////////
+    
+    public func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
+        print("collectionView didSelectItemsAt ")
+        
+//        selection?.wrappedValue = Set( collectionView.selectionIndexes )
+        updSelectionIfNeeded(collectionView)
+    }
+    
+    public func collectionView(_ collectionView: NSCollectionView, didDeselectItemsAt indexPaths: Set<IndexPath>) {
+        print("collectionView didDeselectItemsAt ")
+        
+//        selection?.wrappedValue = Set( collectionView.selectionIndexes )
+        updSelectionIfNeeded(collectionView)
+    }
+    
+    func updSelectionIfNeeded(_ collectionView: NSCollectionView) {
+        guard let selection = selection else { return }
+        
+        let selSet: Set<Int> = Set( collectionView.selectionIndexes )
+        
+        if selection.wrappedValue != selSet {
+            selection.wrappedValue = selSet
+        }
+    }
     
     
     ///////////////////////////////
