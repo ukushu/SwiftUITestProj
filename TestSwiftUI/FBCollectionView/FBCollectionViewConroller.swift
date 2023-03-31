@@ -41,34 +41,44 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
         return item
     }
     
-    ///////////////////////////////
-    // HELPERS Selection update
-    ///////////////////////////////
-    
-    public func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
-        print("collectionView didSelectItemsAt ")
-        
-//        selection?.wrappedValue = Set( collectionView.selectionIndexes )
-        updSelectionIfNeeded(collectionView)
-    }
-    
-    public func collectionView(_ collectionView: NSCollectionView, didDeselectItemsAt indexPaths: Set<IndexPath>) {
-        print("collectionView didDeselectItemsAt ")
-        
-//        selection?.wrappedValue = Set( collectionView.selectionIndexes )
-        updSelectionIfNeeded(collectionView)
-    }
-    
-    func updSelectionIfNeeded(_ collectionView: NSCollectionView) {
-        guard let selection = selection else { return }
-        
-        let selSet: Set<Int> = Set( collectionView.selectionIndexes )
-        
-        if selection.wrappedValue != selSet {
-            selection.wrappedValue = selSet
+    public func reloadData(at indexPath: Set<IndexPath>? ) {
+        if let indexPath = indexPath {
+            collectionView?.reloadItems(at: indexPath)
         }
     }
     
+    ///////////////////////////////
+    // HELPERS Selection update
+    ///////////////////////////////
+    public func collectionView(_ collectionView: NSCollectionView, shouldSelectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
+//        print("collectionView shouldSelectItemsAt ")
+        
+        if let selection = selection {
+            let tmp: [Int] = collectionView.selectionIndexes.sorted()
+            let newSelSet: Set<Int> = Set(tmp).union(indexPaths.map{ $0.intValue })
+            
+            if selection.wrappedValue != newSelSet {
+                selection.wrappedValue = newSelSet
+            }
+        }
+        
+        return indexPaths
+    }
+    
+    public func collectionView(_ collectionView: NSCollectionView, shouldDeselectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
+//        print("collectionView shouldDeselectItemsAt ")
+        
+        if let selection = selection {
+            let tmp: [Int] = collectionView.selectionIndexes.sorted()
+            let newSelSet: Set<Int> = Set(tmp).subtracting(indexPaths.map{ $0.intValue })
+            
+            if selection.wrappedValue != newSelSet {
+                selection.wrappedValue = newSelSet
+            }
+        }
+        
+        return indexPaths
+    }
     
     ///////////////////////////////
     // HELPERS Drag

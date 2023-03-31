@@ -14,7 +14,7 @@ struct UKSImagePath: View {
     let path: String
     let size: CGFloat
     
-    @State private var thumbnail: NSImage? = nil
+    @State private var thumbnail: NSImage? = nil //{ didSet{ print("path ZZ: \(path)") } }
     
     var body: some View {
         if let thumbnail = thumbnail {

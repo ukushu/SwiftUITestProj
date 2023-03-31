@@ -93,6 +93,16 @@ class RecentFile: Identifiable {
     }
 }
 
+extension RecentFile: Hashable {
+    static func == (lhs: RecentFile, rhs: RecentFile) -> Bool {
+        lhs.url == rhs.url
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(self.path)
+    }
+}
+
 public extension String {
     func asURLdir() -> URL {
         URL(fileURLWithPath: self, isDirectory: true )
