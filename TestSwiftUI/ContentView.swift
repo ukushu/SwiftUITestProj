@@ -23,6 +23,7 @@ struct ContentView: View {
             ) { item, indexPath in
                 
                 AppTile(app: item, isSelected: model.selectedItems.contains(indexPath.intValue) )
+                    .id(item)
                 
             }
         }
@@ -74,14 +75,14 @@ struct ContentView: View {
 }
 
 func getDirContents1() -> [RecentFile] {
-    getDirContentsFor(url: "/Users/uks/Desktop".asURL() )
+    getDirContentsFor(url: URL.userHome.appendingPathComponent("Desktop") )
         .map { $0.path }
         .compactMap { MDItemCreate(nil, $0 as CFString) }
         .compactMap { RecentFile($0) }
 }
 
 func getDirContents2() -> [RecentFile] {
-    getDirContentsFor(url: "/Users/uks/Documents".asURL() )
+    getDirContentsFor(url: URL.userHome.appendingPathComponent("Documents") )
         .map { $0.path }
         .compactMap { MDItemCreate(nil, $0 as CFString) }
         .compactMap { RecentFile($0) }
