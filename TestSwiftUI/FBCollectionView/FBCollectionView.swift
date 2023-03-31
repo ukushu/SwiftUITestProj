@@ -55,8 +55,6 @@ struct FBCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewControll
     
     init(items: [ItemType], selection: Binding<Set<Int>>?, layout: NSCollectionViewFlowLayout, topScroller: AnyPublisher<Void, Never>? = nil, factory: @escaping (ItemType, IndexPath) -> Content) {
         
-        print("FBCollectionView init")
-        
         self.items = items
         self.selectedItems = selection
         self.layout = layout
@@ -105,8 +103,6 @@ struct FBCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewControll
         
         collectionView.reloadData()
     }
-    
-    
 }
 
 //extension FBCollectionView {
