@@ -47,13 +47,16 @@ struct FBCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewControll
     private let layout: NSCollectionViewFlowLayout
     
     let items: [ItemType]
-    let selectedItems: Set<Int>
+    var selectedItems: Binding<Set<Int>>?
     
     let topScroller: AnyPublisher<Void, Never>?
     
     let factory: (ItemType, IndexPath) -> Content
     
-    init(items: [ItemType], selection: Set<Int>, layout: NSCollectionViewFlowLayout, topScroller: AnyPublisher<Void, Never>? = nil, factory: @escaping (ItemType, IndexPath) -> Content) {
+    init(items: [ItemType], selection: Binding<Set<Int>>?, layout: NSCollectionViewFlowLayout, topScroller: AnyPublisher<Void, Never>? = nil, factory: @escaping (ItemType, IndexPath) -> Content) {
+        
+        print("FBCollectionView init")
+        
         self.items = items
         self.selectedItems = selection
         self.layout = layout
@@ -96,12 +99,13 @@ struct FBCollectionView<ItemType, Content: View>: /* NSObject, */ NSViewControll
         guard let collectionView = scrollView.documentView as? NSCollectionView else { return }
         guard let controller = viewController as? NSCollectionController<[ItemType],Content> else { return }
         
-        print("Update: \n| items.count: \(items.count) \n| selectedItems: \(selectedItems) \n| collectionView.selectionIndexPaths \( collectionView.selectionIndexPaths )")
+        print("Update: \n| items.count: \(items.count) \n| selectedItems: \(String(describing: selectedItems?.wrappedValue)) \n| collectionView.selectionIndexPaths \( collectionView.selectionIndexPaths )")
         
         controller.collection = self.items
         
         collectionView.reloadData()
     }
+    
     
 }
 

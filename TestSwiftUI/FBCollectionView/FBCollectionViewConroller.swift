@@ -13,11 +13,11 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
     let         id : String
     var         collection : T
     weak var    collectionView: NSCollectionView?
-    let         selection : Set<Int>?
+    let         selection : Binding<Set<Int>>?
     
     let scrollToTopCancellable: AnyCancellable?
     
-    init(id: String = "", collection: T, factory: @escaping (T.Element, IndexPath) -> Content, collectionView: NSCollectionView? = nil, selection: Set<Int>?, scrollToTopCancellable: AnyCancellable?) {
+    init(id: String = "", collection: T, factory: @escaping (T.Element, IndexPath) -> Content, collectionView: NSCollectionView? = nil, selection: Binding<Set<Int>>?, scrollToTopCancellable: AnyCancellable?) {
         self.id = id
         self.collection = collection
         self.factory = factory
@@ -40,6 +40,7 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
         
         return item
     }
+    
     
     
     ///////////////////////////////

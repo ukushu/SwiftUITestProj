@@ -17,7 +17,7 @@ struct ContentView: View {
             ButtonsPanel()
             
             FBCollectionView(items: model.filesList,
-                             selection: model.selectedItems,
+                             selection: $model.selectedItems,
                              layout: model.layout,
                              topScroller: model.topScroller.eraseToAnyPublisher()
             ) { item, indexPath in
