@@ -39,7 +39,7 @@ import Combine
 
 // TODO: ItemType extends identifiable?
 // TODO: Move the delegates to a coordinator.
-struct FBCollectionView<ItemType: Hashable, Content: View>: /* NSObject, */ NSViewControllerRepresentable /* NSCollectionViewDataSource, NSCollectionViewDelegateFlowLayout */ {
+struct FBCollectionView<ItemType: Identifiable, Content: View>: /* NSObject, */ NSViewControllerRepresentable /* NSCollectionViewDataSource, NSCollectionViewDelegateFlowLayout */ {
     
     //Need to locate here for topScroller
     private var scrollView: NSScrollView = NSScrollView()
@@ -83,7 +83,7 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: /* NSObject, */ NSVi
         collectionView.allowsMultipleSelection = true
         collectionView.allowsEmptySelection = false
         
-        collectionView.register(CollectionViewItem.self, forItemWithIdentifier: NSUserInterfaceItemIdentifier("NSCollectionViewItem"))
+        collectionView.register(CollectionViewItem<ItemType.ID>.self, forItemWithIdentifier: NSUserInterfaceItemIdentifier("NSCollectionViewItem"))
         
         if ItemType.self == URL.self || ItemType.self == RecentFile.self {
             //collectionView.keyDownHandler = context.coordinator.handleKeyDown(_:)
@@ -99,17 +99,8 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: /* NSObject, */ NSVi
         
         print("Update: \n| items.count: \(items.count) \n| selectedItems: \(String(describing: selectedItems?.wrappedValue)) \n| collectionView.selectionIndexPaths \( collectionView.selectionIndexPaths )")
         
-        let itemsToUpd = Set(controller.collection).subtracting(self.items)
-        
         controller.collection = self.items
-        
-        let idxToUpd = controller.collection.filter{ itemsToUpd.contains($0) }.indices.map{ IndexPath(index: $0) }
-        
-        let selections = self.selectedItems?.wrappedValue.map{ IndexPath(index: $0) } ?? []
-        
         collectionView.reloadData()
-        
-//        collectionView.reloadItems(at: Set(selections) )//.union(idxToUpd)
     }
 }
 
