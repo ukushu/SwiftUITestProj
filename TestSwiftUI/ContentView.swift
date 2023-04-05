@@ -75,7 +75,7 @@ struct ContentView: View {
 }
 
 func getDirContents1() -> [RecentFile] {
-    getDirContentsFor(url: "/Users/uks/Documents/ToBPC/pix/Girls".asURLdir() )//  URL.userHome.appendingPathComponent("Desktop") )
+    getDirContentsFor(url: "/Users/uks/Desktop/Girls".asURLdir() )//  URL.userHome.appendingPathComponent("Desktop") )
         .map { $0.path }
         .compactMap { MDItemCreate(nil, $0 as CFString) }
         .compactMap { RecentFile($0) }
@@ -105,7 +105,7 @@ func getDirContentsFor(url: URL) -> [URL] {
 class SuperViewModel: ObservableObject {
     let topScroller = PassthroughSubject<Void, Never>()
     
-    @Published var selectedItems: Set<Int> = [] { didSet { print("selection changed! Yo!")} }
+    @Published var selectedItems: Set<Int> = []
     
     let layout = flowLayout()
     
