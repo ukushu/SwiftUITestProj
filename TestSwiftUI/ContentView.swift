@@ -75,7 +75,7 @@ struct ContentView: View {
 }
 
 func getDirContents1() -> [RecentFile] {
-    getDirContentsFor(url: URL.userHome.appendingPathComponent("Desktop") )
+    getDirContentsFor(url: "/Users/uks/Documents/ToBPC/pix/Girls".asURLdir() )//  URL.userHome.appendingPathComponent("Desktop") )
         .map { $0.path }
         .compactMap { MDItemCreate(nil, $0 as CFString) }
         .compactMap { RecentFile($0) }

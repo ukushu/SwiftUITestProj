@@ -3,24 +3,49 @@ import SwiftUI
 import QuickLook
 import QuickLookThumbnailing
 import Darwin
+import Essentials
 
 public class FBCollectionCache {
     private static var cache: [String : FBCCacheItem] = [:]
     
+    private static let timer = TimerCall(.continious(interval: 1)) {
+//        automaticCacheCleanup()
+    }
+    
     static func getCachedImg(path: String) -> FBCCacheItem? {
+        let _ = FBCollectionCache.timer
+        
         if let img = cache[path] {
             return img
         }
         
-        cache[path] = FBCCacheItem(path: path)
-        
-        
-        
-//        let cahceSizeBytes = class_getInstanceSize(FBCCacheItem.self) * cache.count
-//        print("Cache size: \(cahceSizeBytes)")
-        
+        if cache[path] == nil {
+            cache[path] = FBCCacheItem(path: path)
+        } else {
+            cache[path]?.updLastAccessDate()
+        }
         
         return cache[path]
+    }
+    
+    static func automaticCacheCleanup() {
+        let countToLeave = 100
+        
+        if cache.count > countToLeave * 2 { //DO NOT CHANGE
+            var tmp = FBCollectionCache.cache
+            
+            print("automaticCacheCleanup ; \(cache.count)")
+            
+            tmp.sorted { $0.value.lastAccessDate > $1.value.lastAccessDate }
+                .dropFirst(countToLeave)
+                .forEach {
+                    tmp.removeValue(forKey: $0.key)
+                }
+            
+            FBCollectionCache.cache = tmp
+            
+            print("automaticCacheCleanup ; \(cache.count)")
+        }
     }
     
     static func clearCache() {
@@ -30,7 +55,7 @@ public class FBCollectionCache {
 
 class FBCCacheItem {
     private(set) var thumbnail: NSImage? = nil
-    private(set) var date: Date = Date.now
+    private(set) var lastAccessDate: Date = Date.now
     private let path: String
     
     init(path: String) {
@@ -39,11 +64,13 @@ class FBCCacheItem {
     }
     
     func updateThumbnail() {
-        self.date = Date.now
-        
         DispatchQueue.global(qos: .background).async {
             self.thumbnail = imgThumbnailAdv(125, path: self.path)
         }
+    }
+    
+    func updLastAccessDate() {
+        self.lastAccessDate = Date.now
     }
 }
 
@@ -89,7 +116,6 @@ extension NSImage{
     }
 }
 
-
 class IconCache {
     private static let musicIcon = NSImage(named: "MusicIcon")
     
@@ -102,27 +128,8 @@ class IconCache {
     }
 }
 
-
-//func allocatedMem() {
-//    let TASK_VM_INFO_COUNT = MemoryLayout<task_vm_info_data_t>.size / MemoryLayout<natural_t>.size
-//
-//    var vmInfo = task_vm_info_data_t()
-//    var vmInfoSize = mach_msg_type_number_t(TASK_VM_INFO_COUNT)
-//
-//    let kern: kern_return_t = withUnsafeMutablePointer(to: &vmInfo) {
-//            $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
-//                task_info(mach_task_self_,
-//                          task_flavor_t(TASK_VM_INFO),
-//                          $0,
-//                          &vmInfoSize)
-//                }
-//            }
-//
-//    if kern == KERN_SUCCESS {
-//        let usedSize = DataSize(bytes: Int(vmInfo.internal + vmInfo.compressed))
-//        print("Memory in use (in bytes): %u", usedSize)
-//    } else {
-//        let errorString = String(cString: mach_error_string(kern), encoding: .ascii) ?? "unknown error"
-//        print("Error with task_info(): %s", errorString);
-//    }
-//}
+extension Dictionary where Key == String, Value == FBCCacheItem {
+    var sizeInBytes: Int {
+        class_getInstanceSize(FBCCacheItem.self) * self.count
+    }
+}
