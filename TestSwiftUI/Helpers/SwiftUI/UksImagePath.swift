@@ -36,7 +36,7 @@ class UKSImagePathVM: ObservableObject {
         self.path = path
         
         
-        self.timer = TimerCall(.continious(interval: 2)) {
+        self.timer = TimerCall(.continious(interval: 0.05)) {
             let thumb = FBCollectionCache.getCachedImg(path: path)?.thumbnail
             
             //update only in case not the same
