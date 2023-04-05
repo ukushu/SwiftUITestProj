@@ -2,9 +2,8 @@ import Foundation
 import AppKit
 import SwiftUI
 
-final class CollectionViewItem<ID: Hashable> : NSCollectionViewItem {
+final class CollectionViewItem : NSCollectionViewItem {
     let container = NSStackView()
-    var id : ID?
     
     override func loadView() {
         container.orientation = NSUserInterfaceLayoutOrientation.vertical

@@ -6,7 +6,7 @@ import Combine
 
 public class NSCollectionController<T: RandomAccessCollection, Content: View>:
     NSViewController, NSCollectionViewDelegate, NSCollectionViewDataSource
-    where T.Index == Int, T.Element : Identifiable {
+        where T.Index == Int {
     
     let factory: (T.Element, IndexPath) -> Content
     
@@ -31,31 +31,28 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
     public func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
         let item = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier("NSCollectionViewItem"), for: indexPath)
         
-        if let item = item as? CollectionViewItem<T.Element.ID> {
-            let element = collection[indexPath.item] //as? Identifiable
+        if let item = item as? CollectionViewItem {
+            let hosting = NSHostingView(rootView: factory(collection[indexPath.item], indexPath))
             
-            print("/n--------------------")
-            print(element.id, item.id)
-            print("/n--------------------")
-            
-            if item.id != nil && item.id == element.id {
-                // do nothing
-            } else {
-                let hosting = NSHostingView(rootView: factory(element, indexPath))
-                
-                item.container.views.forEach { item.container.removeView($0) }
-                item.container.addView(hosting, in: .center)
-                item.id = element.id
-            }
+            item.container.views.forEach { item.container.removeView($0) }
+            item.container.addView(hosting, in: .center)
         }
         
         return item
     }
-        
+    
+    public func reloadData(at indexPath: Set<IndexPath>? ) {
+        if let indexPath = indexPath {
+            collectionView?.reloadItems(at: indexPath)
+        }
+    }
+    
     ///////////////////////////////
     // HELPERS Selection update
     ///////////////////////////////
     public func collectionView(_ collectionView: NSCollectionView, shouldSelectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
+//        print("collectionView shouldSelectItemsAt ")
+        
         if let selection = selection {
             let tmp: [Int] = collectionView.selectionIndexes.sorted()
             let newSelSet: Set<Int> = Set(tmp).union(indexPaths.map{ $0.intValue })
@@ -69,6 +66,8 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
     }
     
     public func collectionView(_ collectionView: NSCollectionView, shouldDeselectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
+//        print("collectionView shouldDeselectItemsAt ")
+        
         if let selection = selection {
             let tmp: [Int] = collectionView.selectionIndexes.sorted()
             let newSelSet: Set<Int> = Set(tmp).subtracting(indexPaths.map{ $0.intValue })
