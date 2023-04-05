@@ -26,7 +26,7 @@ struct ContentView: View {
                     .id(item)
                 
             }
-        }
+        }.draggable()
     }
     
     @ViewBuilder

@@ -1,9 +1,10 @@
-//
-//  UKSImage.swift
-//  FileBo
-//
-//  Created by UKS on 04.09.2022.
-//
+///////////////////////////
+// OPTIMIZED
+//////////////////////////
+
+
+
+
 
 import Foundation
 import SwiftUI
@@ -22,13 +23,8 @@ struct UKSImagePath: View {
                 .resizable()
                 .scaledToFit()
         } else {
-            if let mimeType = path.FS.info.mimeType, mimeType.conforms(to: .audio) {
-                Image(nsImage: NSImage(named: "MusicIcon")! )
-                    .resizable()
-                    .scaledToFit()
-                    .onAppear(perform: generateThumbnail) // << here !!
-            } else {
-                Image(nsImage: NSWorkspace.shared.icon(forFile: path) )
+            if let icon = IconCache.getIcon(path:path) {
+                Image(nsImage: icon )
                     .resizable()
                     .scaledToFit()
                     .onAppear(perform: generateThumbnail) // << here !!
@@ -115,5 +111,18 @@ extension NSImage{
             return size
         }
         return nil
+    }
+}
+
+
+class IconCache {
+    private static let musicIcon = NSImage(named: "MusicIcon")
+    
+    static func getIcon(path: String) -> NSImage? {
+        if let mimeType = path.FS.info.mimeType, mimeType.conforms(to: .audio) {
+            return musicIcon
+        }
+        
+        return NSWorkspace.shared.icon(forFile: path)
     }
 }
