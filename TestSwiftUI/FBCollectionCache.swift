@@ -33,7 +33,7 @@ public class FBCollectionCache {
             let oldCache = cache.count
             
             cache.sorted { $0.value.lastAccessDate < $1.value.lastAccessDate }
-                .dropFirst(cache.count - countToLeave)
+                .dropFirst(countToLeave)
                 .forEach {
                     cache[$0.key] = nil
                 }
@@ -65,6 +65,11 @@ class FBCCacheItem {
     
     func updLastAccessDate() {
         self.lastAccessDate = Date.now
+    }
+    
+    deinit {
+        thumbnail = nil
+        print("deinit: \(path)")
     }
 }
 

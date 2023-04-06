@@ -11,17 +11,20 @@ struct UKSImagePath: View {
     }
     
     var body: some View {
+        TrueBody()
+            .onAppear{ model.tryLoadIfNeeded() }
+    }
+    
+    @ViewBuilder
+    func TrueBody() -> some View {
         if let thumbnail = model.thumbnail {
             Image(nsImage: thumbnail)
                 .resizable()
                 .scaledToFit()
-        } else {
-            if let icon = IconCache.getIcon(path: model.path) {
-                Image(nsImage: icon )
-                    .resizable()
-                    .scaledToFit()
-                    .onAppear{ model.tryLoadIfNeeded() }
-            }
+        } else if let icon = IconCache.getIcon(path: model.path) {
+            Image(nsImage: icon )
+                .resizable()
+                .scaledToFit()
         }
     }
 }
@@ -38,7 +41,7 @@ class UKSImagePathVM: ObservableObject {
         self.thumbnail = FBCollectionCache.getCachedImg(path: path)?.thumbnail
         self.path = path
         
-        self.timer = TimerCall(.continious(interval: 0.05)) {
+        self.timer = TimerCall(.continious(interval: 0.09)) {
             if self.readyToLoad {
                 let thumb = FBCollectionCache.getCachedImg(path: path)?.thumbnail
                 
@@ -50,10 +53,8 @@ class UKSImagePathVM: ObservableObject {
     }
     
     func tryLoadIfNeeded() {
-        if let thumbnail {
-            return
+        if thumbnail == nil {
+            readyToLoad = true;
         }
-        
-        readyToLoad = true;
     }
 }
