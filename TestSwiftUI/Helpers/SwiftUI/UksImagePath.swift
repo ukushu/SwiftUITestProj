@@ -20,6 +20,7 @@ struct UKSImagePath: View {
                 Image(nsImage: icon )
                     .resizable()
                     .scaledToFit()
+                    .onAppear{ model.tryLoadIfNeeded() }
             }
         }
     }
@@ -31,18 +32,28 @@ class UKSImagePathVM: ObservableObject {
     
     private(set) var timer: TimerCall!
     
+    var readyToLoad = false
+    
     init(path: String) {
         self.thumbnail = FBCollectionCache.getCachedImg(path: path)?.thumbnail
         self.path = path
         
-        
         self.timer = TimerCall(.continious(interval: 0.05)) {
-            let thumb = FBCollectionCache.getCachedImg(path: path)?.thumbnail
-            
-            //update only in case not the same
-            if self.thumbnail != thumb {
+            if self.readyToLoad {
+                let thumb = FBCollectionCache.getCachedImg(path: path)?.thumbnail
+                
+                //update only in case not the same
                 self.thumbnail = thumb
+                self.readyToLoad = false
             }
         }
+    }
+    
+    func tryLoadIfNeeded() {
+        if let thumbnail {
+            return
+        }
+        
+        readyToLoad = true;
     }
 }

@@ -9,42 +9,36 @@ public class FBCollectionCache {
     private static var cache: [String : FBCCacheItem] = [:]
     
     private static let timer = TimerCall(.continious(interval: 1)) {
-//        automaticCacheCleanup()
+        automaticCacheCleanup()
     }
     
     static func getCachedImg(path: String) -> FBCCacheItem? {
         let _ = FBCollectionCache.timer
         
-        if let img = cache[path] {
-            return img
-        }
-        
-        if cache[path] == nil {
-            cache[path] = FBCCacheItem(path: path)
-        } else {
+        if let item = cache[path] {
             cache[path]?.updLastAccessDate()
+            
+            return item
+        } else {
+            cache[path] = FBCCacheItem(path: path)
         }
         
         return cache[path]
     }
     
     static func automaticCacheCleanup() {
-        let countToLeave = 100
+        let countToLeave = 150
         
         if cache.count > countToLeave * 2 { //DO NOT CHANGE
-            var tmp = FBCollectionCache.cache
+            let oldCache = cache.count
             
-            print("automaticCacheCleanup ; \(cache.count)")
-            
-            tmp.sorted { $0.value.lastAccessDate > $1.value.lastAccessDate }
-                .dropFirst(countToLeave)
+            cache.sorted { $0.value.lastAccessDate < $1.value.lastAccessDate }
+                .dropFirst(cache.count - countToLeave)
                 .forEach {
-                    tmp.removeValue(forKey: $0.key)
+                    cache[$0.key] = nil
                 }
             
-            FBCollectionCache.cache = tmp
-            
-            print("automaticCacheCleanup ; \(cache.count)")
+            print("cacheCleanup: \(oldCache) -> \(cache.count)")
         }
     }
     
