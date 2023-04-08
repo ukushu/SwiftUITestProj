@@ -86,7 +86,7 @@ func getDirContents1() -> [RecentFile] {
 }
 
 func getDirContents2() -> [RecentFile] {
-    getDirContentsFor(url: URL.userHome.appendingPathComponent("Documents") )
+    getDirContentsFor(url: URL.userHome.appendingPathComponent("Downloads") )
         .map { $0.path }
         .compactMap { MDItemCreate(nil, $0 as CFString) }
         .compactMap { RecentFile($0) }
