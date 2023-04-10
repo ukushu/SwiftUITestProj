@@ -75,9 +75,9 @@ struct ContentView: View {
 }
 
 func getDirContents1() -> [RecentFile] {
-    let girls = "/Users/uks/Desktop/BING Wallpapers".asURLdir()
+    let wallpapers = URL.userHome.appendingPathComponent("/Desktop/Wallpapers")
     
-    let url = girls.exists ? girls : URL.userHome.appendingPathComponent("Desktop")
+    let url = wallpapers.exists ? wallpapers : URL.userHome.appendingPathComponent("Desktop")
     
     return getDirContentsFor(url: url)
         .map { $0.path }
