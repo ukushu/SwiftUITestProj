@@ -38,7 +38,7 @@ public class FBCollectionCache {
                     cache[$0.key] = nil
                 }
             
-            print("cacheCleanup: \(oldCache) -> \(cache.count)")
+//            print("cacheCleanup: \(oldCache) -> \(cache.count)")
         }
     }
     
@@ -69,7 +69,7 @@ class FBCCacheItem {
     
     deinit {
         thumbnail = nil
-        print("deinit: \(path)")
+//        print("deinit: \(path)")
     }
 }
 
