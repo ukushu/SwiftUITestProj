@@ -40,7 +40,7 @@ extension AppTile {
             .frame(width: 126, height: 126)
             .overlay {
                 //UKSImage(url: app.url, size: 125)
-                UKSImagePath(path: app.path, size: 125)
+                UKSImagePath2(path: app.path, size: 125)
                     .frame(width: 125, height: 125)
             }
     }

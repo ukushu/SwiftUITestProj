@@ -16,15 +16,15 @@ struct ContentView: View {
         VStack {
             ButtonsPanel()
             
+            Text("Selected: \(model.selectedItems.map{ "\($0)" }.joined(separator: ", ") )")
+            
             FBCollectionView(items: model.filesList,
                              selection: $model.selectedItems,
                              layout: model.layout,
                              topScroller: model.topScroller.eraseToAnyPublisher()
             ) { item, indexPath in
-                
                 AppTile(app: item, isSelected: model.selectedItems.contains(indexPath.intValue) )
-                    .id(item)
-                
+                    .id(item.path )
             }
         }
     }

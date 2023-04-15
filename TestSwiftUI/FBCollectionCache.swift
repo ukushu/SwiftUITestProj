@@ -12,6 +12,22 @@ public class FBCollectionCache {
         automaticCacheCleanup()
     }
     
+    static func getFor(path: String) -> FBCCacheItem? {
+        let _ = FBCollectionCache.timer
+        
+        if let item = cache[path] {
+            cache[path]?.updLastAccessDate()
+            
+            return item
+        }
+        
+        return cache[path]
+    }
+    
+    static func setFor(path: String, image: NSImage) {
+        cache[path] = FBCCacheItem(path: path, img: image)
+    }
+    
     static func getCachedImg(path: String) -> FBCCacheItem? {
         let _ = FBCollectionCache.timer
         
@@ -55,6 +71,11 @@ class FBCCacheItem {
     init(path: String) {
         self.path = path
         updateThumbnail()
+    }
+    
+    init(path: String, img: NSImage) {
+        self.path = path
+        self.thumbnail = img
     }
     
     func updateThumbnail() {
@@ -118,9 +139,9 @@ extension NSImage{
 class IconCache {
     private static let musicIcon = NSImage(named: "MusicIcon")
     
-    static func getIcon(path: String) -> NSImage? {
+    static func getIcon(path: String) -> NSImage {
         if let mimeType = path.FS.info.mimeType, mimeType.conforms(to: .audio) {
-            return musicIcon
+            return musicIcon!
         }
         
         return NSWorkspace.shared.icon(forFile: path)

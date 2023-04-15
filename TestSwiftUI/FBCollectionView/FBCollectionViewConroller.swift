@@ -45,6 +45,12 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
         if let indexPath = indexPath {
             collectionView?.reloadItems(at: indexPath)
         }
+        
+        if let selection = selection {
+            if selection.wrappedValue.isEmpty && collection.count > 0 {
+                selection.wrappedValue = [0]
+            }
+        }
     }
     
     ///////////////////////////////

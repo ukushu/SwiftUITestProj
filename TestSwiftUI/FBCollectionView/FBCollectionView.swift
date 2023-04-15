@@ -99,15 +99,24 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: /* NSObject, */ NSVi
         
 //        print("Update: \n| items.count: \(items.count) \n| selectedItems: \(String(describing: selectedItems?.wrappedValue)) \n| collectionView.selectionIndexPaths \( collectionView.selectionIndexPaths )")
         
-        let itemsToUpd = Set(controller.collection).subtracting(self.items)
-        
-        controller.collection = self.items
+//        let itemsToUpd = Set(controller.collection).subtracting(self.items)
         
 //        let idxToUpd = controller.collection.filter{ itemsToUpd.contains($0) }.indices.map{ IndexPath(index: $0) }
 //        
 //        let selections = self.selectedItems?.wrappedValue.map{ IndexPath(index: $0) } ?? []
         
-        collectionView.reloadData()
+        
+        
+//        if controller.collection.first == self.items.first,
+//            controller.collection.last == self.items.last,
+//           controller.collection.count == self.items.count {
+//            collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems() )
+//        } else {
+            controller.collection = self.items
+            collectionView.reloadData()
+//        }
+        
+        
         
 //        collectionView.reloadItems(at: Set(selections) )//.union(idxToUpd)
     }
