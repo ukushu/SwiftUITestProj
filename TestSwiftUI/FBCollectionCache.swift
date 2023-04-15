@@ -144,7 +144,7 @@ class IconCache {
             return musicIcon!
         }
         
-        return NSWorkspace.shared.icon(forFile: path)
+        return path.FS.info.hiresIcon(size: Int(125))
     }
 }
 

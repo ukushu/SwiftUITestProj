@@ -41,7 +41,6 @@ class UKSImagePathVM2: ObservableObject {
         
         self.icon = IconCache.getIcon(path:path)
         self.thumbnail = FBCollectionCache.getFor(path: path)?.thumbnail
-        self.icon = path.FS.info.hiresIcon(size: Int(125))
         
         if path.FS.info.isDirectory || path.lowercased().hasSuffix(extensionsExceptions) {
             request = nil
