@@ -22,7 +22,7 @@
 //        init(_ parent: FBCollectionView<ItemType, Content>) {
 //            self.parent = parent
 //            self._items = Binding<[ItemType]>( get: { parent.items }, set: { _ in })
-//            self._selections = parent.$selectedItems
+//            self._selections = parent.$selection
 //            
 //            super.init()
 //            

@@ -6,17 +6,17 @@ import Combine
  /////////////////SwiftUI usage Sample/////////////////////////////
  
  var filesLst = [URL(), URL(), URL()]
- var selectedItems: Set<Int> = []
+ var selection: Set<Int> = []
  
  let layout = flowLayout()
  
  FBCollectionView(items: model.filesList,
-                  selection: model.selectedItems,
+                  selection: model.selection,
                   layout: model.layout,
                   topScroller: model.topScroller.eraseToAnyPublisher()
  ) { item, indexPath in
      
-     AppTile(app: item, isSelected: model.selectedItems.contains(indexPath.intValue) )
+     AppTile(app: item, isSelected: model.selection.contains(indexPath.intValue) )
      
  }
  
@@ -47,7 +47,7 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: /* NSObject, */ NSVi
     private let layout: NSCollectionViewFlowLayout
     
     let items: [ItemType]
-    var selectedItems: Binding<Set<Int>>?
+    var selection: Binding<Set<Int>>?
     
     let topScroller: AnyPublisher<Void, Never>?
     
@@ -56,7 +56,7 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: /* NSObject, */ NSVi
     init(items: [ItemType], selection: Binding<Set<Int>>?, layout: NSCollectionViewFlowLayout, topScroller: AnyPublisher<Void, Never>? = nil, factory: @escaping (ItemType, IndexPath) -> Content) {
         
         self.items = items
-        self.selectedItems = selection
+        self.selection = selection
         self.layout = layout
         self.topScroller = topScroller
         self.factory = factory
@@ -68,7 +68,7 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: /* NSObject, */ NSVi
         
         let viewController = NSCollectionController(collection: self.items,
                                                     factory: factory,
-                                                    selection: selectedItems,
+                                                    selection: selection,
                                                     scrollToTopCancellable: getScrollToTopCancellable() )
         
         viewController.view = scrollView
@@ -97,13 +97,13 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: /* NSObject, */ NSVi
         guard let collectionView = scrollView.documentView as? NSCollectionView else { return }
         guard let controller = viewController as? NSCollectionController<[ItemType],Content> else { return }
         
-//        print("Update: \n| items.count: \(items.count) \n| selectedItems: \(String(describing: selectedItems?.wrappedValue)) \n| collectionView.selectionIndexPaths \( collectionView.selectionIndexPaths )")
+//        print("Update: \n| items.count: \(items.count) \n| selection: \(String(describing: selection?.wrappedValue)) \n| collectionView.selectionIndexPaths \( collectionView.selectionIndexPaths )")
         
 //        let itemsToUpd = Set(controller.collection).subtracting(self.items)
         
 //        let idxToUpd = controller.collection.filter{ itemsToUpd.contains($0) }.indices.map{ IndexPath(index: $0) }
 //        
-//        let selections = self.selectedItems?.wrappedValue.map{ IndexPath(index: $0) } ?? []
+//        let selections = self.selection?.wrappedValue.map{ IndexPath(index: $0) } ?? []
         
         
         
