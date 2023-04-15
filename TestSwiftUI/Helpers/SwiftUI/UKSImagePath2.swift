@@ -60,11 +60,13 @@ class UKSImagePathVM2: ObservableObject {
         guard let request = self.request else { return }
         
         QLThumbnailGenerator.shared.generateRepresentations(for: request)
-        { (thumbnail, type, error) in
+        { [weak self] (thumbnail, type, error) in
+            guard let me = self else { return }
+            
             DispatchQueue.main.async {
                 if let thumbnail = thumbnail {
-                    self.thumbnail = thumbnail.nsImage
-                    FBCollectionCache.setFor(path: self.path, image: thumbnail.nsImage)
+                    me.thumbnail = thumbnail.nsImage
+                    FBCollectionCache.setFor(path: me.path, image: thumbnail.nsImage)
                 } else {
                     // Handle the error case gracefully.
                 }
