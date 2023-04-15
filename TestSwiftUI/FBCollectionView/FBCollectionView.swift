@@ -82,6 +82,7 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: /* NSObject, */ NSVi
         collectionView.isSelectable = true
         collectionView.allowsMultipleSelection = true
         collectionView.allowsEmptySelection = false
+//        collectionView.layerContentsRedrawPolicy = .crossfade
         
         collectionView.register(CollectionViewItem.self, forItemWithIdentifier: NSUserInterfaceItemIdentifier("NSCollectionViewItem"))
         

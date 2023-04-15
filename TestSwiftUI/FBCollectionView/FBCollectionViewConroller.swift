@@ -41,17 +41,17 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
         return item
     }
     
-    public func reloadData(at indexPath: Set<IndexPath>? ) {
-        if let indexPath = indexPath {
-            collectionView?.reloadItems(at: indexPath)
-        }
-        
-        if let selection = selection {
-            if selection.wrappedValue.isEmpty && collection.count > 0 {
-                selection.wrappedValue = [0]
-            }
-        }
-    }
+//    public func reloadData(at indexPath: Set<IndexPath>? ) {
+//        if let indexPath = indexPath {
+//            collectionView?.reloadItems(at: indexPath)
+//        }
+//
+//        if let selection = selection {
+//            if selection.wrappedValue.isEmpty && collection.count > 0 {
+//                selection.wrappedValue = [0]
+//            }
+//        }
+//    }
     
     ///////////////////////////////
     // HELPERS Selection update

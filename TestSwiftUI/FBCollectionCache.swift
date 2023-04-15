@@ -12,50 +12,50 @@ public class FBCollectionCache {
         automaticCacheCleanup()
     }
     
-    static func getFor(path: String) -> FBCCacheItem? {
+    static func getFor(path: String) -> FBCCacheItem {
         let _ = FBCollectionCache.timer
         
         if let item = cache[path] {
-            cache[path]?.updLastAccessDate()
-            
+            item.updLastAccessDate()
             return item
         }
         
-        return cache[path]
-    }
-    
-    static func setFor(path: String, image: NSImage) {
-        cache[path] = FBCCacheItem(path: path, img: image)
-    }
-    
-    static func getCachedImg(path: String) -> FBCCacheItem? {
-        let _ = FBCollectionCache.timer
+        let newItem = FBCCacheItem(path: path)
+        cache[path] = newItem
         
-        if let item = cache[path] {
-            cache[path]?.updLastAccessDate()
-            
-            return item
-        } else {
-            cache[path] = FBCCacheItem(path: path)
-        }
-        
-        return cache[path]
+        return newItem
     }
     
     static func automaticCacheCleanup() {
-        let countToLeave = 150
+//        let oldCache = cache.count
         
-        if cache.count > countToLeave * 2 { //DO NOT CHANGE
-            let oldCache = cache.count
-            
-            cache.sorted { $0.value.lastAccessDate < $1.value.lastAccessDate }
+        let minCountToLeave = 18
+        let countToLeave = 700
+        let countToDoCleanup = Int( 1.2 * Double(countToLeave) )
+        let maxTime = Date.now.addingTimeInterval(TimeInterval(-20))
+        
+        //clean older than maxTimeSec
+        let cashSortedNewFirstly = cache
+            .sorted { $0.value.lastAccessDate > $1.value.lastAccessDate }
+        
+        cashSortedNewFirstly
+            .dropFirst(minCountToLeave)
+            // clean older than maxTime. Checked - correctly works
+            .filter { maxTime > $0.value.lastAccessDate }
+            .forEach {
+                print( cache[$0.key]!.lastAccessDate.string(withFormat: "ss.sss") )
+                cache.remove(key: $0.key)
+            }
+        
+        if cache.count > countToDoCleanup {
+            cashSortedNewFirstly
                 .dropFirst(countToLeave)
                 .forEach {
-                    cache[$0.key] = nil
+                    cache.remove(key: $0.key)
                 }
-            
-//            print("cacheCleanup: \(oldCache) -> \(cache.count)")
         }
+        
+//        print("cacheCleanup: \(oldCache) -> \(cache.count)")
     }
     
     static func clearCache() {
@@ -64,33 +64,18 @@ public class FBCollectionCache {
 }
 
 class FBCCacheItem {
-    private(set) var thumbnail: NSImage? = nil
+    private(set) var model: UKSImagePathVM2
     private(set) var lastAccessDate: Date = Date.now
     private let path: String
     
+    
     init(path: String) {
         self.path = path
-        updateThumbnail()
-    }
-    
-    init(path: String, img: NSImage) {
-        self.path = path
-        self.thumbnail = img
-    }
-    
-    func updateThumbnail() {
-        DispatchQueue.global(qos: .background).async {
-            self.thumbnail = imgThumbnailAdv(125, path: self.path)
-        }
+        self.model = UKSImagePathVM2(path: path)
     }
     
     func updLastAccessDate() {
         self.lastAccessDate = Date.now
-    }
-    
-    deinit {
-        thumbnail = nil
-//        print("deinit: \(path)")
     }
 }
 
@@ -127,7 +112,7 @@ fileprivate func imgThumbnailAdv(_ size: CGFloat, path: String) -> NSImage? {
 }
 
 extension NSImage{
-    var pixelSize: NSSize?{
+    var pixelSize: NSSize? {
         if let rep = self.representations.first{
             let size = NSSize(width: rep.pixelsWide, height: rep.pixelsHigh)
             return size
@@ -152,4 +137,11 @@ extension Dictionary where Key == String, Value == FBCCacheItem {
     var sizeInBytes: Int {
         class_getInstanceSize(FBCCacheItem.self) * self.count
     }
+    
+    mutating func remove(key: Key) {
+        guard let idx = self.index(forKey: key) else { return }
+        
+        self.remove(at: idx)
+    }
 }
+

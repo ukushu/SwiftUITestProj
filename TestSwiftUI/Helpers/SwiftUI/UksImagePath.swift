@@ -33,7 +33,7 @@ class UKSImagePathVM: ObservableObject {
     let path: String
     @Published var thumbnail: NSImage?
     
-    private(set) var timer: TimerCall?
+//    private(set) var timer: TimerCall?
     
     var readyToLoad = false
     

@@ -6,7 +6,7 @@ struct UKSImagePath2: View {
     @ObservedObject var model: UKSImagePathVM2
     
     init(path: String, size: CGFloat) {
-        model = UKSImagePathVM2(path: path)
+        model = FBCollectionCache.getFor(path: path).model
     }
     
     var body: some View {
@@ -31,41 +31,42 @@ struct UKSImagePath2: View {
 }
 
 class UKSImagePathVM2: ObservableObject {
-    let path: String
+    private let path: String
     @Published var icon: NSImage? = nil
     @Published var thumbnail: NSImage?
-    private let request: QLThumbnailGenerator.Request?
+    private var request: QLThumbnailGenerator.Request?
     
     init(path: String) {
         self.path = path
         
-        self.icon = IconCache.getIcon(path:path)
-        self.thumbnail = FBCollectionCache.getFor(path: path)?.thumbnail
+//        self.icon = IconCache.getIcon(path:path)
         
-        if path.FS.info.isDirectory || path.lowercased().hasSuffix(extensionsExceptions) {
-            request = nil
-            
-            path.FS.info.hiresQLThumbnail(size: 125)
-                .onSuccess { [weak self] in
-                    self?.icon = $0
-                }
-        } else {
-            request = QLThumbnailGenerator.Request(fileAt: path.asURL(), size: CGSize(width: 125, height: 125), scale: 1.0, representationTypes: .thumbnail)
-        }
+//        if path.FS.info.isDirectory || path.lowercased().hasSuffix(extensionsExceptions) {
+//            request = nil
+//
+//            path.FS.info.hiresQLThumbnail(size: 125)
+//                .onSuccess { img in
+//                    DispatchQueue.main.async {
+//                        self.thumbnail = img
+//                    }
+//                }
+//        } else {
+//            request = QLThumbnailGenerator.Request(fileAt: path.asURL(), size: CGSize(width: 125, height: 125), scale: 1.0, representationTypes: .thumbnail)
+//        }
     }
     
     func requestThumbnail() {
         guard self.thumbnail == nil else { return }
         guard let request = self.request else { return }
         
-        QLThumbnailGenerator.shared.generateRepresentations(for: request)
-        { [weak self] (thumbnail, type, error) in
+        QLThumbnailGenerator.shared.generateBestRepresentation(for: request)
+        { [weak self] (thumbnail, error) in
             guard let me = self else { return }
             
             DispatchQueue.main.async {
                 if let thumbnail = thumbnail {
                     me.thumbnail = thumbnail.nsImage
-                    FBCollectionCache.setFor(path: me.path, image: thumbnail.nsImage)
+                    me.request = nil
                 } else {
                     // Handle the error case gracefully.
                 }
