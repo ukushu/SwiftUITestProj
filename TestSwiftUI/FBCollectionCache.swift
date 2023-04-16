@@ -5,35 +5,35 @@ import Essentials
 public class FBCollectionCache {
     static let thumbnailSize: Int = 125
     
-    private static var cache: [String : FBCCacheItem] = [:]
-    private static var metadata: [String : FBCCacheMeta] = [:]
+    private static var cache: [URL : FBCCacheItem] = [:]
+    private static var metadata: [URL : FBCCacheMeta] = [:]
     
     private static let timer = TimerCall(.continious(interval: 1)) {
         automaticCacheCleanup()
         automaticCacheCleanupMeta()
     }
     
-    static func getFor(path: String) -> FBCCacheItem {
+    static func getFor(url: URL) -> FBCCacheItem {
         let _ = FBCollectionCache.timer
         
-        if let item = cache[path] {
+        if let item = cache[url] {
             item.updLastAccessDate()
             return item
         }
         
-        let newItem = FBCCacheItem(path: path)
-        cache[path] = newItem
+        let newItem = FBCCacheItem(url: url)
+        cache[url] = newItem
         
         return newItem
     }
     
-    static func getMetaFor(path: String) -> RecentFile {
-        if let item = metadata[path] {
+    static func getMetaFor(url: URL) -> RecentFile {
+        if let item = metadata[url] {
             return item.model
         }
         
-        let newItem = FBCCacheMeta(path: path)
-        metadata[path] = newItem
+        let newItem = FBCCacheMeta(url: url)
+        metadata[url] = newItem
         
         return newItem.model
     }
@@ -45,17 +45,10 @@ public class FBCollectionCache {
         let countToLeave = 300
         let countToDoCleanup = Int( 1.2 * Double(countToLeave) )
         let maxTime = Date.now.addingTimeInterval(TimeInterval(-20))
-        let fullCleanTime = Date.now.addingTimeInterval(TimeInterval(-40))
         
         //clean older than maxTimeSec
         let cashSortedNewFirstly = cache
             .sorted { $0.value.lastAccessDate > $1.value.lastAccessDate }
-        
-        cashSortedNewFirstly
-            .filter { fullCleanTime > $0.value.lastAccessDate }
-            .forEach {
-                cache.remove(key: $0.key)
-            }
         
         cashSortedNewFirstly
             .dropFirst(minCountToLeave)
@@ -109,11 +102,11 @@ public class FBCollectionCache {
 class FBCCacheItem {
     private(set) var model: FilePreviewVM
     private(set) var lastAccessDate: Date = Date.now
-    private let path: String
+    private let url: URL
     
-    init(path: String) {
-        self.path = path
-        self.model = FilePreviewVM(path: path)
+    init(url: URL) {
+        self.url = url
+        self.model = FilePreviewVM(url: url)
     }
     
     func updLastAccessDate() {
@@ -124,11 +117,11 @@ class FBCCacheItem {
 class FBCCacheMeta {
     private(set) var model: RecentFile
     private(set) var lastAccessDate: Date = Date.now
-    private let path: String
+    private let url: URL
     
-    init(path: String) {
-        self.path = path
-        self.model = RecentFile(path)
+    init(url: URL) {
+        self.url = url
+        self.model = RecentFile(url)
     }
     
     func updLastAccessDate() {

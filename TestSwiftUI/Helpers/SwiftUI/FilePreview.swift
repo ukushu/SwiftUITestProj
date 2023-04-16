@@ -6,8 +6,8 @@ import AsyncNinja
 struct FilePreview: View {
     @ObservedObject var model: FilePreviewVM
     
-    init(path: String) {
-        model = FBCollectionCache.getFor(path: path).model
+    init(url: URL) {
+        model = FBCollectionCache.getFor(url: url).model
     }
     
     var body: some View {
@@ -26,38 +26,40 @@ struct FilePreview: View {
 }
 
 class FilePreviewVM: NinjaContext.Main, ObservableObject {
-    private let path: String
+    private let url: URL
     @Published var thumbnail: NSImage?
     
-    init(path: String) {
-        self.path = path
+    init(url: URL) {
+        self.url = url
         super.init()
         
         requestThumbnail()
     }
     
     func requestThumbnail() {
-        if path.ends(with: ".DS_Store") {
-            self.thumbnail = IconCache.getIcon(path: path)
+        if url.path.ends(with: ".DS_Store") {
+            self.thumbnail = IconCache.getIcon(path: url.path)
             return
         }
         
-        path.FS.info.hiresQLThumbnail(size: 125)
+        url.path.FS.info.hiresQLThumbnail(size: 125)
             .onSuccess(executor: .main) { img in
                 self.thumbnail = img
             }
             .onFailure(executor: .main) { _ in
-                self.thumbnail = IconCache.getIcon(path: self.path)
+                self.thumbnail = IconCache.getIcon(path: self.url.path)
             }
         
-        thumbnailReload()
+        if extensionsExceptions.contains(url.pathExtension) {
+            thumbnailReload()
+        }
     }
     
-    //This is hack to get more accurate preview
+    //This is hack to get more accurate preview of some sort of files
     func thumbnailReload() {
         future(value: .success(()))
-            .delayed(timeout: 0.1)
-            .flatMap(context: self) { me, _ in me.path.FS.info.hiresQLThumbnail(size: 125) }
+            .delayed(timeout: 0.15)
+            .flatMap(context: self) { me, _ in me.url.path.FS.info.hiresQLThumbnail(size: 125) }
             .onSuccess(executor: .main) { img in
                 self.thumbnail = img
             }
@@ -66,25 +68,25 @@ class FilePreviewVM: NinjaContext.Main, ObservableObject {
 
 extension FilePreviewVM {
     func assignIcon(thumbnail: QLThumbnailRepresentation?) {
-        self.thumbnail = thumbnail?.nsImage ?? IconCache.getIcon(path: self.path)
+        self.thumbnail = thumbnail?.nsImage ?? IconCache.getIcon(path: self.url.path)
     }
 }
 
 
-//fileprivate let extensionsExceptions: [String]  = ["txt","docx","doc","pages","odt","rtf","tex","wpd","ltxd",
-//                                                   "btxt","dotx","wtt","dsc","me","ans","log","xy","text","docm",
-//                                                   "wps","rst","readme","asc","strings","docz","docxml","sdoc",
-//                                                   "plain","notes","latex","utxt","ascii",
-//
-//                                                   "xlsx","patch","xls","xlsm","ods",
-//
-//                                                   "py","cs","swift","html","css", "fountain","gscript","lua",
-//
-//                                                   "markdown","md",
-//                                                   "plist", "ips",
-//
-//                                                   "ass","str"
-//            ]
+fileprivate let extensionsExceptions: [String]  = ["txt","docx","doc","pages","odt","rtf","tex","wpd","ltxd",
+                                                   "btxt","dotx","wtt","dsc","me","ans","log","xy","text","docm",
+                                                   "wps","rst","readme","asc","strings","docz","docxml","sdoc",
+                                                   "plain","notes","latex","utxt","ascii",
+
+                                                   "xlsx","patch","xls","xlsm","ods",
+
+                                                   "py","cs","swift","html","css", "fountain","gscript","lua",
+
+                                                   "markdown","md",
+                                                   "plist", "ips",
+
+                                                   "ass","str"
+            ]
 
 public class NinjaContext {
     open class Main : ExecutionContext, ReleasePoolOwner {

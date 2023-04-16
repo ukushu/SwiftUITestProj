@@ -2,13 +2,13 @@ import Foundation
 import SwiftUI
 
 struct AppTile: View {
-    let app: URL
+    let url: URL
     let isSelected: Bool
     let recent: RecentFile
-    init(app: URL, isSelected: Bool) {
-        self.app = app
+    init(url: URL, isSelected: Bool) {
+        self.url = url
         self.isSelected = isSelected
-        self.recent = FBCollectionCache.getMetaFor(path: app.path)
+        self.recent = FBCollectionCache.getMetaFor(url: url)
     }
 //    @Binding var selections: Set<String>
     
@@ -45,7 +45,7 @@ extension AppTile {
             .foregroundColor(.clear)
             .frame(width: 126, height: 126)
             .overlay {
-                FilePreview(path: app.path)
+                FilePreview(url: url)
             }
     }
     

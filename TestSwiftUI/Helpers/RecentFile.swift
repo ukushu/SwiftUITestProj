@@ -1,25 +1,24 @@
 import Foundation
 
-class RecentFile: Identifiable {
-    var id: String { self.path }
-    let path: String
-    lazy var url: URL = self.path.asURL()
+class RecentFile {
+//    var id: String { self.url.path }
+    var url: URL
     
     lazy var urlComponents: [URL] = url.urlComponentsUrls()
     
     lazy var urlComponentsDirsOnly: [URL] = urlComponents.last == nil ? [] : urlComponents.last!.isDirectory ? urlComponents : urlComponents.dropLast()
     
-    lazy var name: String = path.FS.info.nameWithoutAppExt
+    lazy var name: String = url.path.FS.info.nameWithoutAppExt
     
     static let attrToGrab = ["kMDItemDateAdded","kMDItemAttributeChangeDate","kMDItemContentModificationDate", "kMDItemFSCreationDate"]
-    lazy var metadata: [String : Any]? = path.FS.info.getAttributes(forAttributes: RecentFile.attrToGrab)
+    lazy var metadata: [String : Any]? = url.path.FS.info.getAttributes(forAttributes: RecentFile.attrToGrab)
     
     func refreshMetadata() {
-        metadata = path.FS.info.getAttributes(forAttributes: RecentFile.attrToGrab)
+        metadata = url.path.FS.info.getAttributes(forAttributes: RecentFile.attrToGrab)
     }
     
     private var displayDateDir: Date? {
-        path.FS.info.creationDate ?? path.FS.info.lastUseDate ??  path.FS.info.modificationDate
+        url.path.FS.info.creationDate ?? url.path.FS.info.lastUseDate ?? url.path.FS.info.modificationDate
     }
     
 //    var displayDate: Date? {
@@ -40,7 +39,7 @@ class RecentFile: Identifiable {
 //    }
     
     var lastUseDate: Date? {
-        if self.path.FS.info.isDirectory {
+        if self.url.path.FS.info.isDirectory {
             if let dateAdded = self.metadata?.kMDItemDateAdded {
                 return dateAdded
             }
@@ -67,10 +66,10 @@ class RecentFile: Identifiable {
     
     private let addedToCacheDate: Date = Date.now
     
-    lazy var isDirectory: Bool = path.FS.info.isDirectory
+    lazy var isDirectory: Bool = self.url.FS.info.isDirectory
     
-    init(_ path: String) {
-        self.path = path
+    init(_ url: URL) {
+        self.url = url
     }
 }
 
@@ -80,7 +79,7 @@ extension RecentFile: Hashable {
     }
     
     func hash(into hasher: inout Hasher) {
-        hasher.combine(self.path)
+        hasher.combine(self.url.path)
     }
 }
 

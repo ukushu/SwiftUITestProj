@@ -16,7 +16,7 @@ struct ContentView: View {
                              layout: model.layout,
                              topScroller: model.topScroller.eraseToAnyPublisher()
             ) { item, indexPath in
-                AppTile(app: item, isSelected: model.selectedItems.contains(indexPath.intValue) )
+                AppTile(url: item, isSelected: model.selectedItems.contains(indexPath.intValue) )
 //                    .id(item.path )
             }
         }
