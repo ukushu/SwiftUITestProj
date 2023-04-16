@@ -86,7 +86,7 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: /* NSObject, */ NSVi
         
         collectionView.register(CollectionViewItem.self, forItemWithIdentifier: NSUserInterfaceItemIdentifier("NSCollectionViewItem"))
         
-        if ItemType.self == URL.self || ItemType.self == RecentFile.self {
+        if ItemType.self == URL.self {
             //collectionView.keyDownHandler = context.coordinator.handleKeyDown(_:)
         }
         
