@@ -74,7 +74,7 @@ public class FBCollectionCache {
     }
     
     static func automaticCacheCleanupMeta() {
-        let oldCache = metadata.count
+//        let oldCache = metadata.count
         let maxTime = Date.now.addingTimeInterval(TimeInterval(-10) )
         
         //remove cache older than 10 sec
@@ -85,13 +85,19 @@ public class FBCollectionCache {
                 metadata.remove(key: $0.key)
             }
         
-        if oldCache != metadata.count {
-            print("cacheCleanup: \(oldCache) -> \(metadata.count)")
-        }
+//        if oldCache != metadata.count {
+//            print("cacheCleanup: \(oldCache) -> \(metadata.count)")
+//        }
     }
     
     static func clearCache() {
-        cache = [:]
+        if !cache.isEmpty {
+            cache = [:]
+        }
+        
+        if !metadata.isEmpty {
+            metadata = [:]
+        }
     }
 }
 
@@ -131,33 +137,6 @@ class FBCCacheMeta {
 ///HELPERS
 /////////////////////////////////
 
-fileprivate func imgThumbnailAdv(_ size: CGFloat, path: String) -> NSImage? {
-    if path.FS.info.isDirectory {
-        return path.FS.info.hiresQLThumbnail(size: size).wait().maybeSuccess ??
-               path.FS.info.hiresIcon(size: Int(size))
-    }
-    
-    let extensionsExceptions: [String]  = ["txt","docx","doc","pages","odt","rtf","tex","wpd","ltxd",
-                                           "btxt","dotx","wtt","dsc","me","ans","log","xy","text","docm",
-                                           "wps","rst","readme","asc","strings","docz","docxml","sdoc",
-                                           "plain","notes","latex","utxt","ascii",
-                                           
-                                           "xlsx","patch","xls","xlsm","ods",
-                                           
-                                           "py","cs","swift","html","css", "fountain","gscript","lua",
-                                           
-                                           "markdown","md",
-                                           "plist", "ips"
-    ]
-    
-    if path.lowercased().hasSuffix(extensionsExceptions) {
-        return path.FS.info.hiresQLThumbnail(size: size).wait().maybeSuccess ??
-                path.FS.info.hiresIcon(size: Int(size))
-    }
-    
-    return path.FS.info.hiresThumbnail(size: size)
-}
-
 extension NSImage{
     var pixelSize: NSSize? {
         if let rep = self.representations.first{
@@ -170,8 +149,19 @@ extension NSImage{
 
 class IconCache {
     private static let musicIcon = NSImage(named: "MusicIcon")
+    private static var dsStore: NSImage?
     
     static func getIcon(path: String) -> NSImage {
+        if path.ends(with: ".DS_Store") {
+            if let dsStore = dsStore {
+                return dsStore
+            } else {
+                let img = path.FS.info.hiresIcon(size: Int(125))
+                dsStore = img
+                return img
+            }
+        }
+        
         if let mimeType = path.FS.info.mimeType, mimeType.conforms(to: .audio) {
             return musicIcon!
         }

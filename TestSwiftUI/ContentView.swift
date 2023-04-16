@@ -52,7 +52,7 @@ struct ContentView: View {
             }
             
             Button("Documents") {
-                model.filesList = getDirContents1()
+                model.filesList = getDirContents2()
             }
             
             Button("Select 1") {
@@ -80,17 +80,11 @@ func getDirContents1() -> [URL] {
     let url = wallpapers.exists ? wallpapers : URL.userHome.appendingPathComponent("Desktop")
     
     return getDirContentsFor(url: url)
-//        .map { $0.path }
-//        .compactMap { MDItemCreate(nil, $0 as CFString) }
-//        .compactMap { RecentFile($0) }
 }
 
-//func getDirContents2() -> [RecentFile] {
-//    getDirContentsFor(url: URL.userHome.appendingPathComponent("Downloads") )
-//        .map { $0.path }
-//        .compactMap { MDItemCreate(nil, $0 as CFString) }
-//        .compactMap { RecentFile($0) }
-//}
+func getDirContents2() -> [URL] {
+    getDirContentsFor(url: URL.userHome.appendingPathComponent("Downloads") )
+}
 
 func getDirContentsFor(url: URL) -> [URL] {
     let fileManager = FileManager.default
@@ -113,7 +107,7 @@ class SuperViewModel: ObservableObject {
     
     let layout = flowLayout()
     
-    @Published var filesList: [URL] = getDirContents1()//.sorted { $0.lastPathComonent < $1.lastPathComonent }
+    @Published var filesList: [URL] = getDirContents1().sorted { $0 < $1 }
 }
 
 func flowLayout() -> NSCollectionViewFlowLayout{
@@ -125,4 +119,10 @@ func flowLayout() -> NSCollectionViewFlowLayout{
     flowLayout.minimumLineSpacing = 30.0
     
     return flowLayout
+}
+
+extension URL : Comparable {
+    public static func < (lhs: URL, rhs: URL) -> Bool {
+        lhs.path < rhs.path
+    }
 }

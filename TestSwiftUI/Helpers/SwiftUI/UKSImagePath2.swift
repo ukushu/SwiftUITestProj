@@ -39,7 +39,9 @@ class UKSImagePathVM2: ObservableObject {
     init(path: String) {
         self.path = path
         
-        self.icon = IconCache.getIcon(path:path)
+        if path.ends(with: ".DS_Store") {
+            self.icon = IconCache.getIcon(path: path)
+        }
         
         if path.FS.info.isDirectory || path.lowercased().hasSuffix(extensionsExceptions) {
             request = nil
@@ -48,6 +50,11 @@ class UKSImagePathVM2: ObservableObject {
                 .onSuccess { img in
                     DispatchQueue.main.async {
                         self.thumbnail = img
+                    }
+                }
+                .onFailure { _ in
+                    DispatchQueue.main.async {
+                        self.icon = IconCache.getIcon(path:path)
                     }
                 }
         } else {
@@ -86,5 +93,7 @@ fileprivate let extensionsExceptions: [String]  = ["txt","docx","doc","pages","o
                                                    "py","cs","swift","html","css", "fountain","gscript","lua",
                                                    
                                                    "markdown","md",
-                                                   "plist", "ips"
+                                                   "plist", "ips",
+                                                   
+                                                   "ass","str"
             ]
