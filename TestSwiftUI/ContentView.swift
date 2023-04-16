@@ -40,8 +40,8 @@ struct ContentView: View {
             }
             
             Button("append at 0") {
-                let e = RecentFile(MDItemCreate(nil, "/Users" as CFString))!
-                model.filesList.insert(e, at: 0)
+//                let e = RecentFile(MDItemCreate(nil, "/Users" as CFString))!
+//                model.filesList.insert(e, at: 0)
                 //filesList.append(RecentFile(MDItemCreate(nil, "/Users" as CFString))! )
                 //filesList.sort { $0.name < $1.name }
                 print("filesLst.count: \(model.filesList.count )")
@@ -52,7 +52,7 @@ struct ContentView: View {
             }
             
             Button("Documents") {
-                model.filesList = getDirContents2()
+                model.filesList = getDirContents1()
             }
             
             Button("Select 1") {
@@ -74,23 +74,23 @@ struct ContentView: View {
     }
 }
 
-func getDirContents1() -> [RecentFile] {
+func getDirContents1() -> [URL] {
     let wallpapers = URL.userHome.appendingPathComponent("/Desktop/Wallpapers")
     
     let url = wallpapers.exists ? wallpapers : URL.userHome.appendingPathComponent("Desktop")
     
     return getDirContentsFor(url: url)
-        .map { $0.path }
-        .compactMap { MDItemCreate(nil, $0 as CFString) }
-        .compactMap { RecentFile($0) }
+//        .map { $0.path }
+//        .compactMap { MDItemCreate(nil, $0 as CFString) }
+//        .compactMap { RecentFile($0) }
 }
 
-func getDirContents2() -> [RecentFile] {
-    getDirContentsFor(url: URL.userHome.appendingPathComponent("Downloads") )
-        .map { $0.path }
-        .compactMap { MDItemCreate(nil, $0 as CFString) }
-        .compactMap { RecentFile($0) }
-}
+//func getDirContents2() -> [RecentFile] {
+//    getDirContentsFor(url: URL.userHome.appendingPathComponent("Downloads") )
+//        .map { $0.path }
+//        .compactMap { MDItemCreate(nil, $0 as CFString) }
+//        .compactMap { RecentFile($0) }
+//}
 
 func getDirContentsFor(url: URL) -> [URL] {
     let fileManager = FileManager.default
@@ -113,7 +113,7 @@ class SuperViewModel: ObservableObject {
     
     let layout = flowLayout()
     
-    @Published var filesList: [RecentFile] = getDirContents1().sorted { $0.name < $1.name }
+    @Published var filesList: [URL] = getDirContents1()//.sorted { $0.lastPathComonent < $1.lastPathComonent }
 }
 
 func flowLayout() -> NSCollectionViewFlowLayout{

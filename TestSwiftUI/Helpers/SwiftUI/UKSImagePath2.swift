@@ -39,20 +39,20 @@ class UKSImagePathVM2: ObservableObject {
     init(path: String) {
         self.path = path
         
-//        self.icon = IconCache.getIcon(path:path)
+        self.icon = IconCache.getIcon(path:path)
         
-//        if path.FS.info.isDirectory || path.lowercased().hasSuffix(extensionsExceptions) {
-//            request = nil
-//
-//            path.FS.info.hiresQLThumbnail(size: 125)
-//                .onSuccess { img in
-//                    DispatchQueue.main.async {
-//                        self.thumbnail = img
-//                    }
-//                }
-//        } else {
-//            request = QLThumbnailGenerator.Request(fileAt: path.asURL(), size: CGSize(width: 125, height: 125), scale: 1.0, representationTypes: .thumbnail)
-//        }
+        if path.FS.info.isDirectory || path.lowercased().hasSuffix(extensionsExceptions) {
+            request = nil
+            
+            path.FS.info.hiresQLThumbnail(size: 125)
+                .onSuccess { img in
+                    DispatchQueue.main.async {
+                        self.thumbnail = img
+                    }
+                }
+        } else {
+            request = QLThumbnailGenerator.Request(fileAt: path.asURL(), size: CGSize(width: 125, height: 125), scale: 1.0, representationTypes: .thumbnail)
+        }
     }
     
     func requestThumbnail() {

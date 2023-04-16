@@ -2,8 +2,14 @@ import Foundation
 import SwiftUI
 
 struct AppTile: View {
-    let app: RecentFile
+    let app: URL
     let isSelected: Bool
+    let recent: RecentFile
+    init(app: URL, isSelected: Bool) {
+        self.app = app
+        self.isSelected = isSelected
+        self.recent = FBCollectionCache.getMetaFor(path: app.path)
+    }
 //    @Binding var selections: Set<String>
     
     var body: some View {
@@ -19,7 +25,7 @@ struct AppTile: View {
             AppTimeStamp()
         }
         .background(Color.clickableAlpha)
-        .help(app.name)
+        .help(recent.name)
     }
 }
 
@@ -39,14 +45,13 @@ extension AppTile {
             .foregroundColor(.clear)
             .frame(width: 126, height: 126)
             .overlay {
-                //UKSImage(url: app.url, size: 125)
                 UKSImagePath2(path: app.path, size: 125)
-                    .frame(width: 125, height: 125)
+//                    .frame(width: 125, height: 125)
             }
     }
     
     func AppTitle() -> some View {
-        Text(app.name)
+        Text(recent.name)
             .fontWeight(.regular)
             .lineLimit(1)
             .truncationMode(.middle)
@@ -58,7 +63,7 @@ extension AppTile {
     
     @ViewBuilder
     func AppTimeStamp() -> some View {
-        if let date = app.lastUseDate {
+        if let date = recent.lastUseDate {
             Text(date.readableString)
                 .multilineTextAlignment(.center)
                 .font(.system(size: 11))

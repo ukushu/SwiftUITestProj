@@ -39,7 +39,7 @@ public extension FSFileInfo {
 
 public extension FSFileInfo {
     var addedToFSDate: Date? {
-        return getAttributes()["kMDItemDateAdded"] as? Date
+        return getAttributes()?["kMDItemDateAdded"] as? Date
     }
     
     var lastUseDate: Date? {
@@ -87,15 +87,14 @@ public extension FSFileInfo {
     
     var isHidden: Bool { path.contains("/.") }
     
-    func getAttributes() -> [String : Any] {
+    func getAttributes(forAttributes: [String] = []) -> [String : Any]? {
         let attrItem = NSMetadataItem(url: path.asURL() )
         
-        if let item = attrItem,
-           let attributes = item.values(forAttributes: item.attributes) {
-            return attributes
-        }
+        guard let item = attrItem else { return [:] }
         
-        return [:]
+        let attributesList = forAttributes.count == 0 ? item.attributes : forAttributes
+        
+        return item.values(forAttributes: attributesList)
     }
 }
 

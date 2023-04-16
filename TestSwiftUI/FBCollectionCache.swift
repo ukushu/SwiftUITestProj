@@ -7,9 +7,11 @@ import Essentials
 
 public class FBCollectionCache {
     private static var cache: [String : FBCCacheItem] = [:]
+    private static var metadata: [String : FBCCacheMeta] = [:]
     
     private static let timer = TimerCall(.continious(interval: 1)) {
         automaticCacheCleanup()
+        automaticCacheCleanupMeta()
     }
     
     static func getFor(path: String) -> FBCCacheItem {
@@ -24,6 +26,17 @@ public class FBCollectionCache {
         cache[path] = newItem
         
         return newItem
+    }
+    
+    static func getMetaFor(path: String) -> RecentFile {
+        if let item = metadata[path] {
+            return item.model
+        }
+        
+        let newItem = FBCCacheMeta(path: path)
+        metadata[path] = newItem
+        
+        return newItem.model
     }
     
     static func automaticCacheCleanup() {
@@ -43,7 +56,7 @@ public class FBCollectionCache {
             // clean older than maxTime. Checked - correctly works
             .filter { maxTime > $0.value.lastAccessDate }
             .forEach {
-                print( cache[$0.key]!.lastAccessDate.string(withFormat: "ss.sss") )
+//                print( cache[$0.key]!.lastAccessDate.string(withFormat: "ss.sss") )
                 cache.remove(key: $0.key)
             }
         
@@ -58,6 +71,32 @@ public class FBCollectionCache {
 //        print("cacheCleanup: \(oldCache) -> \(cache.count)")
     }
     
+    static func automaticCacheCleanupMeta() {
+        let oldCache = metadata.count
+        let maxTime = Date.now.addingTimeInterval(TimeInterval(-10))
+        
+//        //clean older than maxTimeSec
+        let cashSortedNewFirstly = metadata
+            .sorted { $0.value.lastAccessDate > $1.value.lastAccessDate }
+        
+//        cashSortedNewFirstly
+//            .dropFirst(100)
+//            .forEach {
+//                metadata.remove(key: $0.key)
+//            }
+        
+        //remove cache older than 20 sec
+        cashSortedNewFirstly
+            .filter { maxTime > $0.value.lastAccessDate }
+            .forEach {
+                metadata.remove(key: $0.key)
+            }
+        
+        if oldCache != metadata.count {
+            print("cacheCleanup: \(oldCache) -> \(metadata.count)")
+        }
+    }
+    
     static func clearCache() {
         cache = [:]
     }
@@ -68,7 +107,6 @@ class FBCCacheItem {
     private(set) var lastAccessDate: Date = Date.now
     private let path: String
     
-    
     init(path: String) {
         self.path = path
         self.model = UKSImagePathVM2(path: path)
@@ -78,6 +116,22 @@ class FBCCacheItem {
         self.lastAccessDate = Date.now
     }
 }
+
+class FBCCacheMeta {
+    private(set) var model: RecentFile
+    private(set) var lastAccessDate: Date = Date.now
+    private let path: String
+    
+    init(path: String) {
+        self.path = path
+        self.model = RecentFile(path)
+    }
+    
+    func updLastAccessDate() {
+        self.lastAccessDate = Date.now
+    }
+}
+
 
 
 //////////////////////////////////
@@ -137,7 +191,9 @@ extension Dictionary where Key == String, Value == FBCCacheItem {
     var sizeInBytes: Int {
         class_getInstanceSize(FBCCacheItem.self) * self.count
     }
-    
+}
+
+extension Dictionary {
     mutating func remove(key: Key) {
         guard let idx = self.index(forKey: key) else { return }
         
