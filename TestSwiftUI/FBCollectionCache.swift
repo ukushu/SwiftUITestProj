@@ -68,25 +68,18 @@ public class FBCollectionCache {
                 }
         }
         
-//        print("cacheCleanup: \(oldCache) -> \(cache.count)")
+//        if oldCache != metadata.count {
+//            print("cacheCleanup: \(oldCache) -> \(cache.count)")
+//        }
     }
     
     static func automaticCacheCleanupMeta() {
         let oldCache = metadata.count
-        let maxTime = Date.now.addingTimeInterval(TimeInterval(-10))
+        let maxTime = Date.now.addingTimeInterval(TimeInterval(-10) )
         
-//        //clean older than maxTimeSec
-        let cashSortedNewFirstly = metadata
+        //remove cache older than 10 sec
+        metadata
             .sorted { $0.value.lastAccessDate > $1.value.lastAccessDate }
-        
-//        cashSortedNewFirstly
-//            .dropFirst(100)
-//            .forEach {
-//                metadata.remove(key: $0.key)
-//            }
-        
-        //remove cache older than 20 sec
-        cashSortedNewFirstly
             .filter { maxTime > $0.value.lastAccessDate }
             .forEach {
                 metadata.remove(key: $0.key)
