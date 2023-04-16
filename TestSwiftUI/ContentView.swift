@@ -45,6 +45,12 @@ struct ContentView: View {
                 model.filesList = getDirContents2()
             }
             
+            if URL.userHome.appendingPathComponent("/Desktop/Test").exists {
+                Button("Test") {
+                    model.filesList = getDirContents3()
+                }
+            }
+            
             Button("Select 1") {
                 model.selectedItems = [1]
             }
@@ -74,6 +80,10 @@ func getDirContents1() -> [URL] {
 
 func getDirContents2() -> [URL] {
     getDirContentsFor(url: URL.userHome.appendingPathComponent("Downloads") ).sorted { $0 < $1 }
+}
+
+func getDirContents3() -> [URL] {
+    getDirContentsFor(url: URL.userHome.appendingPathComponent("/Desktop/Test") ).sorted { $0 < $1 }
 }
 
 func getDirContentsFor(url: URL) -> [URL] {
