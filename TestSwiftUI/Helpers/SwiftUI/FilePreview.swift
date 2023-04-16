@@ -12,9 +12,6 @@ struct FilePreview: View {
     
     var body: some View {
         TrueBody()
-            .onAppear{
-                model.objectWillChange.send()
-            }
     }
     
     @ViewBuilder
