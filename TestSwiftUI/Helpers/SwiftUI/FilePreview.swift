@@ -53,6 +53,7 @@ class FilePreviewVM: NinjaContext.Main, ObservableObject {
         thumbnailReload()
     }
     
+    //This is hack to get more accurate preview
     func thumbnailReload() {
         future(value: .success(()))
             .delayed(timeout: 0.1)
