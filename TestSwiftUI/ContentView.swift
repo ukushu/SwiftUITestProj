@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  TestSwiftUI
-//
-//  Created by UKS on 04.02.2023.
-//
-
 import Combine
 import SwiftUI
 
@@ -40,10 +33,8 @@ struct ContentView: View {
             }
             
             Button("append at 0") {
-//                let e = RecentFile(MDItemCreate(nil, "/Users" as CFString))!
-//                model.filesList.insert(e, at: 0)
-                //filesList.append(RecentFile(MDItemCreate(nil, "/Users" as CFString))! )
-                //filesList.sort { $0.name < $1.name }
+                model.filesList.insert("/Users".asURLdir(), at: 0)
+                
                 print("filesLst.count: \(model.filesList.count )")
             }
             

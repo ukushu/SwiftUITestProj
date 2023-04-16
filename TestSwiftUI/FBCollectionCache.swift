@@ -1,8 +1,5 @@
-import Foundation
 import SwiftUI
-import QuickLook
 import QuickLookThumbnailing
-import Darwin
 import Essentials
 
 public class FBCollectionCache {
@@ -132,18 +129,15 @@ class FBCCacheMeta {
 }
 
 
-
 //////////////////////////////////
 ///HELPERS
 /////////////////////////////////
 
-extension NSImage{
+extension NSImage {
     var pixelSize: NSSize? {
-        if let rep = self.representations.first{
-            let size = NSSize(width: rep.pixelsWide, height: rep.pixelsHigh)
-            return size
-        }
-        return nil
+        guard let rep = self.representations.first else { return nil }
+        
+        return NSSize(width: rep.pixelsWide, height: rep.pixelsHigh)
     }
 }
 
@@ -183,4 +177,3 @@ extension Dictionary {
         self.remove(at: idx)
     }
 }
-
