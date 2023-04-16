@@ -45,8 +45,7 @@ extension AppTile {
             .foregroundColor(.clear)
             .frame(width: 126, height: 126)
             .overlay {
-                UKSImagePath2(path: app.path, size: 125)
-//                    .frame(width: 125, height: 125)
+                FilePreview(path: app.path)
             }
     }
     

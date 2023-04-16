@@ -3,6 +3,8 @@ import QuickLookThumbnailing
 import Essentials
 
 public class FBCollectionCache {
+    static let thumbnailSize: Int = 125
+    
     private static var cache: [String : FBCCacheItem] = [:]
     private static var metadata: [String : FBCCacheMeta] = [:]
     
@@ -40,7 +42,7 @@ public class FBCollectionCache {
 //        let oldCache = cache.count
         
         let minCountToLeave = 18
-        let countToLeave = 700
+        let countToLeave = 300
         let countToDoCleanup = Int( 1.2 * Double(countToLeave) )
         let maxTime = Date.now.addingTimeInterval(TimeInterval(-20))
         let fullCleanTime = Date.now.addingTimeInterval(TimeInterval(-40))
@@ -57,10 +59,9 @@ public class FBCollectionCache {
         
         cashSortedNewFirstly
             .dropFirst(minCountToLeave)
-            // clean older than maxTime. Checked - correctly works
+            // clean older than maxTime. Correctly works
             .filter { maxTime > $0.value.lastAccessDate }
             .forEach {
-//                print( cache[$0.key]!.lastAccessDate.string(withFormat: "ss.sss") )
                 cache.remove(key: $0.key)
             }
         
@@ -106,13 +107,13 @@ public class FBCollectionCache {
 }
 
 class FBCCacheItem {
-    private(set) var model: UKSImagePathVM2
+    private(set) var model: FilePreviewVM
     private(set) var lastAccessDate: Date = Date.now
     private let path: String
     
     init(path: String) {
         self.path = path
-        self.model = UKSImagePathVM2(path: path)
+        self.model = FilePreviewVM(path: path)
     }
     
     func updLastAccessDate() {
@@ -157,7 +158,7 @@ class IconCache {
             if let dsStore = dsStore {
                 return dsStore
             } else {
-                let img = path.FS.info.hiresIcon(size: Int(125))
+                let img = path.FS.info.hiresIcon(size: Int(FBCollectionCache.thumbnailSize))
                 dsStore = img
                 return img
             }
@@ -167,7 +168,7 @@ class IconCache {
             return musicIcon!
         }
         
-        return path.FS.info.hiresIcon(size: Int(125))
+        return path.FS.info.hiresIcon(size: Int(FBCollectionCache.thumbnailSize))
     }
 }
 

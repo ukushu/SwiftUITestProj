@@ -17,7 +17,7 @@ struct ContentView: View {
                              topScroller: model.topScroller.eraseToAnyPublisher()
             ) { item, indexPath in
                 AppTile(app: item, isSelected: model.selectedItems.contains(indexPath.intValue) )
-                    .id(item.path )
+//                    .id(item.path )
             }
         }
     }
@@ -70,11 +70,11 @@ func getDirContents1() -> [URL] {
     
     let url = wallpapers.exists ? wallpapers : URL.userHome.appendingPathComponent("Desktop")
     
-    return getDirContentsFor(url: url)
+    return getDirContentsFor(url: url).sorted { $0 < $1 }
 }
 
 func getDirContents2() -> [URL] {
-    getDirContentsFor(url: URL.userHome.appendingPathComponent("Downloads") )
+    getDirContentsFor(url: URL.userHome.appendingPathComponent("Downloads") ).sorted { $0 < $1 }
 }
 
 func getDirContentsFor(url: URL) -> [URL] {
@@ -98,7 +98,7 @@ class SuperViewModel: ObservableObject {
     
     let layout = flowLayout()
     
-    @Published var filesList: [URL] = getDirContents1().sorted { $0 < $1 }
+    @Published var filesList: [URL] = getDirContents1()
 }
 
 func flowLayout() -> NSCollectionViewFlowLayout{

@@ -201,31 +201,30 @@ extension FSFileInfo {
 fileprivate func quickLookThumbnail(url: URL,
                                     type: QLThumbnailGenerator.Request.RepresentationTypes,
                                     size: CGFloat) -> Future<NSImage> {
-    let size = CGSize(width: size, height: size)
-    
+
     let request = QLThumbnailGenerator.Request(fileAt: url,
-                                               size: size,
+                                               size: CGSize(width: size, height: size),
                                                scale: NSScreen.main?.backingScaleFactor ?? 1,
                                                representationTypes: type)
     request.iconMode = true
     
     return promise { promise in
         DispatchQueue.main.async {
-            QLThumbnailGenerator.shared.generateBestRepresentation(for: request) { thumbnail, error in
-                    if let error = error {
-                        promise.fail(error)
-                        return
-                    }
-                    
-                    if let thumbnail = thumbnail {
-                        promise.succeed(thumbnail.nsImage)
-                    } else {
-                        promise.fail( NSError(domain: "www", code: 666) )
-                    }
-                    
-                    if !promise.isComplete {
-                        promise.fail( NSError(domain: "www", code: 667) )
-                    }
+            QLThumbnailGenerator.shared.generateRepresentations(for: request) { thumbnail, _ , error in
+                if let error = error {
+                    promise.fail(error)
+                    return
+                }
+                
+                if let thumbnail = thumbnail {
+                    promise.succeed(thumbnail.nsImage)
+                } else {
+                    promise.fail( NSError(domain: "www", code: 666) )
+                }
+                
+                if !promise.isComplete {
+                    promise.fail( NSError(domain: "www", code: 667) )
+                }
             }
         }
     }
