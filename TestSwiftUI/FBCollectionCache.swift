@@ -43,10 +43,17 @@ public class FBCollectionCache {
         let countToLeave = 700
         let countToDoCleanup = Int( 1.2 * Double(countToLeave) )
         let maxTime = Date.now.addingTimeInterval(TimeInterval(-20))
+        let fullCleanTime = Date.now.addingTimeInterval(TimeInterval(-40))
         
         //clean older than maxTimeSec
         let cashSortedNewFirstly = cache
             .sorted { $0.value.lastAccessDate > $1.value.lastAccessDate }
+        
+        cashSortedNewFirstly
+            .filter { fullCleanTime > $0.value.lastAccessDate }
+            .forEach {
+                cache.remove(key: $0.key)
+            }
         
         cashSortedNewFirstly
             .dropFirst(minCountToLeave)
