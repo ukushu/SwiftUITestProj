@@ -64,7 +64,6 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: /* NSObject, */ NSVi
     
     func makeNSViewController(context: Context) -> NSViewController {
         let collectionView = InternalCollectionView()
-        scrollView.documentView = collectionView
         
         let viewController = NSCollectionController(collection: self.items,
                                                     factory: factory,
@@ -72,23 +71,22 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: /* NSObject, */ NSVi
                                                     scrollToTopCancellable: getScrollToTopCancellable() )
         
         viewController.view = scrollView
-        scrollView.documentView = collectionView
-        
         collectionView.dataSource = viewController
         collectionView.delegate = viewController
+        
+        scrollView.documentView = collectionView
         
         collectionView.collectionViewLayout = layout
         collectionView.backgroundColors = [.clear]
         collectionView.isSelectable = true
         collectionView.allowsMultipleSelection = true
         collectionView.allowsEmptySelection = false
-//        collectionView.layerContentsRedrawPolicy = .crossfade
-        
+
         collectionView.register(CollectionViewItem.self, forItemWithIdentifier: NSUserInterfaceItemIdentifier("NSCollectionViewItem"))
         
-        if ItemType.self == URL.self {
-            //collectionView.keyDownHandler = context.coordinator.handleKeyDown(_:)
-        }
+//        if ItemType.self == URL.self {
+//            collectionView.keyDownHandler = context.coordinator.handleKeyDown(_:)
+//        }
         
         return viewController
     }
