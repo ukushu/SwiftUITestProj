@@ -73,19 +73,21 @@ public class FBCollectionCache {
     
     static func automaticCacheCleanupMeta() {
 //        let oldCache = metadata.count
-        let maxTime = Date.now.addingTimeInterval(TimeInterval(-10) )
+        let maxTime = Date.now.addingTimeInterval(TimeInterval(-60) )
         
         //remove cache older than 10 sec
-        metadata
-            .sorted { $0.value.lastAccessDate > $1.value.lastAccessDate }
-            .filter { maxTime > $0.value.lastAccessDate }
-            .forEach {
-                metadata.remove(key: $0.key)
-            }
+//        metadata
+//            .sorted { $0.value.lastAccessDate > $1.value.lastAccessDate }
+//            .filter { maxTime > $0.value.lastAccessDate }
+//            .forEach {
+//                metadata.remove(key: $0.key)
+//            }
+        
         
 //        if oldCache != metadata.count {
 //            print("cacheCleanup: \(oldCache) -> \(metadata.count)")
 //        }
+        print("dict weight: \(metadata.sizeInBytes)")
     }
     
     static func clearCache() {
@@ -165,9 +167,13 @@ class IconCache {
     }
 }
 
-extension Dictionary where Key == String, Value == FBCCacheItem {
+extension Dictionary {
     var sizeInBytes: Int {
-        class_getInstanceSize(FBCCacheItem.self) * self.count
+        if let type_ = Value.self as? AnyClass {
+            return class_getInstanceSize(type_) * self.count
+        }
+        
+        return 0
     }
 }
 

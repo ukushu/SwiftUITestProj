@@ -53,10 +53,6 @@ public extension FSurl {
 //            .map { $0 as URL }
     }
     
-    func openWithAssociatedApp() {
-        NSWorkspace.shared.openFile(url.path)
-    }
-    
     @available(macOS 10.15, *)
     func openTerminalAt() {
         guard let appUrl = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.apple.Terminal")

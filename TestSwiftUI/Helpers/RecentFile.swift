@@ -10,11 +10,11 @@ class RecentFile {
     
     lazy var name: String = url.path.FS.info.nameWithoutAppExt
     
-    static let attrToGrab = ["kMDItemDateAdded","kMDItemAttributeChangeDate","kMDItemContentModificationDate", "kMDItemFSCreationDate"]
-    lazy var metadata: [String : Any]? = url.path.FS.info.getAttributes(forAttributes: RecentFile.attrToGrab)
+    //static let attrToGrab = ["kMDItemDateAdded","kMDItemAttributeChangeDate","kMDItemContentModificationDate", "kMDItemFSCreationDate"]
+    lazy var metadata: [String : Any]? = url.path.FS.info.getAttributes()//(forAttributes: RecentFile.attrToGrab)
     
     func refreshMetadata() {
-        metadata = url.path.FS.info.getAttributes(forAttributes: RecentFile.attrToGrab)
+        metadata = url.path.FS.info.getAttributes()//(forAttributes: RecentFile.attrToGrab)
     }
     
     private var displayDateDir: Date? {

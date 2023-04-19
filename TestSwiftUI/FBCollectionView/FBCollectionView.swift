@@ -106,10 +106,12 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: /* NSObject, */ NSVi
 //        
 //        let selections = self.selection?.wrappedValue.map{ IndexPath(index: $0) } ?? []
         
-        controller.collection = self.items
-        collectionView.reloadData()
-        
-//        collectionView.reloadItems(at: Set(selections) )//.union(idxToUpd)
+        if controller.collection == self.items {
+            collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems())
+        } else {
+            controller.collection = self.items
+            collectionView.reloadData()
+        }
     }
 }
 

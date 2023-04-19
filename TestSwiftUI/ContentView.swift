@@ -16,6 +16,7 @@ struct ContentView: View {
                              layout: model.layout,
                              topScroller: model.topScroller.eraseToAnyPublisher()
             ) { item, indexPath in
+//                Text(item.lastPathComponent)
                 AppTile(url: item, isSelected: model.selectedItems.contains(indexPath.intValue) )
             }
         }
@@ -107,7 +108,7 @@ class SuperViewModel: ObservableObject {
     
     let layout = flowLayout()
     
-    @Published var filesList: [URL] = getDirContents1()
+    @Published var filesList: [URL] = getDirContents2()
 }
 
 func flowLayout() -> NSCollectionViewFlowLayout{
