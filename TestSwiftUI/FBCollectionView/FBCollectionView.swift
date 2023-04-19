@@ -113,6 +113,8 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: /* NSObject, */ NSVi
             collectionView.reloadData()
         }
     }
+    
+    
 }
 
 //extension FBCollectionView {

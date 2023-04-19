@@ -56,12 +56,28 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
     ///////////////////////////////
     // HELPERS Selection update
     ///////////////////////////////
+    
+//    public func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
+//        // Unsure if necessary to queue:
+//        DispatchQueue.main.async {
+//            self.selection?.wrappedValue.formUnion(indexPaths.map{ $0.item })
+////            print("Selected items: \(self.selections) \n\t| added: \(indexPaths)")
+//
+////            if let quickLook = QLPreviewPanel.shared() {
+////                if (quickLook.isVisible) {
+////                    quickLook.reloadData()
+////                }
+////            }
+//        }
+//    }
+    
+    
+//    WORKS WELL
     public func collectionView(_ collectionView: NSCollectionView, shouldSelectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
-//        print("collectionView shouldSelectItemsAt ")
+        print("collectionView shouldSelectItemsAt \(indexPaths.map{ $0.item })")
         
         if let selection = selection {
-            let tmp: [Int] = collectionView.selectionIndexes.sorted()
-            let newSelSet: Set<Int> = Set(tmp).union(indexPaths.map{ $0.intValue })
+            let newSelSet = Set(indexPaths.map{ $0.item })
             
             if selection.wrappedValue != newSelSet {
                 selection.wrappedValue = newSelSet
@@ -72,18 +88,25 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
     }
     
     public func collectionView(_ collectionView: NSCollectionView, shouldDeselectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
-//        print("collectionView shouldDeselectItemsAt ")
-        
-        if let selection = selection {
-            let tmp: [Int] = collectionView.selectionIndexes.sorted()
-            let newSelSet: Set<Int> = Set(tmp).subtracting(indexPaths.map{ $0.intValue })
-            
-            if selection.wrappedValue != newSelSet {
-                selection.wrappedValue = newSelSet
-            }
-        }
-        
+        print("collectionView shouldDeselectItemsAt \(indexPaths.map{ $0.item })")
+
+//        selection?.wrappedValue.subtract(indexPaths.map{ $0.item })
+
+//        if let selection = selection {
+//            let newSelSet = selection.wrappedValue.subtracting(indexPaths.map{ $0.item })
+//
+//            if selection.wrappedValue != newSelSet {
+//                selection.wrappedValue = newSelSet
+//            }
+//        }
+
         return indexPaths
+    }
+
+    public func collectionView(_ collectionView: NSCollectionView, didDeselectItemsAt indexPaths: Set<IndexPath>) {
+        print("collectionView didDeselectItemsAt \(indexPaths.map{ $0.item })")
+
+//        selection?.wrappedValue.subtract(indexPaths.map{ $0.item })
     }
     
     ///////////////////////////////

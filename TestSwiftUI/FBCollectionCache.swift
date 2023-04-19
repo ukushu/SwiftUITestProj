@@ -73,7 +73,7 @@ public class FBCollectionCache {
     
     static func automaticCacheCleanupMeta() {
 //        let oldCache = metadata.count
-        let maxTime = Date.now.addingTimeInterval(TimeInterval(-60) )
+//        let maxTime = Date.now.addingTimeInterval(TimeInterval(-60) )
         
         //remove cache older than 10 sec
 //        metadata
@@ -87,7 +87,7 @@ public class FBCollectionCache {
 //        if oldCache != metadata.count {
 //            print("cacheCleanup: \(oldCache) -> \(metadata.count)")
 //        }
-        print("dict weight: \(metadata.sizeInBytes)")
+//        print("dict weight: \(metadata.sizeInBytes)")
     }
     
     static func clearCache() {
