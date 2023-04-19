@@ -71,13 +71,14 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
 //        }
 //    }
     
-    
-//    WORKS WELL
     public func collectionView(_ collectionView: NSCollectionView, shouldSelectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
-        print("collectionView shouldSelectItemsAt \(indexPaths.map{ $0.item })")
+        if let sel = self.selection?.wrappedValue {
+            print("+ shouldSelectItemsAt\nAdded: \(indexPaths)\n\tSelected items: \(sel)")
+        }
         
         if let selection = selection {
-            let newSelSet = Set(indexPaths.map{ $0.item })
+            let newSelSet: Set<Int> = Set(indexPaths.map{ $0.item })
+//            let newSelSet: Set<Int> = selection.wrappedValue.union(indexPaths.map{ $0.item }) //.union(indexPaths.map{ $0 })
             
             if selection.wrappedValue != newSelSet {
                 selection.wrappedValue = newSelSet
@@ -87,26 +88,25 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
         return indexPaths
     }
     
+    public func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
+        if let sel = self.selection?.wrappedValue {
+            print("+ didSelectItemsAt\nAdded: \(indexPaths)\n\tSelected items: \(sel)")
+        }
+        
+    }
+    
     public func collectionView(_ collectionView: NSCollectionView, shouldDeselectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
-        print("collectionView shouldDeselectItemsAt \(indexPaths.map{ $0.item })")
-
-//        selection?.wrappedValue.subtract(indexPaths.map{ $0.item })
-
-//        if let selection = selection {
-//            let newSelSet = selection.wrappedValue.subtracting(indexPaths.map{ $0.item })
-//
-//            if selection.wrappedValue != newSelSet {
-//                selection.wrappedValue = newSelSet
-//            }
-//        }
-
+        if let sel = self.selection?.wrappedValue {
+            print("- shouldDeselectItemsAt\nRemoved: \(indexPaths)\n\tSelected items: \(sel)")
+        }
+        
         return indexPaths
     }
-
+    
     public func collectionView(_ collectionView: NSCollectionView, didDeselectItemsAt indexPaths: Set<IndexPath>) {
-        print("collectionView didDeselectItemsAt \(indexPaths.map{ $0.item })")
-
-//        selection?.wrappedValue.subtract(indexPaths.map{ $0.item })
+        if let sel = self.selection?.wrappedValue {
+            print("- didDeselectItemsAt\nRemoved: \(indexPaths)\n\tSelected items: \(sel)")
+        }
     }
     
     ///////////////////////////////
