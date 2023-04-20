@@ -53,6 +53,10 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
 //        }
 //    }
     
+    
+    
+    
+    
     ///////////////////////////////
     // HELPERS Selection update
     ///////////////////////////////
@@ -71,19 +75,20 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
 //        }
 //    }
     
+    public override func viewDidAppear() {
+        //Select first item if selection is empty
+        guard let selection = selection else { return }
+        if collection.count > 0 && selection.wrappedValue.count == 0
+        {
+            selection.wrappedValue = [0]
+            becomeFirstResponder()
+        }
+    }
+    
     public func collectionView(_ collectionView: NSCollectionView, shouldSelectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
-        if let sel = self.selection?.wrappedValue {
-            print("+ shouldSelectItemsAt\nAdded: \(indexPaths)\n\tSelected items: \(sel)")
-        }
-        
-        if let selection = selection {
-            let newSelSet: Set<Int> = Set(indexPaths.map{ $0.item })
-//            let newSelSet: Set<Int> = selection.wrappedValue.union(indexPaths.map{ $0.item }) //.union(indexPaths.map{ $0 })
-            
-            if selection.wrappedValue != newSelSet {
-                selection.wrappedValue = newSelSet
-            }
-        }
+//        if let sel = self.selection?.wrappedValue {
+//            print("+ shouldSelectItemsAt\nAdded: \(indexPaths)\n\tSelected items: \(sel)")
+//        }
         
         return indexPaths
     }
@@ -93,19 +98,46 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
             print("+ didSelectItemsAt\nAdded: \(indexPaths)\n\tSelected items: \(sel)")
         }
         
+        if let selection = selection {
+            let newSelSet: Set<Int> = Set(indexPaths.map{ $0.item })
+//            let newSelSet: Set<Int> = selection.wrappedValue.union(indexPaths.map{ $0.item }) //.union(indexPaths.map{ $0 })
+
+            if selection.wrappedValue != newSelSet {
+                selection.wrappedValue = newSelSet
+            }
+        }
     }
     
     public func collectionView(_ collectionView: NSCollectionView, shouldDeselectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
-        if let sel = self.selection?.wrappedValue {
-            print("- shouldDeselectItemsAt\nRemoved: \(indexPaths)\n\tSelected items: \(sel)")
-        }
+//        if let sel = self.selection?.wrappedValue {
+//            print("- shouldDeselectItemsAt\nRemoved: \(indexPaths)\n\tSelected items: \(sel)")
+//        }
         
         return indexPaths
     }
     
     public func collectionView(_ collectionView: NSCollectionView, didDeselectItemsAt indexPaths: Set<IndexPath>) {
+        //select fisrt if nothing selected #1
+        let firstSel = self.selection?.wrappedValue.first ?? 0
+        
         if let sel = self.selection?.wrappedValue {
             print("- didDeselectItemsAt\nRemoved: \(indexPaths)\n\tSelected items: \(sel)")
+        }
+        
+        if let selection = selection {
+            if let sel = self.collectionView?.selectionIndexes.map({ $0 as Int }) {
+                self.selection?.wrappedValue = Set(sel)
+            }
+//            let filteredSet: Set<Int> = selection.wrappedValue.subtracting(indexPaths.map{ $0.item })
+//
+//            if selection.wrappedValue != filteredSet {
+//                selection.wrappedValue = filteredSet
+//            }
+//
+//            //select fisrt if nothing selected #2
+//            if selection.wrappedValue.isEmpty && collection.count > 0 {
+//                selection.wrappedValue = [firstSel]
+//            }
         }
     }
     

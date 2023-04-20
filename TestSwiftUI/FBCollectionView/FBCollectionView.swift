@@ -70,6 +70,7 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: /* NSObject, */ NSVi
                                                     selection: selection,
                                                     scrollToTopCancellable: getScrollToTopCancellable() )
         
+        
         viewController.view = scrollView
         collectionView.dataSource = viewController
         collectionView.delegate = viewController
@@ -81,7 +82,7 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: /* NSObject, */ NSVi
         collectionView.isSelectable = true
         collectionView.allowsMultipleSelection = true
         collectionView.allowsEmptySelection = false
-
+        
         collectionView.register(CollectionViewItem.self, forItemWithIdentifier: NSUserInterfaceItemIdentifier("NSCollectionViewItem"))
         
 //        if ItemType.self == URL.self {
@@ -153,6 +154,18 @@ final class InternalCollectionView: NSCollectionView {
         }
         
         super.keyDown(with: event)
+    }
+    
+    override func becomeFirstResponder() -> Bool {
+        if selectionIndexPaths.count == 0 {
+            for section in 0..<numberOfSections {
+                if numberOfItems(inSection: section) > 0 {
+                    selectionIndexPaths = [IndexPath(item: 0, section: section)]
+                    break
+                }
+            }
+        }
+        return super.becomeFirstResponder()
     }
     
     ////////////////////////////////////////////////////////////////////
