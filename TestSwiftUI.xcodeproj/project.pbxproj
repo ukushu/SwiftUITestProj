@@ -25,7 +25,7 @@
 		1DDDEDB129B7604300C48216 /* URL+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDDEDB029B7604300C48216 /* URL+Ext.swift */; };
 		1DDDEDB329B760A300C48216 /* Color+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDDEDB229B760A300C48216 /* Color+Ext.swift */; };
 		1DDDEDB529B7612F00C48216 /* MDItem+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDDEDB429B7612F00C48216 /* MDItem+Ext.swift */; };
-		1DDDEDB729B762C800C48216 /* AppTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDDEDB629B762C800C48216 /* AppTile.swift */; };
+		1DDDEDB729B762C800C48216 /* FileTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDDEDB629B762C800C48216 /* FileTile.swift */; };
 		1DDDEDBA29B762F800C48216 /* Space.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDDEDB929B762F800C48216 /* Space.swift */; };
 		1DDDEDBF29B7639400C48216 /* AsyncNinja in Frameworks */ = {isa = PBXBuildFile; productRef = 1DDDEDBE29B7639400C48216 /* AsyncNinja */; };
 		1DDDEDC129B764B200C48216 /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDDEDC029B764B200C48216 /* Date+Ext.swift */; };
@@ -53,7 +53,7 @@
 		1DDDEDB029B7604300C48216 /* URL+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Ext.swift"; sourceTree = "<group>"; };
 		1DDDEDB229B760A300C48216 /* Color+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Ext.swift"; sourceTree = "<group>"; };
 		1DDDEDB429B7612F00C48216 /* MDItem+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MDItem+Ext.swift"; sourceTree = "<group>"; };
-		1DDDEDB629B762C800C48216 /* AppTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTile.swift; sourceTree = "<group>"; };
+		1DDDEDB629B762C800C48216 /* FileTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTile.swift; sourceTree = "<group>"; };
 		1DDDEDB929B762F800C48216 /* Space.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Space.swift; sourceTree = "<group>"; };
 		1DDDEDC029B764B200C48216 /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
 		E6CBE35F29D21BA2006373E2 /* FBCollectionViewConroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBCollectionViewConroller.swift; sourceTree = "<group>"; };
@@ -130,7 +130,7 @@
 				1DDDEDB029B7604300C48216 /* URL+Ext.swift */,
 				1DDDEDB229B760A300C48216 /* Color+Ext.swift */,
 				1DDDEDB429B7612F00C48216 /* MDItem+Ext.swift */,
-				1DDDEDB629B762C800C48216 /* AppTile.swift */,
+				1DDDEDB629B762C800C48216 /* FileTile.swift */,
 				1DDDEDC029B764B200C48216 /* Date+Ext.swift */,
 			);
 			path = Helpers;
@@ -243,7 +243,7 @@
 				1DDDEDBA29B762F800C48216 /* Space.swift in Sources */,
 				1DDDEDAE29B75FD900C48216 /* String+FS.swift in Sources */,
 				1DDDEDC129B764B200C48216 /* Date+Ext.swift in Sources */,
-				1DDDEDB729B762C800C48216 /* AppTile.swift in Sources */,
+				1DDDEDB729B762C800C48216 /* FileTile.swift in Sources */,
 				1DDDEDAF29B75FD900C48216 /* URL+FS+FileInfo.swift in Sources */,
 				1D8F362B29EB1BCD00098621 /* FilePreview.swift in Sources */,
 				1D4A87B5298EE5390062686C /* TestSwiftUIApp.swift in Sources */,

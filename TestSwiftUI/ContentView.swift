@@ -18,9 +18,9 @@ struct ContentView: View {
             ) { item, indexPath -> AnyView in
 //                Text(item.lastPathComponent)
                 if let item = item {
-                    return AnyView( AppTile(url: item, isSelected: model.selectedItems.contains(indexPath.intValue) ) )
+                    return AnyView( FileTile(url: item, isSelected: model.selectedItems.contains(indexPath.intValue) ) )
                 } else {
-                    return AnyView( Text("Empty").background(Color.green).allowsHitTesting(false)  )
+                    return AnyView( FileTileEmpty()  )
                 }
             }
         }
@@ -54,6 +54,10 @@ struct ContentView: View {
                 Button("Test") {
                     model.filesList = getDirContents3()
                 }
+            }
+            
+            Button("Empty") {
+                model.filesList = [].appendEmpties()
             }
             
             Button("Select 1") {
