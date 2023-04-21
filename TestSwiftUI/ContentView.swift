@@ -15,9 +15,13 @@ struct ContentView: View {
                              selection: $model.selectedItems,
                              layout: model.layout,
                              topScroller: model.topScroller.eraseToAnyPublisher()
-            ) { item, indexPath in
+            ) { item, indexPath -> AnyView in
 //                Text(item.lastPathComponent)
-                AppTile(url: item, isSelected: model.selectedItems.contains(indexPath.intValue) )
+                if let item = item {
+                    return AnyView( AppTile(url: item, isSelected: model.selectedItems.contains(indexPath.intValue) ) )
+                } else {
+                    return AnyView( Text("Empty").background(Color.green).allowsHitTesting(false)  )
+                }
             }
         }
     }
@@ -71,20 +75,24 @@ struct ContentView: View {
     }
 }
 
-func getDirContents1() -> [URL] {
+func getDirContents1() -> [URL?] {
     let wallpapers = URL.userHome.appendingPathComponent("/Desktop/Wallpapers")
     
     let url = wallpapers.exists ? wallpapers : URL.userHome.appendingPathComponent("Desktop")
     
-    return getDirContentsFor(url: url).sorted { $0 < $1 }
+    return getDirContentsFor(url: url).sorted { $0 < $1 }.map{ val -> URL? in val }.appendEmpties()
 }
 
-func getDirContents2() -> [URL] {
-    getDirContentsFor(url: URL.userHome.appendingPathComponent("Downloads") ).sorted { $0 < $1 }
+func getDirContents2() -> [URL?] {
+    let files = getDirContentsFor(url: URL.userHome.appendingPathComponent("Downloads") ).sorted { $0 < $1 }.map{ val -> URL? in val }
+    
+    return files.appendEmpties()
 }
 
-func getDirContents3() -> [URL] {
-    getDirContentsFor(url: URL.userHome.appendingPathComponent("/Desktop/Test") ).sorted { $0 < $1 }
+func getDirContents3() -> [URL?] {
+    let files = getDirContentsFor(url: URL.userHome.appendingPathComponent("/Desktop/Test") ).sorted { $0 < $1 }.map{ val -> URL? in val }
+    
+    return files.appendEmpties()
 }
 
 func getDirContentsFor(url: URL) -> [URL] {
@@ -108,7 +116,7 @@ class SuperViewModel: ObservableObject {
     
     let layout = flowLayout()
     
-    @Published var filesList: [URL] = getDirContents2()
+    @Published var filesList: [URL?] = getDirContents2()
 }
 
 func flowLayout() -> NSCollectionViewFlowLayout{
@@ -125,5 +133,22 @@ func flowLayout() -> NSCollectionViewFlowLayout{
 extension URL : Comparable {
     public static func < (lhs: URL, rhs: URL) -> Bool {
         lhs.path < rhs.path
+    }
+}
+
+extension Array where Element == Optional<URL> {
+    func appendEmpties() -> [URL?] {
+        if self.count < 12 {
+            let empties = (0..<(12 - self.count)).map{ _ -> URL? in nil }
+            
+            return self.appending(contentsOf: empties)
+        }
+        
+        let emptiesCount = self.count % 6
+        
+        let empties = (0..<emptiesCount).map{ _ -> URL? in nil }
+        
+        return self.appending(contentsOf: empties)
+        //if self.count
     }
 }

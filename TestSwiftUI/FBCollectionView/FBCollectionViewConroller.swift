@@ -11,17 +11,17 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
     let factory: (T.Element, IndexPath) -> Content
     
     let         id : String
-    var         collection : T
-    weak var    collectionView: NSCollectionView?
+    var         items : T
+    weak var    itemsView: NSCollectionView?
     let         selection : Binding<Set<Int>>?
     
     let scrollToTopCancellable: AnyCancellable?
     
     init(id: String = "", collection: T, factory: @escaping (T.Element, IndexPath) -> Content, collectionView: NSCollectionView? = nil, selection: Binding<Set<Int>>?, scrollToTopCancellable: AnyCancellable?) {
         self.id = id
-        self.collection = collection
+        self.items = collection
         self.factory = factory
-        self.collectionView = collectionView
+        self.itemsView = collectionView
         self.selection = selection
         self.scrollToTopCancellable = scrollToTopCancellable
         
@@ -32,7 +32,7 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
         let item = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier("NSCollectionViewItem"), for: indexPath)
         
         if let item = item as? CollectionViewItem {
-            let hosting = NSHostingView(rootView: factory(collection[indexPath.item], indexPath))
+            let hosting = NSHostingView(rootView: factory(items[indexPath.item], indexPath))
             
             item.container.views.forEach { item.container.removeView($0) }
             item.container.addView(hosting, in: .center)
@@ -78,7 +78,7 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
     public override func viewDidAppear() {
         //Select first item if selection is empty
         guard let selection = selection else { return }
-        if collection.count > 0 && selection.wrappedValue.count == 0
+        if items.count > 0 && selection.wrappedValue.count == 0
         {
             selection.wrappedValue = [0]
             becomeFirstResponder()
@@ -90,7 +90,10 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
 //            print("+ shouldSelectItemsAt\nAdded: \(indexPaths)\n\tSelected items: \(sel)")
 //        }
         
-        return indexPaths
+        guard let items = self.items as? [URL?] else { return indexPaths}
+        
+        // do not select nil items
+        return indexPaths.filter{ items[$0.intValue] != nil }
     }
     
     public func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
@@ -113,7 +116,10 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
 //            print("- shouldDeselectItemsAt\nRemoved: \(indexPaths)\n\tSelected items: \(sel)")
 //        }
         
-        return indexPaths
+        guard let items = self.items as? [URL?] else { return indexPaths}
+        
+        // do not select nil items
+        return indexPaths.filter{ items[$0.intValue] != nil }
     }
     
     public func collectionView(_ collectionView: NSCollectionView, didDeselectItemsAt indexPaths: Set<IndexPath>) {
@@ -125,7 +131,7 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
         }
         
         if let selection = selection {
-            if let sel = self.collectionView?.selectionIndexes.map({ $0 as Int }) {
+            if let sel = self.itemsView?.selectionIndexes.map({ $0 as Int }) {
                 self.selection?.wrappedValue = Set(sel)
             }
 //            let filteredSet: Set<Int> = selection.wrappedValue.subtracting(indexPaths.map{ $0.item })
@@ -155,7 +161,7 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
     ///////////////////////////////
     // HELPERS
     ///////////////////////////////
-    public func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int { collection.count }
+    public func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int { items.count }
     
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 }
