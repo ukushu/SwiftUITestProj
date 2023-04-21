@@ -142,17 +142,28 @@ extension URL : Comparable {
 
 extension Array where Element == Optional<URL> {
     func appendEmpties() -> [URL?] {
+        var arr = self
+        // remove all nil elements from end of array
+        for i in arr.indices.reversed() {
+            if arr[i] == nil {
+                arr.remove(at: i)
+            } else {
+                break
+            }
+        }
+        
+        // fill in case of empty
         if self.count < 12 {
             let empties = (0..<(12 - self.count)).map{ _ -> URL? in nil }
             
-            return self.appending(contentsOf: empties)
+            return arr.appending(contentsOf: empties)
         }
         
-        let emptiesCount = self.count % 6
+        // add needed count of empties
+        let emptiesCount = arr.count % 6
         
         let empties = (0..<emptiesCount).map{ _ -> URL? in nil }
         
-        return self.appending(contentsOf: empties)
-        //if self.count
+        return arr.appending(contentsOf: empties)
     }
 }
