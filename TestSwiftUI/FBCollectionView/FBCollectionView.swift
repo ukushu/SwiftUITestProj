@@ -39,7 +39,7 @@ import Combine
 
 // TODO: ItemType extends identifiable?
 // TODO: Move the delegates to a coordinator.
-struct FBCollectionView<ItemType: Hashable, Content: View>: /* NSObject, */ NSViewControllerRepresentable /* NSCollectionViewDataSource, NSCollectionViewDelegateFlowLayout */ {
+struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepresentable /* NSObject, NSCollectionViewDelegateFlowLayout */ {
     
     //Need to locate here for topScroller
     private var scrollView: NSScrollView = NSScrollView()
@@ -54,7 +54,6 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: /* NSObject, */ NSVi
     let factory: (ItemType, IndexPath) -> Content
     
     init(items: [ItemType], selection: Binding<Set<Int>>?, layout: NSCollectionViewFlowLayout, topScroller: AnyPublisher<Void, Never>? = nil, factory: @escaping (ItemType, IndexPath) -> Content) {
-        
         self.items = items
         self.selection = selection
         self.layout = layout
@@ -70,7 +69,6 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: /* NSObject, */ NSVi
                                                     selection: selection,
                                                     scrollToTopCancellable: getScrollToTopCancellable() )
         
-        
         viewController.view = scrollView
         collectionView.dataSource = viewController
         collectionView.delegate = viewController
@@ -85,9 +83,9 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: /* NSObject, */ NSVi
         
         collectionView.register(CollectionViewItem.self, forItemWithIdentifier: NSUserInterfaceItemIdentifier("NSCollectionViewItem"))
         
-//        if ItemType.self == URL.self {
-//            collectionView.keyDownHandler = context.coordinator.handleKeyDown(_:)
-//        }
+        if ItemType.self == URL.self {
+//            collectionView.keyDownHandler = viewController.handleKeyDown(_:)
+        }
         
         return viewController
     }
