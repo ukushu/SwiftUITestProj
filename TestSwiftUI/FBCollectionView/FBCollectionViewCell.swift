@@ -8,6 +8,5 @@ final class CollectionViewItem : NSCollectionViewItem {
         container.orientation = NSUserInterfaceLayoutOrientation.vertical
         container.wantsLayer = true
         self.view = container
-        
     }
 }

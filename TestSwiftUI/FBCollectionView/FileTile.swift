@@ -78,34 +78,7 @@ extension FileTile {
 ///AppTileEmpty
 ///////////////////////////
 
-struct FileTileEmpty: View {
-    var body: some View {
-        VStack(alignment: .center, spacing: 0) {
-            RRect()
-                .frame(width: 90, height: 118)
-                .frame(width: 126, height: 126)
-            
-            Space(6)
-            
-            RRect()
-                .frame(width: 90, height: 15)
-            
-            Space(4)
-            
-            RRect()
-                .frame(width: 126, height: 13)
-        }
-    }
-}
 
-fileprivate struct RRect: View {
-    @Environment(\.colorScheme) var colorScheme
-    
-    var body: some View {
-        RoundedRectangle(cornerRadius: 8)
-            .foregroundColor( colorScheme == .dark ? Color(rgbaHex: 0xffffff07) : Color(rgbaHex: 0x00000007) )
-    }
-}
 
 //    .onDrag {
 //        appState.isDragging = true

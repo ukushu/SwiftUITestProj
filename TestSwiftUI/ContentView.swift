@@ -20,7 +20,7 @@ struct ContentView: View {
                 if let item = item {
                     return AnyView( FileTile(url: item, isSelected: model.selectedItems.contains(indexPath.intValue) ) )
                 } else {
-                    return AnyView( FileTileEmpty()  )
+                    return AnyView( FileTileEmpty2() )
                 }
             }
         }

@@ -157,10 +157,14 @@ final class InternalCollectionView: NSCollectionView {
     }
     
     override func becomeFirstResponder() -> Bool {
+        becomeFirstResponder(idx: 0)
+    }
+    
+    func becomeFirstResponder(idx: Int) -> Bool {
         if selectionIndexPaths.count == 0 {
             for section in 0..<numberOfSections {
-                if numberOfItems(inSection: section) > 0 {
-                    selectionIndexPaths = [IndexPath(item: 0, section: section)]
+                if numberOfItems(inSection: section) >= idx {
+                    selectionIndexPaths = [IndexPath(item: idx, section: section)]
                     break
                 }
             }

@@ -92,6 +92,7 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
         
         guard let items = self.items as? [URL?] else { return indexPaths}
         
+        
         // do not select nil items
         return indexPaths.filter{ items[$0.intValue] != nil }
     }
@@ -104,10 +105,13 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
         if let selection = selection {
             let newSelSet: Set<Int> = Set(indexPaths.map{ $0.item })
 //            let newSelSet: Set<Int> = selection.wrappedValue.union(indexPaths.map{ $0.item }) //.union(indexPaths.map{ $0 })
-
+            
             if selection.wrappedValue != newSelSet {
                 selection.wrappedValue = newSelSet
             }
+            
+//            collectionView.selectItems(at: indexPaths, scrollPosition: .nearestHorizontalEdge)
+            
         }
     }
     
@@ -145,6 +149,8 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
 //                selection.wrappedValue = [firstSel]
 //            }
         }
+        
+        collectionView.becomeFirstResponder()
     }
     
     ///////////////////////////////
