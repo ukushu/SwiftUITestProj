@@ -62,26 +62,9 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
     
     
     
-    
-    
-    ///////////////////////////////
-    // HELPERS Selection update
-    ///////////////////////////////
-    
-//    public func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
-//        // Unsure if necessary to queue:
-//        DispatchQueue.main.async {
-//            self.selection?.wrappedValue.formUnion(indexPaths.map{ $0.item })
-////            print("Selected items: \(self.selections) \n\t| added: \(indexPaths)")
-//
-////            if let quickLook = QLPreviewPanel.shared() {
-////                if (quickLook.isVisible) {
-////                    quickLook.reloadData()
-////                }
-////            }
-//        }
-//    }
-    
+         ///////////////////////////////
+#if true // HELPERS Selection update
+         ///////////////////////////////
     public override func viewDidAppear() {
         //Select first item if selection is empty
         guard let selection = selection else { return }
@@ -159,6 +142,7 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
         
         collectionView.becomeFirstResponder()
     }
+#endif
     
     ///////////////////////////////
     // HELPERS Drag
