@@ -83,9 +83,9 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
         
         collectionView.register(CollectionViewItem.self, forItemWithIdentifier: NSUserInterfaceItemIdentifier("NSCollectionViewItem"))
         
-        if ItemType.self == URL.self {
-//            collectionView.keyDownHandler = viewController.handleKeyDown(_:)
-        }
+//        if ItemType.self == URL.self {
+            collectionView.keyDownHandler = viewController.handleKeyDown(_:)
+//        }
         
         return viewController
     }
