@@ -155,6 +155,20 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
         NSImage(named: "square.and.arrow.down.on.square.fill")!
     }
     
+    // NSCollectionViewDelegate
+    public func collectionView(_ collectionView: NSCollectionView, pasteboardWriterForItemAt index: Int) -> NSPasteboardWriting? {
+        print("check for dragHandler is not nil")
+        
+        guard let itemsView = self.itemsView as? FBCollectionView<URL, FileTile>?,
+              let dragHandler = itemsView?.dragHandler,
+              let item = itemsView?.items[index]
+        else { return nil }
+        
+        print("dragHandler is not nil!!!!!")
+        
+        return dragHandler(item)
+    }
+    
     ///////////////////////////////
     // HELPERS
     ///////////////////////////////

@@ -53,6 +53,9 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
     
     let factory: (ItemType, IndexPath) -> Content
     
+    typealias DragHandler = (_ item: ItemType) -> NSPasteboardWriting?
+    var dragHandler: DragHandler?
+    
     init(items: [ItemType], selection: Binding<Set<Int>>?, layout: NSCollectionViewFlowLayout, topScroller: AnyPublisher<Void, Never>? = nil, factory: @escaping (ItemType, IndexPath) -> Content) {
         self.items = items
         self.selection = selection
@@ -111,18 +114,13 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
         }
     }
     
+    func updateNSView(_ scrollView: NSScrollView, context: Context) {
+        guard let collectionView = scrollView.documentView as? NSCollectionView else { return }
+        
+        initDragAndDrop(collectionView)
+    }
     
 }
-
-//extension FBCollectionView {
-//    // Just do lots of copies?
-//    // https://www.hackingwithswift.com/quick-start/swiftui/how-to-create-modifiers-for-a-uiviewrepresentable-struct
-//    func onDrag(_ dragHandler: @escaping DragHandler) -> FBCollectionView {
-//        var view = self
-//        view.dragHandler = dragHandler
-//        return view
-//    }
-//}
 
 //////////////////////////////
 ///HELPERS
@@ -179,5 +177,30 @@ final class InternalCollectionView: NSCollectionView {
 public extension IndexPath {
     var intValue: Int {
         self.item
+    }
+}
+
+
+/////////////////////////////
+///Drag&Drop
+/////////////////////////////
+extension FBCollectionView {
+    // Just do lots of copies?
+    // https://www.hackingwithswift.com/quick-start/swiftui/how-to-create-modifiers-for-a-uiviewrepresentable-struct
+    func onDrag(_ dragHandler: @escaping DragHandler) -> FBCollectionView {
+        var view = self
+        
+        view.dragHandler = dragHandler
+        print("view.dragHandler assigned")
+        
+        return view
+    }
+    
+    func initDragAndDrop(_ collectionView: NSCollectionView) {
+        // Drag and drop
+        // https://www.raywenderlich.com/1047-advanced-collection-views-in-os-x-tutorial#toc-anchor-011
+        if let _ = dragHandler {
+            collectionView.setDraggingSourceOperationMask(.copy, forLocal: false)
+        }
     }
 }

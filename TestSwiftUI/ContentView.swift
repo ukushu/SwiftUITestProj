@@ -15,14 +15,19 @@ struct ContentView: View {
                              selection: $model.selectedItems,
                              layout: model.layout,
                              topScroller: model.topScroller.eraseToAnyPublisher()
-            ) { item, indexPath -> AnyView in
+            ) { url, indexPath in
 //                Text(item.lastPathComponent)
-                if let item = item {
-                    return AnyView( FileTile(url: item, isSelected: model.selectedItems.contains(indexPath.intValue) ) )
-                } else {
-                    return AnyView( FileTileEmpty2() )
-                }
+                FileItem(url: url, selected: model.selectedItems.contains(indexPath.intValue))
             }
+        }
+    }
+    
+    @ViewBuilder
+    func FileItem(url: URL?, selected: Bool) -> some View {
+        if let url = url {
+            FileTile(url: url, isSelected: selected)
+        } else {
+            FileTileEmpty2()
         }
     }
     
