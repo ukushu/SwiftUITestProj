@@ -38,6 +38,10 @@ where T.Index == Int {
     }
     
     public func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
+        return makeItemForCV(byIndexPath: indexPath, collectionView: collectionView)
+    }
+    
+    func makeItemForCV(byIndexPath indexPath: IndexPath, collectionView: NSCollectionView) -> NSCollectionViewItem {
         let item = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier("NSCollectionViewItem"), for: indexPath)
         
         if let item = item as? CollectionViewItem {
@@ -74,7 +78,9 @@ where T.Index == Int {
         collectionView.selectionIndexes = collectionView.selectionIndexes.union( IndexSet(indexPaths.map{ $0.intValue } ) )
         print("sel: \(collectionView.selectionIndexes.map{ $0 as Int })" )
         self.selection.wrappedValue = collectionView.selectionIndexes
-        print("sel2: \(self.selection.wrappedValue.map{ $0})" )
+        print("sel2: \(self.selection.wrappedValue.map{$0} )" )
+        
+        collectionView.reloadItems(at: indexPaths )
         
 //        self.selection.wrappedValue = a
         
@@ -92,7 +98,7 @@ where T.Index == Int {
 //
 //        // do not select nil items
 //        return indexPaths.filter{ items[$0.intValue] != nil }
-        return collectionView.selectionIndexPaths
+        return indexPaths
     }
     
     public func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
@@ -131,6 +137,8 @@ where T.Index == Int {
         print("sel: \(collectionView.selectionIndexes.map{ $0})" )
         self.selection.wrappedValue = collectionView.selectionIndexes
         print("sel2: \(self.selection.wrappedValue.map{ $0})" )
+        
+        collectionView.reloadItems(at: indexPaths )
         
 //        //        if let sel = self.selection?.wrappedValue {
 //        //            print("- shouldDeselectItemsAt\nRemoved: \(indexPaths)\n\tSelected items: \(sel)")
