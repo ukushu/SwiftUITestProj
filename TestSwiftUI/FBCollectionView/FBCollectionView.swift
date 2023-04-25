@@ -47,7 +47,7 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
     private let layout: NSCollectionViewFlowLayout
     
     let items: [ItemType]
-    var selection: Binding<Set<Int>>?
+    var selection: Binding<IndexSet>
     
     let topScroller: AnyPublisher<Void, Never>?
     
@@ -56,7 +56,7 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
     typealias DragHandler = (_ item: ItemType) -> NSPasteboardWriting?
     var dragHandler: DragHandler?
     
-    init(items: [ItemType], selection: Binding<Set<Int>>?, layout: NSCollectionViewFlowLayout, topScroller: AnyPublisher<Void, Never>? = nil, factory: @escaping (ItemType, IndexPath) -> Content) {
+    init(items: [ItemType], selection: Binding<IndexSet>, layout: NSCollectionViewFlowLayout, topScroller: AnyPublisher<Void, Never>? = nil, factory: @escaping (ItemType, IndexPath) -> Content) {
         self.items = items
         self.selection = selection
         self.layout = layout
@@ -82,7 +82,7 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
         collectionView.backgroundColors = [.clear]
         collectionView.isSelectable = true
         collectionView.allowsMultipleSelection = true
-        collectionView.allowsEmptySelection = false
+//        collectionView.allowsEmptySelection = false
         
         collectionView.register(CollectionViewItem.self, forItemWithIdentifier: NSUserInterfaceItemIdentifier("NSCollectionViewItem"))
         
@@ -94,9 +94,14 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
     }
     
     func updateNSViewController(_ viewController: NSViewController, context: Context) {
+        print("updateNSViewController")
+        
         guard let scrollView = viewController.view as? NSScrollView else { return }
         guard let collectionView = scrollView.documentView as? NSCollectionView else { return }
         guard let controller = viewController as? NSCollectionController<[ItemType],Content> else { return }
+        
+//        collectionView.selectionIndexes = selection.wrappedValue
+//        initDragAndDrop(collectionView)
         
 //        print("Update: \n| items.count: \(items.count) \n| selection: \(String(describing: selection?.wrappedValue)) \n| collectionView.selectionIndexPaths \( collectionView.selectionIndexPaths )")
         
@@ -112,14 +117,12 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
             controller.items = self.items
             collectionView.reloadData()
         }
+        
     }
     
     func updateNSView(_ scrollView: NSScrollView, context: Context) {
-        guard let collectionView = scrollView.documentView as? NSCollectionView else { return }
-        
-        initDragAndDrop(collectionView)
+        print("updateNSView")
     }
-    
 }
 
 //////////////////////////////

@@ -8,21 +8,23 @@ import Quartz
 public class NSCollectionController<T: RandomAccessCollection, Content: View>:
     NSViewController, NSCollectionViewDelegate, NSCollectionViewDataSource
 //QuickLook
-    , QLPreviewPanelDataSource
-        where T.Index == Int {
+, QLPreviewPanelDataSource
+where T.Index == Int {
     
     let factory: (T.Element, IndexPath) -> Content
     
     let         id : String
     var         items : T
     weak var    itemsView: NSCollectionView?
-    let         selection : Binding<Set<Int>>?
+    let         selection : Binding<IndexSet>
     
-//    public let parent: NSCollectionView
+    //    public let parent: NSCollectionView
     
     let scrollToTopCancellable: AnyCancellable?
     
-    init(id: String = "", collection: T, factory: @escaping (T.Element, IndexPath) -> Content, collectionView: NSCollectionView? = nil, selection: Binding<Set<Int>>?, scrollToTopCancellable: AnyCancellable?) {
+    init(id: String = "", collection: T, factory: @escaping (T.Element, IndexPath) -> Content, collectionView: NSCollectionView? = nil, selection: Binding<IndexSet>, scrollToTopCancellable: AnyCancellable?) {
+        print("Controller init")
+        
         self.id = id
         self.items = collection
         self.factory = factory
@@ -48,97 +50,120 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
         return item
     }
     
-//    public func reloadData(at indexPath: Set<IndexPath>? ) {
-//        if let indexPath = indexPath {
-//            collectionView?.reloadItems(at: indexPath)
-//        }
-//
-//        if let selection = selection {
-//            if selection.wrappedValue.isEmpty && collection.count > 0 {
-//                selection.wrappedValue = [0]
-//            }
+    //    public func reloadData(at indexPath: Set<IndexPath>? ) {
+    //        if let indexPath = indexPath {
+    //            collectionView?.reloadItems(at: indexPath)
+    //        }
+    //
+    //        if let selection = selection {
+    //            if selection.wrappedValue.isEmpty && collection.count > 0 {
+    //                selection.wrappedValue = [0]
+    //            }
+    //        }
+    //    }
+    
+    
+    
+    ///////////////////////////////
+#if true // HELPERS Selection update
+    ///////////////////////////////
+//    public override func viewDidAppear() {
+//        //Select first item if selection is empty
+//        guard let selection = selection else { return }
+//        if items.count > 0 && selection.wrappedValue.count == 0
+//        {
+//            selection.wrappedValue = [0]
+//            becomeFirstResponder()
 //        }
 //    }
-    
-    
-    
-         ///////////////////////////////
-#if true // HELPERS Selection update
-         ///////////////////////////////
-    public override func viewDidAppear() {
-        //Select first item if selection is empty
-        guard let selection = selection else { return }
-        if items.count > 0 && selection.wrappedValue.count == 0
-        {
-            selection.wrappedValue = [0]
-            becomeFirstResponder()
-        }
-    }
-    
+//    
     public func collectionView(_ collectionView: NSCollectionView, shouldSelectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
-//        if let sel = self.selection?.wrappedValue {
-//            print("+ shouldSelectItemsAt\nAdded: \(indexPaths)\n\tSelected items: \(sel)")
-//        }
+        print("shouldSelectItemsAt \(indexPaths)")
         
-        guard let items = self.items as? [URL?] else { return indexPaths}
+        collectionView.selectionIndexes = collectionView.selectionIndexes.union( IndexSet(indexPaths.map{ $0.intValue } ) )
+        print("sel: \(collectionView.selectionIndexes.map{ $0})" )
         
-        
-        // do not select nil items
-        return indexPaths.filter{ items[$0.intValue] != nil }
+//        // do not select nil items
+//        return indexPaths.filter{ items[$0.intValue] != nil }
+        return collectionView.selectionIndexPaths
     }
     
     public func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
-        if let sel = self.selection?.wrappedValue {
-            print("+ didSelectItemsAt\nAdded: \(indexPaths)\n\tSelected items: \(sel)")
-        }
+//        print("didSelectItemsAt \(indexPaths)")
         
-        if let selection = selection {
-            let newSelSet: Set<Int> = Set(indexPaths.map{ $0.item })
+//        indexPaths.forEach { val in
+//            selection.wrappedValue.formUnion( IndexSet( indexPaths.map{ $0.intValue } ) )
+//        }
+//
+//        collectionView.selectionIndexes = selection.wrappedValue
+//
+////        selection.wrappedValue
+//
+////        selection.wrappedValue = collectionView.selectionIndexes.union(IndexSet(indexPaths.map{ $0.intValue as Int}))
+////        indexPaths.forEach { val in
+////            self.selection.wrappedValue.update(with: val.intValue )
+////        }
+//
+//        print("- didSelectItemsAt\nAdded: \(indexPaths)\n\tSelected items external: \(self.selection.wrappedValue.map{ $0 })\n\tSelected Items View: \(collectionView.selectionIndexes.map{ $0 } )")
+        
+        
+//        let newSelSet: Set<Int> = Set(indexPaths.map{ $0.item })
 //            let newSelSet: Set<Int> = selection.wrappedValue.union(indexPaths.map{ $0.item }) //.union(indexPaths.map{ $0 })
-            
-            if selection.wrappedValue != newSelSet {
-                selection.wrappedValue = newSelSet
-            }
-            
-//            collectionView.selectItems(at: indexPaths, scrollPosition: .nearestHorizontalEdge)
-            
-        }
+        
+//        if selection.wrappedValue != newSelSet {
+//            selection.wrappedValue = newSelSet
+//        }
+        
+        //            collectionView.selectItems(at: indexPaths, scrollPosition: .nearestHorizontalEdge)
     }
     
     public func collectionView(_ collectionView: NSCollectionView, shouldDeselectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
-//        if let sel = self.selection?.wrappedValue {
-//            print("- shouldDeselectItemsAt\nRemoved: \(indexPaths)\n\tSelected items: \(sel)")
-//        }
+        print("SHOULD_DeselectItemsAt \(indexPaths)")
         
-        guard let items = self.items as? [URL?] else { return indexPaths}
+        collectionView.selectionIndexes = collectionView.selectionIndexes.subtracting( IndexSet(indexPaths.map{ $0.intValue } ) )
+        print("sel: \(collectionView.selectionIndexes.map{ $0})" )
+//        self.selection.wrappedValue = collectionView.selectionIndexes
         
-        // do not select nil items
-        return indexPaths.filter{ items[$0.intValue] != nil }
+//        //        if let sel = self.selection?.wrappedValue {
+//        //            print("- shouldDeselectItemsAt\nRemoved: \(indexPaths)\n\tSelected items: \(sel)")
+//        //        }
+//
+//        guard let items = self.items as? [URL?] else { return indexPaths}
+//
+//        // do not select nil items
+//        return indexPaths.filter{ items[$0.intValue] != nil }
+        return indexPaths
     }
     
     public func collectionView(_ collectionView: NSCollectionView, didDeselectItemsAt indexPaths: Set<IndexPath>) {
-        //select fisrt if nothing selected #1
-//        let firstSel = self.selection?.wrappedValue.first ?? 0
-        
-        if let sel = self.selection?.wrappedValue {
-            print("- didDeselectItemsAt\nRemoved: \(indexPaths)\n\tSelected items: \(sel)")
-        }
-        
-        if let selection = selection {
-            if let sel = self.itemsView?.selectionIndexes.map({ $0 as Int }) {
-                self.selection?.wrappedValue = Set(sel)
-            }
-//            let filteredSet: Set<Int> = selection.wrappedValue.subtracting(indexPaths.map{ $0.item })
+//        print("DID_DeselectItemsAt \(indexPaths)")
+//        indexPaths.forEach { val in
+//            collectionView.selectionIndexes.subtract( IndexSet( indexPaths.map{ $0.intValue } ) )
+//        }
 //
-//            if selection.wrappedValue != filteredSet {
-//                selection.wrappedValue = filteredSet
+//        selection.wrappedValue = collectionView.selectionIndexes
+//
+//
+//
+//
+//        print("- didDEselectItemsAt\nRemoved: \(indexPaths)\n\tSelected items external: \(self.selection.wrappedValue.map{ $0 })\n\tSelected Items View: \(collectionView.selectionIndexes.map{ $0 })")
+        
+//        if let selection = selection {
+//            if let sel = self.itemsView?.selectionIndexes.map({ $0 as Int }) {
+//                self.selection?.wrappedValue = Set(sel)
 //            }
+//
+////            let filteredSet: Set<Int> = selection.wrappedValue.subtracting(indexPaths.map{ $0.item })
+////
+////            if selection.wrappedValue != filteredSet {
+////                selection.wrappedValue = filteredSet
+////            }
 //
 //            //select fisrt if nothing selected #2
-//            if selection.wrappedValue.isEmpty && collection.count > 0 {
-//                selection.wrappedValue = [firstSel]
-//            }
-        }
+////            if selection.wrappedValue.isEmpty && collection.count > 0 {
+////                selection.wrappedValue = [firstSel]
+////            }
+//        }
         
         collectionView.becomeFirstResponder()
     }
@@ -188,15 +213,15 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
             guard isQuickLookEnabled else {
                 return false
             }
-
+            
             print("Space pressed & QuickLook is enabled.")
             if let quickLook = QLPreviewPanel.shared() {
-                quickLook.currentPreviewItemIndex = selection?.wrappedValue.sorted(by: <).first ?? 0
-
+                quickLook.currentPreviewItemIndex = selection.wrappedValue.sorted(by: <).first ?? 0
+                
                 print("preview idx: \(quickLook.currentPreviewItemIndex)")
-
+                
                 let isQuickLookShowing = QLPreviewPanel.sharedPreviewPanelExists() && quickLook.isVisible
-
+                
                 if (isQuickLookShowing) {
                     quickLook.reloadData()
                 } else {
@@ -206,24 +231,24 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
                     quickLook.makeKeyAndOrderFront(nil)
                 }
             }
-
+            
             return true
         default:
             return false
         }
     }
-
+    
     // QLPreviewPanelDataSource
     public func numberOfPreviewItems(in panel: QLPreviewPanel!) -> Int {
         return isQuickLookEnabled ? items.count : 0
     }
-
+    
     // QLPreviewPanelDelegate
     // Inspired by https://stackoverflow.com/a/33923618/788168
     func previewPanel(_ panel: QLPreviewPanel!, handle event: NSEvent!) -> Bool {
         if (event.type == .keyDown) {
             print("Key down: \(event.keyCode); modifiders: \(event.modifierFlags)")
-
+            
             // TODO: forward Option+Backspace to the NSCollectionView?
             let upArrow: UInt16 = 126
             let rightArrow: UInt16 = 124
@@ -236,12 +261,12 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
             case leftArrow:
                 // Don't pass through shift-selection keys.
                 guard event.modifierFlags.contains(.shift) == false else { return false }
-
+                
                 // Though I believe the event is handled by QL when
                 // multiple items exist, just be safe.
-                if (selection?.wrappedValue.count ?? 0 <= 1) {
+                if (selection.wrappedValue.count <= 1) {
                     // Forward the keydown event to the NSCollectionView, which will handle moving focus.
-
+                    
                     parent?.keyDown(with: event)
                     return true
                 }
@@ -249,20 +274,20 @@ public class NSCollectionController<T: RandomAccessCollection, Content: View>:
                 // no-op
             }
         }
-
+        
         return false
     }
-
+    
     public func previewPanel(_ panel: QLPreviewPanel!, previewItemAt index: Int) -> QLPreviewItem! {
         guard isQuickLookEnabled else {
             return nil
         }
-
+        
         guard let urls = quickLookHandler() else {
             // If no URLs, return.
             return nil
         }
-
+        
         return urls[safe: index] as QLPreviewItem?
     }
 }

@@ -17,6 +17,7 @@ struct ContentView: View {
                              topScroller: model.topScroller.eraseToAnyPublisher()
             ) { url, indexPath in
 //                Text(item.lastPathComponent)
+                
                 FileItem(url: url, selected: model.selectedItems.contains(indexPath.intValue))
             }
         }
@@ -121,7 +122,13 @@ func getDirContentsFor(url: URL) -> [URL] {
 class SuperViewModel: ObservableObject {
     let topScroller = PassthroughSubject<Void, Never>()
     
-    @Published var selectedItems: Set<Int> = []
+    var selectedItems: IndexSet = IndexSet() {
+        didSet{
+            print("@Published var selectedItems changed: \(selectedItems.map{ $0 as Int } )")
+            
+            self.objectWillChange.send()
+        }
+    }
     
     let layout = flowLayout()
     
