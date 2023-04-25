@@ -88,13 +88,18 @@ where T.Index == Int {
         print("sel2: \(self.selection.wrappedValue.map{ $0})" )
     }
     
-//    public func collectionView(_ collectionView: NSCollectionView, shouldSelectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
-//        return indexPaths.filter{ items[$0.intValue] as? URL? != nil }
-//    }
-//    
-//    public func collectionView(_ collectionView: NSCollectionView, shouldDeselectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
-//        return indexPaths.filter{ items[$0.intValue] as? URL? != nil }
-//    }
+    public func collectionView(_ collectionView: NSCollectionView, shouldSelectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
+        // do not select nil items
+        guard let items = self.items as? [URL?] else { return indexPaths}
+        return indexPaths.filter{ items[$0.intValue] != nil }
+    }
+    
+    public func collectionView(_ collectionView: NSCollectionView, shouldDeselectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
+        if collectionView.selectionIndexPaths != indexPaths {
+            return indexPaths.filter{ (items[$0.intValue] as? URL?) != nil }
+        }
+        return []
+    }
     
     ///////////////////////////////
     // HELPERS Drag
