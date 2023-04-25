@@ -77,57 +77,12 @@ where T.Index == Int {
         
         collectionView.selectionIndexes = collectionView.selectionIndexes.union( IndexSet(indexPaths.map{ $0.intValue } ) )
         print("sel: \(collectionView.selectionIndexes.map{ $0 as Int })" )
-        self.selection.wrappedValue = collectionView.selectionIndexes
         print("sel2: \(self.selection.wrappedValue.map{$0} )" )
         
-//        collectionView.reloadItems(at: indexPaths )
-        
-//        self.selection.wrappedValue = a
-        
-        
-//        self.selection.wrappedValue = a
-        
-        //collectionView.selectionIndexes = self.selection.wrappedValue
-        
-//                if let sel = self.selection?.wrappedValue {
-//                    print("+ shouldSelectItemsAt\nAdded: \(indexPaths)\n\tSelected items: \(sel)")
-//                }
-        
-//        guard let items = self.items as? [URL?] else { return indexPaths}
-//
-//
-//        // do not select nil items
-//        return indexPaths.filter{ items[$0.intValue] != nil }
         return indexPaths
     }
     
     public func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
-//        print("didSelectItemsAt \(indexPaths)")
-        
-//        indexPaths.forEach { val in
-//            selection.wrappedValue.formUnion( IndexSet( indexPaths.map{ $0.intValue } ) )
-//        }
-//
-//        collectionView.selectionIndexes = selection.wrappedValue
-//
-////        selection.wrappedValue
-//
-////        selection.wrappedValue = collectionView.selectionIndexes.union(IndexSet(indexPaths.map{ $0.intValue as Int}))
-////        indexPaths.forEach { val in
-////            self.selection.wrappedValue.update(with: val.intValue )
-////        }
-//
-//        print("- didSelectItemsAt\nAdded: \(indexPaths)\n\tSelected items external: \(self.selection.wrappedValue.map{ $0 })\n\tSelected Items View: \(collectionView.selectionIndexes.map{ $0 } )")
-        
-        
-//        let newSelSet: Set<Int> = Set(indexPaths.map{ $0.item })
-//            let newSelSet: Set<Int> = selection.wrappedValue.union(indexPaths.map{ $0.item }) //.union(indexPaths.map{ $0 })
-        
-//        if selection.wrappedValue != newSelSet {
-//            selection.wrappedValue = newSelSet
-//        }
-        
-        //            collectionView.selectItems(at: indexPaths, scrollPosition: .nearestHorizontalEdge)
     }
     
     public func collectionView(_ collectionView: NSCollectionView, shouldDeselectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
@@ -135,53 +90,13 @@ where T.Index == Int {
         
         collectionView.selectionIndexes = collectionView.selectionIndexes.subtracting( IndexSet(indexPaths.map{ $0.intValue } ) )
         print("sel: \(collectionView.selectionIndexes.map{ $0})" )
-        self.selection.wrappedValue = collectionView.selectionIndexes
         print("sel2: \(self.selection.wrappedValue.map{ $0})" )
         
-//        collectionView.reloadItems(at: indexPaths )
-        
-//        //        if let sel = self.selection?.wrappedValue {
-//        //            print("- shouldDeselectItemsAt\nRemoved: \(indexPaths)\n\tSelected items: \(sel)")
-//        //        }
-//
-//        guard let items = self.items as? [URL?] else { return indexPaths}
-//
-//        // do not select nil items
-//        return indexPaths.filter{ items[$0.intValue] != nil }
         return indexPaths
     }
     
     public func collectionView(_ collectionView: NSCollectionView, didDeselectItemsAt indexPaths: Set<IndexPath>) {
-//        print("DID_DeselectItemsAt \(indexPaths)")
-//        indexPaths.forEach { val in
-//            collectionView.selectionIndexes.subtract( IndexSet( indexPaths.map{ $0.intValue } ) )
-//        }
-//
-//        selection.wrappedValue = collectionView.selectionIndexes
-//
-//
-//
-//
-//        print("- didDEselectItemsAt\nRemoved: \(indexPaths)\n\tSelected items external: \(self.selection.wrappedValue.map{ $0 })\n\tSelected Items View: \(collectionView.selectionIndexes.map{ $0 })")
-        
-//        if let selection = selection {
-//            if let sel = self.itemsView?.selectionIndexes.map({ $0 as Int }) {
-//                self.selection?.wrappedValue = Set(sel)
-//            }
-//
-////            let filteredSet: Set<Int> = selection.wrappedValue.subtracting(indexPaths.map{ $0.item })
-////
-////            if selection.wrappedValue != filteredSet {
-////                selection.wrappedValue = filteredSet
-////            }
-//
-//            //select fisrt if nothing selected #2
-////            if selection.wrappedValue.isEmpty && collection.count > 0 {
-////                selection.wrappedValue = [firstSel]
-////            }
-//        }
-        
-        collectionView.becomeFirstResponder()
+//        collectionView.becomeFirstResponder()
     }
 #endif
     

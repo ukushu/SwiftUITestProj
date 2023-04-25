@@ -146,6 +146,8 @@ final class InternalCollectionView: NSCollectionView {
     typealias KeyDownHandler = (_ event: NSEvent) -> Bool
     var keyDownHandler: KeyDownHandler? = nil
     
+    
+    
     override func keyDown(with event: NSEvent) {
         if let keyDownHandler = keyDownHandler {
             let didHandle = keyDownHandler(event)
