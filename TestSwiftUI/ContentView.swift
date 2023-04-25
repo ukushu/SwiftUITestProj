@@ -18,15 +18,15 @@ struct ContentView: View {
             ) { url, indexPath in
 //                Text(item.lastPathComponent)
                 
-                FileItem(url: url, selected: model.selectedItems.contains(indexPath.intValue))
+                FileItem(url: url, selectedItems: $model.selectedItems, indexPath: indexPath)
             }
         }
     }
     
     @ViewBuilder
-    func FileItem(url: URL?, selected: Bool) -> some View {
+    func FileItem(url: URL?, selectedItems: Binding<IndexSet>, indexPath: IndexPath) -> some View {
         if let url = url {
-            FileTile(url: url, isSelected: selected)
+            FileTile(url: url, isSelected: selectedItems.wrappedValue.contains(indexPath.intValue))
         } else {
             FileTileEmpty2()
         }
