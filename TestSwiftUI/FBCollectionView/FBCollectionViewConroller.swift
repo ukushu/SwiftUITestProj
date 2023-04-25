@@ -73,13 +73,20 @@ where T.Index == Int {
 ///////////////////////////////
     
     public func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
+        print("""
+              ________________:    changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.wrappedValue.map{ $0 })
+              """ )
+        
         self.selection.wrappedValue = collectionView.selectionIndexes.union( IndexSet(indexPaths.map{ $0.intValue } ) )
         print("""
-              shouldSelectItemsAt:    changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.wrappedValue.map{ $0 })
+              didSelectItemsAt:    changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.wrappedValue.map{ $0 })
               """ )
     }
     
     public func collectionView(_ collectionView: NSCollectionView, didDeselectItemsAt indexPaths: Set<IndexPath>) {
+        print("""
+              _______________:        changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.wrappedValue.map{ $0 })
+              """ )
         self.selection.wrappedValue = collectionView.selectionIndexes.subtracting( IndexSet(indexPaths.map{ $0.intValue } ) )
         print("""
               DESELECTItemsAt:        changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.wrappedValue.map{ $0 })
