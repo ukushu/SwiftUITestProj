@@ -94,8 +94,6 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
     }
     
     func updateNSViewController(_ viewController: NSViewController, context: Context) {
-        print("updateNSViewController")
-        
         guard let scrollView = viewController.view as? NSScrollView else { return }
         guard let collectionView = scrollView.documentView as? NSCollectionView else { return }
         guard let controller = viewController as? NSCollectionController<[ItemType],Content> else { return }
@@ -104,8 +102,7 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
         collectionView.delegate = controller
         
         print("""
-              \tupd: selInternal: \(collectionView.selectionIndexes.map{ $0 }) upd: selExternal: \(self.selection.wrappedValue.map{ $0 })
-              
+              updateNSViewController: selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.wrappedValue.map{ $0 })
               """ )
         
         collectionView.selectionIndexes = selection.wrappedValue
