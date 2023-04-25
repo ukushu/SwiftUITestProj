@@ -103,6 +103,11 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
         collectionView.dataSource = controller
         collectionView.delegate = controller
         
+        print("""
+              upd: selInternal: \(collectionView.selectionIndexes.map{ $0 })
+              upd: selExternal: \(self.selection.wrappedValue.map{ $0 })
+              """ )
+        
         collectionView.selectionIndexes = selection.wrappedValue
 //        initDragAndDrop(collectionView)
         

@@ -78,7 +78,7 @@ where T.Index == Int {
         self.selection.wrappedValue = collectionView.selectionIndexes.union( IndexSet(indexPaths.map{ $0.intValue } ) )
         print("""
               selInternal: \(collectionView.selectionIndexes.map{ $0 })
-              selExternal \(self.selection.wrappedValue.map{ $0 })
+              selExternal: \(self.selection.wrappedValue.map{ $0 })
               """ )
     }
     
@@ -88,7 +88,7 @@ where T.Index == Int {
         self.selection.wrappedValue = collectionView.selectionIndexes.subtracting( IndexSet(indexPaths.map{ $0.intValue } ) )
         print("""
               selInternal: \(collectionView.selectionIndexes.map{ $0 })
-              selExternal \(self.selection.wrappedValue.map{ $0 })
+              selExternal: \(self.selection.wrappedValue.map{ $0 })
               """ )
     }
     
