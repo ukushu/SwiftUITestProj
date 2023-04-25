@@ -80,7 +80,6 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
         collectionView.backgroundColors = [.clear]
         collectionView.isSelectable = true
         collectionView.allowsMultipleSelection = true
-        collectionView.allowsEmptySelection = false
         
         collectionView.register(CollectionViewItem.self, forItemWithIdentifier: NSUserInterfaceItemIdentifier("NSCollectionViewItem"))
         

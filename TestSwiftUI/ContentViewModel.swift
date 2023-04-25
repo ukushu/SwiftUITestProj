@@ -22,5 +22,5 @@ class CollectionState: ObservableObject {
     
     private init() {}
     
-    @Published var selection: IndexSet = IndexSet()
+    @Published var selection: IndexSet = IndexSet(integer: 0)
 }

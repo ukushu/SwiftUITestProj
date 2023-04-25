@@ -21,6 +21,7 @@ where T.Index == Int {
         set { CollectionState.shared.selection = newValue }
     }
     
+    
     //    public let parent: NSCollectionView
     
     let scrollToTopCancellable: AnyCancellable?
@@ -55,6 +56,7 @@ where T.Index == Int {
         
         return item
     }
+   
     
     //    public func reloadData(at indexPath: Set<IndexPath>? ) {
     //        if let indexPath = indexPath {
