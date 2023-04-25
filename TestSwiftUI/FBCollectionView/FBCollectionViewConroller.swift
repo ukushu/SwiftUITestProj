@@ -75,17 +75,21 @@ where T.Index == Int {
     public func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
         print("shouldSelectItemsAt: \(indexPaths.map{ $0.intValue })")
         
-        collectionView.selectionIndexes = collectionView.selectionIndexes.union( IndexSet(indexPaths.map{ $0.intValue } ) )
-        print("sel: \(collectionView.selectionIndexes.map{ $0 as Int })" )
-        print("sel2: \(self.selection.wrappedValue.map{$0} )" )
+        self.selection.wrappedValue = collectionView.selectionIndexes.union( IndexSet(indexPaths.map{ $0.intValue } ) )
+        print("""
+              selInternal: \(collectionView.selectionIndexes.map{ $0 })
+              selExternal \(self.selection.wrappedValue.map{ $0 })
+              """ )
     }
     
     public func collectionView(_ collectionView: NSCollectionView, didDeselectItemsAt indexPaths: Set<IndexPath>) {
         print("SHOULD_DeselectItemsAt: \(indexPaths.map{ $0.intValue })")
         
-        collectionView.selectionIndexes = collectionView.selectionIndexes.subtracting( IndexSet(indexPaths.map{ $0.intValue } ) )
-        print("sel: \(collectionView.selectionIndexes.map{ $0})" )
-        print("sel2: \(self.selection.wrappedValue.map{ $0})" )
+        self.selection.wrappedValue = collectionView.selectionIndexes.subtracting( IndexSet(indexPaths.map{ $0.intValue } ) )
+        print("""
+              selInternal: \(collectionView.selectionIndexes.map{ $0 })
+              selExternal \(self.selection.wrappedValue.map{ $0 })
+              """ )
     }
     
     public func collectionView(_ collectionView: NSCollectionView, shouldSelectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
