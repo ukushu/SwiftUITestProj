@@ -77,7 +77,9 @@ where T.Index == Int {
               ________________:    changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.wrappedValue.map{ $0 })
               """ )
         
-        self.selection.wrappedValue = collectionView.selectionIndexes.union( IndexSet(indexPaths.map{ $0.intValue } ) )
+        self.selection.wrappedValue = collectionView.selectionIndexes
+                                            .union(self.selection.wrappedValue)
+                                            .union( IndexSet(indexPaths.map{ $0.intValue } ) )
         print("""
               didSelectItemsAt:    changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.wrappedValue.map{ $0 })
               """ )
@@ -87,7 +89,9 @@ where T.Index == Int {
         print("""
               _______________:        changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.wrappedValue.map{ $0 })
               """ )
-        self.selection.wrappedValue = collectionView.selectionIndexes.subtracting( IndexSet(indexPaths.map{ $0.intValue } ) )
+        self.selection.wrappedValue = collectionView.selectionIndexes
+                                            .union(self.selection.wrappedValue)
+                                            .subtracting( IndexSet(indexPaths.map{ $0.intValue } ) )
         print("""
               DESELECTItemsAt:        changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.wrappedValue.map{ $0 })
               """ )
