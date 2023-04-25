@@ -68,37 +68,33 @@ where T.Index == Int {
     
     
     
-    ///////////////////////////////
-#if true // HELPERS Selection update
-    ///////////////////////////////
+///////////////////////////////
+// HELPERS Selection update
+///////////////////////////////
     
-    public func collectionView(_ collectionView: NSCollectionView, shouldSelectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
+    public func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
         print("shouldSelectItemsAt: \(indexPaths.map{ $0.intValue })")
         
         collectionView.selectionIndexes = collectionView.selectionIndexes.union( IndexSet(indexPaths.map{ $0.intValue } ) )
         print("sel: \(collectionView.selectionIndexes.map{ $0 as Int })" )
         print("sel2: \(self.selection.wrappedValue.map{$0} )" )
-        
-        return indexPaths
     }
     
-    public func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
-    }
-    
-    public func collectionView(_ collectionView: NSCollectionView, shouldDeselectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
+    public func collectionView(_ collectionView: NSCollectionView, didDeselectItemsAt indexPaths: Set<IndexPath>) {
         print("SHOULD_DeselectItemsAt: \(indexPaths.map{ $0.intValue })")
         
         collectionView.selectionIndexes = collectionView.selectionIndexes.subtracting( IndexSet(indexPaths.map{ $0.intValue } ) )
         print("sel: \(collectionView.selectionIndexes.map{ $0})" )
         print("sel2: \(self.selection.wrappedValue.map{ $0})" )
-        
-        return indexPaths
     }
     
-    public func collectionView(_ collectionView: NSCollectionView, didDeselectItemsAt indexPaths: Set<IndexPath>) {
-//        collectionView.becomeFirstResponder()
-    }
-#endif
+//    public func collectionView(_ collectionView: NSCollectionView, shouldSelectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
+//        return indexPaths.filter{ items[$0.intValue] as? URL? != nil }
+//    }
+//    
+//    public func collectionView(_ collectionView: NSCollectionView, shouldDeselectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
+//        return indexPaths.filter{ items[$0.intValue] as? URL? != nil }
+//    }
     
     ///////////////////////////////
     // HELPERS Drag
