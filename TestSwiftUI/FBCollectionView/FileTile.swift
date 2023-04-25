@@ -3,12 +3,15 @@ import SwiftUI
 
 struct FileTile: View {
     let url: URL
-    let isSelected: Bool
+    private let selectedItems: Binding<IndexSet>
+    private let indexPath: IndexPath
+    var isSelected: Bool { selectedItems.wrappedValue.contains(indexPath.intValue) }
     let recent: RecentFile
     
     init(url: URL, selectedItems: Binding<IndexSet>, indexPath: IndexPath) {
         self.url = url
-        self.isSelected = selectedItems.wrappedValue.contains(indexPath.intValue)
+        self.selectedItems = selectedItems
+        self.indexPath = indexPath
         self.recent = FBCollectionCache.getMetaFor(url: url)
     }
     
