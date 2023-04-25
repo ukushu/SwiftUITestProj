@@ -26,7 +26,7 @@ struct ContentView: View {
     @ViewBuilder
     func FileItem(url: URL?, selectedItems: Binding<IndexSet>, indexPath: IndexPath) -> some View {
         if let url = url {
-            FileTile(url: url, isSelected: selectedItems.wrappedValue.contains(indexPath.intValue))
+            FileTile(url: url, selectedItems: selectedItems, indexPath: indexPath)
         } else {
             FileTileEmpty2()
         }

@@ -6,9 +6,9 @@ struct FileTile: View {
     let isSelected: Bool
     let recent: RecentFile
     
-    init(url: URL, isSelected: Bool) {
+    init(url: URL, selectedItems: Binding<IndexSet>, indexPath: IndexPath) {
         self.url = url
-        self.isSelected = isSelected
+        self.isSelected = selectedItems.wrappedValue.contains(indexPath.intValue)
         self.recent = FBCollectionCache.getMetaFor(url: url)
     }
     
