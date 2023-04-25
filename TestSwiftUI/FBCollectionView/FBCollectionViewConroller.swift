@@ -80,8 +80,7 @@ where T.Index == Int {
               """ )
         
         self.selection = collectionView.selectionIndexes
-                                        .union(self.selection)
-                                        .union( IndexSet(indexPaths.map{ $0.intValue } ) )
+        
         print("""
               didSelectItemsAt:    changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.map{ $0 })
               """ )
@@ -91,9 +90,9 @@ where T.Index == Int {
         print("""
               _______________:        changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.map{ $0 })
               """ )
+        
         self.selection = collectionView.selectionIndexes
-                                        .union(self.selection)
-                                        .subtracting( IndexSet(indexPaths.map{ $0.intValue } ) )
+        
         print("""
               DESELECTItemsAt:        changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.map{ $0 })
               """ )
@@ -107,10 +106,11 @@ where T.Index == Int {
     }
     
     public func collectionView(_ collectionView: NSCollectionView, shouldDeselectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
-        if collectionView.selectionIndexPaths != indexPaths {
-            return indexPaths.filter{ (items[$0.intValue] as? URL?) != nil }
-        }
-        return []
+//        if collectionView.selectionIndexPaths != indexPaths {
+//            return indexPaths.filter{ (items[$0.intValue] as? URL?) != nil }
+//        }
+//        return []
+        indexPaths
     }
     
     ///////////////////////////////
