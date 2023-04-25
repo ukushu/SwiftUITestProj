@@ -159,8 +159,7 @@ final class InternalCollectionView: NSCollectionView {
     }
     
     override func becomeFirstResponder() -> Bool {
-//        becomeFirstResponder(idx: 0)
-        super.becomeFirstResponder()
+        becomeFirstResponder(idx: 0)
     }
     
     func becomeFirstResponder(idx: Int) -> Bool {
@@ -168,6 +167,7 @@ final class InternalCollectionView: NSCollectionView {
             for section in 0..<numberOfSections {
                 if numberOfItems(inSection: section) >= idx {
                     selectionIndexPaths = [IndexPath(item: idx, section: section)]
+                    CollectionState.shared.selection = self.selectionIndexes
                     break
                 }
             }
