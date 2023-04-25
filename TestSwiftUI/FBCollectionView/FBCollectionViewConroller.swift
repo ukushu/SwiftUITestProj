@@ -80,7 +80,7 @@ where T.Index == Int {
         self.selection.wrappedValue = collectionView.selectionIndexes
         print("sel2: \(self.selection.wrappedValue.map{$0} )" )
         
-        collectionView.reloadItems(at: indexPaths )
+//        collectionView.reloadItems(at: indexPaths )
         
 //        self.selection.wrappedValue = a
         
@@ -138,7 +138,7 @@ where T.Index == Int {
         self.selection.wrappedValue = collectionView.selectionIndexes
         print("sel2: \(self.selection.wrappedValue.map{ $0})" )
         
-        collectionView.reloadItems(at: indexPaths )
+//        collectionView.reloadItems(at: indexPaths )
         
 //        //        if let sel = self.selection?.wrappedValue {
 //        //            print("- shouldDeselectItemsAt\nRemoved: \(indexPaths)\n\tSelected items: \(sel)")

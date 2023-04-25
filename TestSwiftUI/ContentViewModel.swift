@@ -12,13 +12,7 @@ import Combine
 class ContentViewModel: ObservableObject {
     let topScroller = PassthroughSubject<Void, Never>()
     
-    var selectedItems: IndexSet = IndexSet() {
-        didSet {
-//            print("model.selectedItems changed: \(selectedItems.map{ $0 } )")
-            
-//            self.objectWillChange.send()
-        }
-    }
+    @Published var selectedItems: IndexSet = IndexSet()
     
     let layout = flowLayout()
     
