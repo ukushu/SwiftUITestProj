@@ -16,20 +16,22 @@ where T.Index == Int {
     let         id : String
     var         items : T
     weak var    itemsView: NSCollectionView?
-    let         selection : Binding<IndexSet>
+    var         selection : IndexSet {
+        get { CollectionState.shared.selection }
+        set { CollectionState.shared.selection = newValue }
+    }
     
     //    public let parent: NSCollectionView
     
     let scrollToTopCancellable: AnyCancellable?
     
-    init(id: String = "", collection: T, factory: @escaping (T.Element, IndexPath) -> Content, collectionView: NSCollectionView? = nil, selection: Binding<IndexSet>, scrollToTopCancellable: AnyCancellable?) {
+    init(id: String = "", collection: T, factory: @escaping (T.Element, IndexPath) -> Content, collectionView: NSCollectionView? = nil, scrollToTopCancellable: AnyCancellable?) {
         print("Controller init")
         
         self.id = id
         self.items = collection
         self.factory = factory
         self.itemsView = collectionView
-        self.selection = selection
         self.scrollToTopCancellable = scrollToTopCancellable
         
         super.init(nibName: nil, bundle: nil)
@@ -74,26 +76,26 @@ where T.Index == Int {
     
     public func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
         print("""
-              ________________:    changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.wrappedValue.map{ $0 })
+              ________________:    changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.map{ $0 })
               """ )
         
-        self.selection.wrappedValue = collectionView.selectionIndexes
-                                            .union(self.selection.wrappedValue)
-                                            .union( IndexSet(indexPaths.map{ $0.intValue } ) )
+        self.selection = collectionView.selectionIndexes
+                                        .union(self.selection)
+                                        .union( IndexSet(indexPaths.map{ $0.intValue } ) )
         print("""
-              didSelectItemsAt:    changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.wrappedValue.map{ $0 })
+              didSelectItemsAt:    changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.map{ $0 })
               """ )
     }
     
     public func collectionView(_ collectionView: NSCollectionView, didDeselectItemsAt indexPaths: Set<IndexPath>) {
         print("""
-              _______________:        changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.wrappedValue.map{ $0 })
+              _______________:        changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.map{ $0 })
               """ )
-        self.selection.wrappedValue = collectionView.selectionIndexes
-                                            .union(self.selection.wrappedValue)
-                                            .subtracting( IndexSet(indexPaths.map{ $0.intValue } ) )
+        self.selection = collectionView.selectionIndexes
+                                        .union(self.selection)
+                                        .subtracting( IndexSet(indexPaths.map{ $0.intValue } ) )
         print("""
-              DESELECTItemsAt:        changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.wrappedValue.map{ $0 })
+              DESELECTItemsAt:        changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.map{ $0 })
               """ )
     }
     
@@ -158,7 +160,7 @@ where T.Index == Int {
             
             print("Space pressed & QuickLook is enabled.")
             if let quickLook = QLPreviewPanel.shared() {
-                quickLook.currentPreviewItemIndex = selection.wrappedValue.sorted(by: <).first ?? 0
+                quickLook.currentPreviewItemIndex = selection.sorted(by: <).first ?? 0
                 
                 print("preview idx: \(quickLook.currentPreviewItemIndex)")
                 
@@ -206,7 +208,7 @@ where T.Index == Int {
                 
                 // Though I believe the event is handled by QL when
                 // multiple items exist, just be safe.
-                if (selection.wrappedValue.count <= 1) {
+                if (selection.count <= 1) {
                     // Forward the keydown event to the NSCollectionView, which will handle moving focus.
                     
                     parent?.keyDown(with: event)

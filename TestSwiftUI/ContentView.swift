@@ -9,10 +9,9 @@ struct ContentView: View {
         VStack {
             ButtonsPanel()
             
-            Text("Selected: \(model.selectedItems.map{ "\($0)" }.joined(separator: ", ") )")
+            Text("Selected: \(CollectionState.shared.selection.map{ "\($0)" }.joined(separator: ", ") )")
             
             FBCollectionView(items: model.filesList,
-                             selection: CollectionState.shared.$selection,
                              layout: model.layout,
                              topScroller: model.topScroller.eraseToAnyPublisher()
             ) { url, indexPath in
@@ -67,15 +66,15 @@ struct ContentView: View {
             }
             
             Button("Select 1") {
-                model.selectedItems = [1]
+                CollectionState.shared.selection = [1]
             }
             
             Button("Select 1-3") {
-                model.selectedItems = [1,2,3]
+                CollectionState.shared.selection = [1,2,3]
             }
             
             Button("Select 4") {
-                model.selectedItems = [4]
+                CollectionState.shared.selection = [4]
             }
             
             Button("Scroll to top") {

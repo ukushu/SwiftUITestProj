@@ -47,7 +47,7 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
     private let layout: NSCollectionViewFlowLayout
     
     let items: [ItemType]
-    var selection: Binding<IndexSet>
+    var selection : IndexSet { CollectionState.shared.selection }
     
     let topScroller: AnyPublisher<Void, Never>?
     
@@ -56,9 +56,8 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
     typealias DragHandler = (_ item: ItemType) -> NSPasteboardWriting?
     var dragHandler: DragHandler?
     
-    init(items: [ItemType], selection: Binding<IndexSet>, layout: NSCollectionViewFlowLayout, topScroller: AnyPublisher<Void, Never>? = nil, factory: @escaping (ItemType, IndexPath) -> Content) {
+    init(items: [ItemType], layout: NSCollectionViewFlowLayout, topScroller: AnyPublisher<Void, Never>? = nil, factory: @escaping (ItemType, IndexPath) -> Content) {
         self.items = items
-        self.selection = selection
         self.layout = layout
         self.topScroller = topScroller
         self.factory = factory
@@ -69,7 +68,6 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
         
         let viewController = NSCollectionController(collection: self.items,
                                                     factory: factory,
-                                                    selection: selection,
                                                     scrollToTopCancellable: getScrollToTopCancellable() )
         
         viewController.view = scrollView
@@ -102,10 +100,10 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
         collectionView.delegate = controller
         
         print("""
-              updateNSViewController: selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.wrappedValue.map{ $0 })
+              updateNSViewController: selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.map{ $0 })
               """ )
         
-        collectionView.selectionIndexes = selection.wrappedValue
+        collectionView.selectionIndexes = selection
 //        initDragAndDrop(collectionView)
         
 //        print("Update: \n| items.count: \(items.count) \n| selection: \(String(describing: selection?.wrappedValue)) \n| collectionView.selectionIndexPaths \( collectionView.selectionIndexPaths )")
