@@ -12,21 +12,21 @@ struct ContentView: View {
             Text("Selected: \(model.selectedItems.map{ "\($0)" }.joined(separator: ", ") )")
             
             FBCollectionView(items: model.filesList,
-                             selection: $model.selectedItems,
+                             selection: CollectionState.shared.$selection,
                              layout: model.layout,
                              topScroller: model.topScroller.eraseToAnyPublisher()
             ) { url, indexPath in
 //                Text(item.lastPathComponent)
                 
-                FileItem(url: url, selectedItems: $model.selectedItems, indexPath: indexPath)
+                FileItem(url: url, indexPath: indexPath)
             }
         }
     }
     
     @ViewBuilder
-    func FileItem(url: URL?, selectedItems: Binding<IndexSet>, indexPath: IndexPath) -> some View {
+    func FileItem(url: URL?, indexPath: IndexPath) -> some View {
         if let url = url {
-            FileTile(url: url, selectedItems: selectedItems, indexPath: indexPath)
+            FileTile(url: url, indexPath: indexPath)
         } else {
             FileTileEmpty2()
         }

@@ -97,6 +97,7 @@ where T.Index == Int {
               """ )
     }
     
+    
     public func collectionView(_ collectionView: NSCollectionView, shouldSelectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
         // do not select nil items
         guard let items = self.items as? [URL?] else { return indexPaths}
