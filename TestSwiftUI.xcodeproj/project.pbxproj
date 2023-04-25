@@ -12,6 +12,8 @@
 		1D4A87B9298EE53B0062686C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D4A87B8298EE53B0062686C /* Assets.xcassets */; };
 		1D4A87BC298EE53B0062686C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D4A87BB298EE53B0062686C /* Preview Assets.xcassets */; };
 		1D671EE329F4867700C77C6D /* FileTileEmpty2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D671EE229F4867700C77C6D /* FileTileEmpty2.swift */; };
+		1D671EE529F78B7300C77C6D /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D671EE429F78B7300C77C6D /* ContentViewModel.swift */; };
+		1D671EE729F78BD500C77C6D /* OtherFuncs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D671EE629F78BD500C77C6D /* OtherFuncs.swift */; };
 		1D8F362B29EB1BCD00098621 /* FilePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8F362A29EB1BCD00098621 /* FilePreview.swift */; };
 		1DC7B18C29DD971F00FCE4EC /* FBCollectionCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC7B18B29DD971F00FCE4EC /* FBCollectionCache.swift */; };
 		1DDDED9C29B75DE300C48216 /* FBCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDDED9929B75DE300C48216 /* FBCollectionViewCell.swift */; };
@@ -41,6 +43,8 @@
 		1D4A87BB298EE53B0062686C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		1D4A87BD298EE53B0062686C /* TestSwiftUI.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestSwiftUI.entitlements; sourceTree = "<group>"; };
 		1D671EE229F4867700C77C6D /* FileTileEmpty2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTileEmpty2.swift; sourceTree = "<group>"; };
+		1D671EE429F78B7300C77C6D /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
+		1D671EE629F78BD500C77C6D /* OtherFuncs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherFuncs.swift; sourceTree = "<group>"; };
 		1D8F362A29EB1BCD00098621 /* FilePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilePreview.swift; sourceTree = "<group>"; };
 		1DC7B18B29DD971F00FCE4EC /* FBCollectionCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBCollectionCache.swift; sourceTree = "<group>"; };
 		1DDDED9929B75DE300C48216 /* FBCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -97,6 +101,8 @@
 				1DDDED9829B75DE300C48216 /* FBCollectionView */,
 				1D4A87B4298EE5390062686C /* TestSwiftUIApp.swift */,
 				1D4A87B6298EE5390062686C /* ContentView.swift */,
+				1D671EE429F78B7300C77C6D /* ContentViewModel.swift */,
+				1D671EE629F78BD500C77C6D /* OtherFuncs.swift */,
 				1D4A87B8298EE53B0062686C /* Assets.xcassets */,
 				1D4A87BD298EE53B0062686C /* TestSwiftUI.entitlements */,
 				1D4A87BA298EE53B0062686C /* Preview Content */,
@@ -252,8 +258,10 @@
 				1D8F362B29EB1BCD00098621 /* FilePreview.swift in Sources */,
 				1D4A87B5298EE5390062686C /* TestSwiftUIApp.swift in Sources */,
 				1DDDEDB529B7612F00C48216 /* MDItem+Ext.swift in Sources */,
+				1D671EE729F78BD500C77C6D /* OtherFuncs.swift in Sources */,
 				1DDDEDA029B75E3100C48216 /* RecentFile.swift in Sources */,
 				1DC7B18C29DD971F00FCE4EC /* FBCollectionCache.swift in Sources */,
+				1D671EE529F78B7300C77C6D /* ContentViewModel.swift in Sources */,
 				1DDDEDB129B7604300C48216 /* URL+Ext.swift in Sources */,
 				1DDDEDAB29B75FD900C48216 /* URL+FS.swift in Sources */,
 				1DDDED9C29B75DE300C48216 /* FBCollectionViewCell.swift in Sources */,

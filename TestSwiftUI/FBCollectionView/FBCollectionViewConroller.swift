@@ -67,22 +67,29 @@ where T.Index == Int {
     ///////////////////////////////
 #if true // HELPERS Selection update
     ///////////////////////////////
-//    public override func viewDidAppear() {
-//        //Select first item if selection is empty
-//        guard let selection = selection else { return }
-//        if items.count > 0 && selection.wrappedValue.count == 0
-//        {
-//            selection.wrappedValue = [0]
-//            becomeFirstResponder()
-//        }
-//    }
-//    
+    
     public func collectionView(_ collectionView: NSCollectionView, shouldSelectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
-        print("shouldSelectItemsAt \(indexPaths)")
+        print("shouldSelectItemsAt: \(indexPaths.map{ $0.intValue })")
         
         collectionView.selectionIndexes = collectionView.selectionIndexes.union( IndexSet(indexPaths.map{ $0.intValue } ) )
-        print("sel: \(collectionView.selectionIndexes.map{ $0})" )
+        print("sel: \(collectionView.selectionIndexes.map{ $0 as Int })" )
+        self.selection.wrappedValue = collectionView.selectionIndexes
+        print("sel2: \(self.selection.wrappedValue.map{ $0})" )
         
+//        self.selection.wrappedValue = a
+        
+        
+//        self.selection.wrappedValue = a
+        
+        //collectionView.selectionIndexes = self.selection.wrappedValue
+        
+//                if let sel = self.selection?.wrappedValue {
+//                    print("+ shouldSelectItemsAt\nAdded: \(indexPaths)\n\tSelected items: \(sel)")
+//                }
+        
+//        guard let items = self.items as? [URL?] else { return indexPaths}
+//
+//
 //        // do not select nil items
 //        return indexPaths.filter{ items[$0.intValue] != nil }
         return collectionView.selectionIndexPaths
@@ -118,11 +125,12 @@ where T.Index == Int {
     }
     
     public func collectionView(_ collectionView: NSCollectionView, shouldDeselectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
-        print("SHOULD_DeselectItemsAt \(indexPaths)")
+        print("SHOULD_DeselectItemsAt: \(indexPaths.map{ $0.intValue })")
         
         collectionView.selectionIndexes = collectionView.selectionIndexes.subtracting( IndexSet(indexPaths.map{ $0.intValue } ) )
         print("sel: \(collectionView.selectionIndexes.map{ $0})" )
-//        self.selection.wrappedValue = collectionView.selectionIndexes
+        self.selection.wrappedValue = collectionView.selectionIndexes
+        print("sel2: \(self.selection.wrappedValue.map{ $0})" )
         
 //        //        if let sel = self.selection?.wrappedValue {
 //        //            print("- shouldDeselectItemsAt\nRemoved: \(indexPaths)\n\tSelected items: \(sel)")

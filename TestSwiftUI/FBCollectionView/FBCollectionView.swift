@@ -82,7 +82,7 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
         collectionView.backgroundColors = [.clear]
         collectionView.isSelectable = true
         collectionView.allowsMultipleSelection = true
-//        collectionView.allowsEmptySelection = false
+        collectionView.allowsEmptySelection = false
         
         collectionView.register(CollectionViewItem.self, forItemWithIdentifier: NSUserInterfaceItemIdentifier("NSCollectionViewItem"))
         
@@ -100,7 +100,10 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
         guard let collectionView = scrollView.documentView as? NSCollectionView else { return }
         guard let controller = viewController as? NSCollectionController<[ItemType],Content> else { return }
         
-//        collectionView.selectionIndexes = selection.wrappedValue
+        collectionView.dataSource = controller
+        collectionView.delegate = controller
+        
+        collectionView.selectionIndexes = selection.wrappedValue
 //        initDragAndDrop(collectionView)
         
 //        print("Update: \n| items.count: \(items.count) \n| selection: \(String(describing: selection?.wrappedValue)) \n| collectionView.selectionIndexPaths \( collectionView.selectionIndexPaths )")
@@ -117,7 +120,6 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
             controller.items = self.items
             collectionView.reloadData()
         }
-        
     }
     
     func updateNSView(_ scrollView: NSScrollView, context: Context) {
@@ -156,7 +158,8 @@ final class InternalCollectionView: NSCollectionView {
     }
     
     override func becomeFirstResponder() -> Bool {
-        becomeFirstResponder(idx: 0)
+//        becomeFirstResponder(idx: 0)
+        super.becomeFirstResponder()
     }
     
     func becomeFirstResponder(idx: Int) -> Bool {
