@@ -82,7 +82,7 @@ where T.Index == Int {
     }
     
     public func collectionView(_ collectionView: NSCollectionView, didDeselectItemsAt indexPaths: Set<IndexPath>) {
-        selLog("________________", indexPaths, collectionView)
+        selLog("_______________", indexPaths, collectionView)
         self.selection = collectionView.selectionIndexes
         selLog("DESELECTItemsAt", indexPaths, collectionView)
     }
@@ -94,7 +94,7 @@ where T.Index == Int {
     
     func selLog(_ title: String, _ indexPaths: Set<IndexPath>, _ collectionView: NSCollectionView) {
 //        print("""
-//              \(title):    changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.map{ $0 })
+//              \(title):\t changes: \(indexPaths.map{ $0.intValue })\t|\tselInternal: \(collectionView.selectionIndexes.map{ $0 })\t|\tselExternal: \(self.selection.map{ $0 })
 //              """ )
     }
     
