@@ -21,7 +21,6 @@ where T.Index == Int {
         set { CollectionState.shared.selection = newValue }
     }
     
-    
     //    public let parent: NSCollectionView
     
     let scrollToTopCancellable: AnyCancellable?
@@ -45,6 +44,8 @@ where T.Index == Int {
     }
     
     func makeItemForCV(byIndexPath indexPath: IndexPath, collectionView: NSCollectionView) -> NSCollectionViewItem {
+        let itemIsEmptyCell = itemIsNil(indexPath)
+        
         let item = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier("NSCollectionViewItem"), for: indexPath)
         
         if let item = item as? CollectionViewItem {
@@ -52,6 +53,10 @@ where T.Index == Int {
             
             item.container.views.forEach { item.container.removeView($0) }
             item.container.addView(hosting, in: .center)
+            
+            if itemIsEmptyCell {
+                item.acceptsMouseDown = false
+            }
         }
         
         return item
@@ -88,8 +93,7 @@ where T.Index == Int {
     }
     
     public func collectionView(_ collectionView: NSCollectionView, shouldSelectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
-        // do not select nil items
-        return indexPaths.filter{ (items[$0.intValue] as? URL?) != nil }
+        return exceptNilItems(indexPaths)
     }
     
     func selLog(_ title: String, _ indexPaths: Set<IndexPath>, _ collectionView: NSCollectionView) {
@@ -228,5 +232,15 @@ where T.Index == Int {
 fileprivate extension NSCollectionController {
     var isQuickLookEnabled: Bool {
         return quickLookHandler() != nil
+    }
+    
+    func itemIsNil(_ indexPath: IndexPath) -> Bool {
+        guard let url = items[indexPath.intValue] as? URL? else { return false }
+        return url == nil
+    }
+    
+    func exceptNilItems(_ indexPaths: Set<IndexPath>) -> Set<IndexPath> {
+        guard let items = self.items as? [URL?] else { return indexPaths }
+        return indexPaths.filter{ items[$0.intValue] != nil }
     }
 }
