@@ -75,40 +75,32 @@ where T.Index == Int {
 ///////////////////////////////
 // HELPERS Selection update
 ///////////////////////////////
-    
     public func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
-        print("""
-              ________________:    changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.map{ $0 })
-              """ )
-        
+        selLog("________________", indexPaths, collectionView)
         self.selection = collectionView.selectionIndexes
-        
-        print("""
-              didSelectItemsAt:    changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.map{ $0 })
-              """ )
+        selLog("didSelectItemsAt", indexPaths, collectionView)
     }
     
     public func collectionView(_ collectionView: NSCollectionView, didDeselectItemsAt indexPaths: Set<IndexPath>) {
-        print("""
-              _______________:        changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.map{ $0 })
-              """ )
-        
+        selLog("________________", indexPaths, collectionView)
         self.selection = collectionView.selectionIndexes
-        
-        print("""
-              DESELECTItemsAt:        changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.map{ $0 })
-              """ )
+        selLog("DESELECTItemsAt", indexPaths, collectionView)
     }
-    
     
     public func collectionView(_ collectionView: NSCollectionView, shouldSelectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
         // do not select nil items
         return indexPaths.filter{ (items[$0.intValue] as? URL?) != nil }
     }
     
-    public func collectionView(_ collectionView: NSCollectionView, shouldDeselectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
-        return indexPaths
+    func selLog(_ title: String, _ indexPaths: Set<IndexPath>, _ collectionView: NSCollectionView) {
+//        print("""
+//              \(title):    changes: \(indexPaths.map{ $0.intValue }) | selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.map{ $0 })
+//              """ )
     }
+    
+//    public func collectionView(_ collectionView: NSCollectionView, shouldDeselectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
+//        return indexPaths
+//    }
     
     ///////////////////////////////
     // HELPERS Drag
