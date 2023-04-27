@@ -103,16 +103,11 @@ where T.Index == Int {
     
     public func collectionView(_ collectionView: NSCollectionView, shouldSelectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
         // do not select nil items
-        guard let items = self.items as? [URL?] else { return indexPaths}
-        return indexPaths.filter{ items[$0.intValue] != nil }
+        return indexPaths.filter{ (items[$0.intValue] as? URL?) != nil }
     }
     
     public func collectionView(_ collectionView: NSCollectionView, shouldDeselectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
-//        if collectionView.selectionIndexPaths != indexPaths {
-//            return indexPaths.filter{ (items[$0.intValue] as? URL?) != nil }
-//        }
-//        return []
-        indexPaths
+        return indexPaths
     }
     
     ///////////////////////////////
