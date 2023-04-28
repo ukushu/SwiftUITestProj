@@ -7,4 +7,6 @@ struct FBKey {
     static let space: UInt16 = 49
     
     static let enter: UInt16 = 36
+    
+    static let c: UInt16 = 8
 }
