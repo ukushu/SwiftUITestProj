@@ -101,11 +101,8 @@ where T.Index == Int {
         switch event {
         case _ where event.keyCode == FBKey.space:
             guard isQuickLookEnabled else { return false }
-            
             enableQuickLookPanel()
-            
             return true
-            
         case _ where event.keyCode == FBKey.enter:
             openFirstSelectedItemInAssociatedApp()
             return true
