@@ -53,8 +53,8 @@ public class Clipboard {
             pasteboard.clearContents()
             pasteboard.writeObjects(fileRefs)
             
-            let descr = fileRefs.map{ $0.relativeString }.joined(separator: "; ").dropLast(2).asString()
-            pasteboard.setString(descr, forType: .fileURL)
+//            let descr = fileRefs.map{ $0.relativeString }.joined(separator: "; ").dropLast(2).asString()
+//            pasteboard.setString(descr, forType: .fileURL)
         }
     }
     
