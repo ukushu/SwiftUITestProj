@@ -1,7 +1,20 @@
 import AppKit
 
+extension InternalCollectionView {
+    override func keyDown(with event: NSEvent) {
+        if let keyDownHandler = keyDownHandler {
+            let didHandle = keyDownHandler(event)
+            
+            if (didHandle) {
+                return
+            }
+        }
+        
+        super.keyDown(with: event)
+    }
+}
+
 extension NSCollectionController {
-    
     func handleKeyDown(_ event: NSEvent) -> Bool {
         print("handleKeyDown: \(event.keyCode)")
         
@@ -18,12 +31,14 @@ extension NSCollectionController {
             
             copySelectedItems()
             return true
+            
         default:
             return false
         }
     }
     
 }
+
 
 fileprivate extension NSCollectionController {
     func openFirstSelectedItemInAssociatedApp() {

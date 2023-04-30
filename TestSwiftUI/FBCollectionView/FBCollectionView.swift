@@ -42,7 +42,7 @@ import Combine
 struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepresentable /* NSObject, NSCollectionViewDelegateFlowLayout */ {
     
     //Need to locate here for topScroller
-    private var scrollView: NSScrollView = NSScrollView()
+    var scrollView: NSScrollView = NSScrollView()
     
     private let layout: NSCollectionViewFlowLayout
     
@@ -80,12 +80,11 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
         collectionView.backgroundColors = [.clear]
         collectionView.isSelectable = true
         collectionView.allowsMultipleSelection = true
+        collectionView.canDrawConcurrently = true
         
         collectionView.register(CollectionViewItem.self, forItemWithIdentifier: NSUserInterfaceItemIdentifier("NSCollectionViewItem"))
         
-//        if ItemType.self == URL.self {
-            collectionView.keyDownHandler = viewController.handleKeyDown(_:)
-//        }
+        collectionView.keyDownHandler = viewController.handleKeyDown(_:)
         
         return viewController
     }
@@ -129,34 +128,11 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
 //////////////////////////////
 ///HELPERS
 /////////////////////////////
-extension FBCollectionView {
-    func getScrollToTopCancellable() -> AnyCancellable? {
-        topScroller?.sink { [self] _ in
-            print("scrolling to top")
-            
-            DispatchQueue.main.async {
-                scrollView.documentView?.scroll(.zero)
-            }
-        }
-    }
-}
+
 
 final class InternalCollectionView: NSCollectionView {
     typealias KeyDownHandler = (_ event: NSEvent) -> Bool
     var keyDownHandler: KeyDownHandler? = nil
-    
-    
-    
-    override func keyDown(with event: NSEvent) {
-        if let keyDownHandler = keyDownHandler {
-            let didHandle = keyDownHandler(event)
-            if (didHandle) {
-                return
-            }
-        }
-        
-        super.keyDown(with: event)
-    }
     
     override func becomeFirstResponder() -> Bool {
         becomeFirstResponder(idx: 0)
@@ -184,30 +160,5 @@ final class InternalCollectionView: NSCollectionView {
 public extension IndexPath {
     var intValue: Int {
         self.item
-    }
-}
-
-
-/////////////////////////////
-///Drag&Drop
-/////////////////////////////
-extension FBCollectionView {
-    // Just do lots of copies?
-    // https://www.hackingwithswift.com/quick-start/swiftui/how-to-create-modifiers-for-a-uiviewrepresentable-struct
-    func onDrag(_ dragHandler: @escaping DragHandler) -> FBCollectionView {
-        var view = self
-        
-        view.dragHandler = dragHandler
-        print("view.dragHandler assigned")
-        
-        return view
-    }
-    
-    func initDragAndDrop(_ collectionView: NSCollectionView) {
-        // Drag and drop
-        // https://www.raywenderlich.com/1047-advanced-collection-views-in-os-x-tutorial#toc-anchor-011
-        if let _ = dragHandler {
-            collectionView.setDraggingSourceOperationMask(.copy, forLocal: false)
-        }
     }
 }
