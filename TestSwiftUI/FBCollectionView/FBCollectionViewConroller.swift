@@ -65,6 +65,8 @@ where T.Index == Int {
     // HELPERS Drag
     ///////////////////////////////
     
+    
+    
     //NSCollectionViewDelegate
     public func collectionView(_ collectionView: NSCollectionView, updateDraggingItemsForDrag draggingInfo: NSDraggingInfo) {
         print("collectionView")
@@ -80,14 +82,11 @@ where T.Index == Int {
     public func collectionView(_ collectionView: NSCollectionView, pasteboardWriterForItemAt index: Int) -> NSPasteboardWriting? {
         print("check for dragHandler is not nil")
         
-        guard let collectionView = self.collectionView as? FBCollectionView<URL, FileTile>?,
-              let dragHandler = collectionView?.dragHandler,
-              let item = collectionView?.items[index]
-        else { return nil }
+        guard let item = items[index] as? URL? else { return nil }
         
-        print("dragHandler is not nil!!!!!")
+        print("dragHandler IS NOT NIL!")
         
-        return dragHandler(item)
+        return item as NSPasteboardWriting?
     }
     
     //////////////////////////////

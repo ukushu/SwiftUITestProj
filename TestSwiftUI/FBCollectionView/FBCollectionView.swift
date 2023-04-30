@@ -53,9 +53,6 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
     
     let factory: (ItemType, IndexPath) -> Content
     
-    typealias DragHandler = (_ item: ItemType) -> NSPasteboardWriting?
-    var dragHandler: DragHandler?
-    
     init(items: [ItemType], layout: NSCollectionViewFlowLayout, topScroller: AnyPublisher<Void, Never>? = nil, factory: @escaping (ItemType, IndexPath) -> Content) {
         self.items = items
         self.layout = layout
@@ -86,6 +83,8 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
         
         collectionView.keyDownHandler = viewController.handleKeyDown(_:)
         
+        initDragAndDrop(collectionView)
+        
         return viewController
     }
     
@@ -102,7 +101,6 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
               """ )
         
         collectionView.selectionIndexes = selection
-//        initDragAndDrop(collectionView)
         
 //        print("Update: \n| items.count: \(items.count) \n| selection: \(String(describing: selection?.wrappedValue)) \n| collectionView.selectionIndexPaths \( collectionView.selectionIndexPaths )")
         
@@ -148,6 +146,7 @@ final class InternalCollectionView: NSCollectionView {
                 }
             }
         }
+        
         return super.becomeFirstResponder()
     }
     

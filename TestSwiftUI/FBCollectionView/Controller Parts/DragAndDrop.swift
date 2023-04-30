@@ -1,22 +1,16 @@
 import AppKit
 
+/*
+ To support drag-and-drop, you'll need to implement the relevant NSCollectionViewDelegate methods, but you have to register the kind of drag-and-drop operations SlidesPro supports.
+ 
+ https://www.kodeco.com/1047-advanced-collection-views-in-os-x-tutorial#toc-anchor-011
+ */
+
 extension FBCollectionView {
-    // Just do lots of copies?
-    // https://www.hackingwithswift.com/quick-start/swiftui/how-to-create-modifiers-for-a-uiviewrepresentable-struct
-    func onDrag(_ dragHandler: @escaping DragHandler) -> FBCollectionView {
-        var view = self
-        
-        view.dragHandler = dragHandler
-        print("view.dragHandler assigned")
-        
-        return view
-    }
     
     func initDragAndDrop(_ collectionView: NSCollectionView) {
-        // Drag and drop
-        // https://www.raywenderlich.com/1047-advanced-collection-views-in-os-x-tutorial#toc-anchor-011
-        if let _ = dragHandler {
-            collectionView.setDraggingSourceOperationMask(.copy, forLocal: false)
-        }
+        // Enabled dragging items from the collection view to other applications
+        // https://www.kodeco.com/1047-advanced-collection-views-in-os-x-tutorial#toc-anchor-011
+        collectionView.setDraggingSourceOperationMask(NSDragOperation.copy, forLocal: false)
     }
 }
