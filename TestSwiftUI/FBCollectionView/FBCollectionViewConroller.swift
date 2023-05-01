@@ -130,7 +130,7 @@ where T.Index == Int {
     var quickLookHandler: ( () -> [URL]? )!
     
     // QLPreviewPanelDataSource
-    public func numberOfPreviewItems(in panel: QLPreviewPanel!) -> Int { isQuickLookEnabled ? items.count : 0 }
+    public func numberOfPreviewItems(in panel: QLPreviewPanel!) -> Int { isQuickLookEnabled ? quickLookHandler()?.count ?? 0 : 0 }
     
     // QLPreviewPanelDelegate               | Inspired by https://stackoverflow.com/a/33923618/788168
     public func previewPanel(_ panel: QLPreviewPanel!, handle event: NSEvent!) -> Bool { quickLookKeyboardArrowsController(event: event) }
