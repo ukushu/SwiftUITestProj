@@ -1,4 +1,5 @@
 import AppKit
+import AudioToolbox
 
 extension InternalCollectionView {
     override func keyDown(with event: NSEvent) {
@@ -26,12 +27,28 @@ extension NSCollectionController {
         case _ where event.keyCode == FBKey.enter:
             openFirstSelectedItemInAssociatedApp()
             return true
-        case _ where event.keyCode == FBKey.c:
-            guard event.modifierFlags.check(equals: .command ) else { return false }
+        case _ where event.keyCode == FBKey.c && event.modifierFlags.check(equals: .command ):
             
             copySelectedItems()
             return true
+        case _ where event.keyCode == FBKey.i && event.modifierFlags.check(equals: .command ):
+//            guard  else { return false }
             
+            let urls = self.selection.map{ $0 as Int }.compactMap{ items[$0] as? URL? }.compactMap{ $0 }
+            
+            FS.openGetInfoWnd(for: urls)
+            
+            return true
+            
+        case _ where event.keyCode == FBKey.delete && event.modifierFlags.check(equals: .command ):
+            let urls = self.selection.map{ $0 as Int }.compactMap{ items[$0] as? URL? }.compactMap{ $0 }
+            
+            urls.forEach{ $0.FS.deleteToTrash() }
+            
+            //Play trash sound
+            AudioServicesPlaySystemSound(0x10)
+            
+            return true
         default:
             return false
         }

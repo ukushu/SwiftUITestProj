@@ -8,6 +8,9 @@ struct FBKey {
     
     static let enter: UInt16 = 36
     
+    static let delete: UInt16 = 51
+    
     static let c: UInt16 = 8
     static let a: UInt16 = 0
+    static let i: UInt16 = 34
 }
