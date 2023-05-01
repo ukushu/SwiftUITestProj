@@ -39,6 +39,7 @@
 		1DDDEDBF29B7639400C48216 /* AsyncNinja in Frameworks */ = {isa = PBXBuildFile; productRef = 1DDDEDBE29B7639400C48216 /* AsyncNinja */; };
 		1DDDEDC129B764B200C48216 /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDDEDC029B764B200C48216 /* Date+Ext.swift */; };
 		1DFB4E3229FDFA6A00CDE067 /* ScrollToTop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFB4E3129FDFA6A00CDE067 /* ScrollToTop.swift */; };
+		1DFB4E3429FF601D00CDE067 /* Selection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFB4E3329FF601D00CDE067 /* Selection.swift */; };
 		E6CBE36029D21BA2006373E2 /* FBCollectionViewConroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CBE35F29D21BA2006373E2 /* FBCollectionViewConroller.swift */; };
 /* End PBXBuildFile section */
 
@@ -76,6 +77,7 @@
 		1DDDEDB929B762F800C48216 /* Space.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Space.swift; sourceTree = "<group>"; };
 		1DDDEDC029B764B200C48216 /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
 		1DFB4E3129FDFA6A00CDE067 /* ScrollToTop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollToTop.swift; sourceTree = "<group>"; };
+		1DFB4E3329FF601D00CDE067 /* Selection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Selection.swift; sourceTree = "<group>"; };
 		E6CBE35F29D21BA2006373E2 /* FBCollectionViewConroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBCollectionViewConroller.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -99,6 +101,7 @@
 				1D10341429FBA3A80021A8E1 /* FBKey.swift */,
 				1D10341A29FC8BDB0021A8E1 /* Hotkeys.swift */,
 				1DFB4E3129FDFA6A00CDE067 /* ScrollToTop.swift */,
+				1DFB4E3329FF601D00CDE067 /* Selection.swift */,
 			);
 			path = "Controller Parts";
 			sourceTree = "<group>";
@@ -286,6 +289,7 @@
 				1DDDEDAE29B75FD900C48216 /* String+FS.swift in Sources */,
 				1DDDEDC129B764B200C48216 /* Date+Ext.swift in Sources */,
 				1DDDEDB729B762C800C48216 /* FileTile.swift in Sources */,
+				1DFB4E3429FF601D00CDE067 /* Selection.swift in Sources */,
 				1DDDEDAF29B75FD900C48216 /* URL+FS+FileInfo.swift in Sources */,
 				1D8F362B29EB1BCD00098621 /* FilePreview.swift in Sources */,
 				1D4A87B5298EE5390062686C /* TestSwiftUIApp.swift in Sources */,

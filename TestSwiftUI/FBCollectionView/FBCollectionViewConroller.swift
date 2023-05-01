@@ -57,9 +57,19 @@ where T.Index == Int {
         selectionLog("DESELECTItemsAt", indexPaths, collectionView)
     }
     
+    var shiftIsPressed: Bool { NSEvent.modifierFlags.check(equals: .shift) }
+    
     public func collectionView(_ collectionView: NSCollectionView, shouldSelectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
+        if shiftIsPressed {
+            let itemsToAdd = shiftIsPressedItemsToAdd(collectionView, indexPaths: indexPaths)
+            
+            return exceptNilItems(indexPaths).union(itemsToAdd)
+        }
+        
         return exceptNilItems(indexPaths)
     }
+    
+    
     
     ///////////////////////////////
     // HELPERS Drag

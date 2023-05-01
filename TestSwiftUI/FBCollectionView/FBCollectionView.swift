@@ -132,6 +132,8 @@ final class InternalCollectionView: NSCollectionView {
     typealias KeyDownHandler = (_ event: NSEvent) -> Bool
     var keyDownHandler: KeyDownHandler? = nil
     
+    var lastClickedIndexPath: IndexPath? = nil
+    
     override func becomeFirstResponder() -> Bool {
 //        becomeFirstResponder(idx: 0)
         super.becomeFirstResponder()
