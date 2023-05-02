@@ -69,7 +69,7 @@ fileprivate extension NSCollectionController {
     func openFirstSelectedItemInAssociatedApp() {
         if let itemIdx = selection.sorted().first,
            let item = items[itemIdx] {
-            _ = FS.openWithAssociatedApp(item)
+            FS.openWithAssociatedApp(item)
         }
     }
     
