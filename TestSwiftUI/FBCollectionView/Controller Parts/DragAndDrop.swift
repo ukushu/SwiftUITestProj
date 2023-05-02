@@ -14,3 +14,11 @@ extension FBCollectionView {
         collectionView.setDraggingSourceOperationMask(NSDragOperation.copy, forLocal: false)
     }
 }
+
+extension NSCollectionController {
+    func preventHidingDuringDrag(_ collectionView: NSCollectionView, indexPaths: Set<IndexPath>) {
+        indexPaths.forEach{
+            collectionView.item(at: $0.item )?.view.isHidden = false
+        }
+    }
+}

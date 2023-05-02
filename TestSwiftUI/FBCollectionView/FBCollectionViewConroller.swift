@@ -70,18 +70,28 @@ public class NSCollectionController<Content: View>:
     ///////////////////////////////
     
     // NSCollectionViewDelegate
+    
     public func collectionView(_ collectionView: NSCollectionView, pasteboardWriterForItemAt index: Int) -> NSPasteboardWriting? {
-        guard let item = items[index] as? URL? else { return nil }
-        
-        return item as NSPasteboardWriting?
+        return items[index] as? NSURL
     }
     
-    public func collectionView(_ collectionView: NSCollectionView, viewForSupplementaryElementOfKind kind: NSCollectionView.SupplementaryElementKind, at indexPath: IndexPath) -> NSView {
-        
-        print("SupplementaryElementKind")
-        
-        return collectionView.item(at: indexPath.item)!.view
+    public func collectionView(_ collectionView: NSCollectionView, draggingSession session: NSDraggingSession, willBeginAt screenPoint: NSPoint, forItemsAt indexPaths: Set<IndexPath>) {
+        preventHidingDuringDrag(collectionView, indexPaths: indexPaths)
     }
+    
+   
+//    public func collectionView(_ collectionView: NSCollectionView, viewForSupplementaryElementOfKind kind: NSCollectionView.SupplementaryElementKind, at indexPath: IndexPath) -> NSView {
+//
+//        print("SupplementaryElementKind")
+//
+//        return collectionView.item(at: indexPath.item)!.view
+//    }
+    
+//    public func collectionView(_ collectionView: NSCollectionView, draggingImageForItemsAt indexPaths: Set<IndexPath>,
+//                                 with event: NSEvent, offset dragImageOffset: NSPointPointer ) -> NSImage {
+//
+//        collectionView.item(at: indexPaths.first!.item)!.view.asNSImage()!
+//    }
     
     
     
@@ -135,13 +145,10 @@ fileprivate extension NSCollectionController {
     }
     
     func urlIsNilBy(_ indexPath: IndexPath) -> Bool {
-        guard let url = items[indexPath.intValue] as? URL? else { return false }
-        return url == nil
+        return items[indexPath.intValue] == nil
     }
     
     func exceptNilItems(_ indexPaths: Set<IndexPath>) -> Set<IndexPath> {
-        guard let items = self.items as? [URL?] else { return indexPaths }
-        
         return indexPaths.filter{ items[$0.intValue] != nil }
     }
     
@@ -152,6 +159,7 @@ fileprivate extension NSCollectionController {
             let hosting = NSHostingView(rootView: factory(items[indexPath.item], indexPath))
             
             item.container.views.forEach { item.container.removeView($0) }
+            item.container.addView(hosting, in: .center)
             item.container.addView(hosting, in: .center)
             
 //            if urlIsNilBy(indexPath) {
@@ -173,4 +181,18 @@ fileprivate extension NSCollectionController {
 //    public func collectionView(_ collectionView: NSCollectionView, shouldDeselectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
 //        return indexPaths
 //    }
+}
+
+fileprivate extension NSView {
+    func asNSImage() -> NSImage? {
+        guard let rep = bitmapImageRepForCachingDisplay(in: bounds) else { return nil }
+        
+        cacheDisplay(in: bounds, to: rep)
+        
+        guard let cgImage = rep.cgImage else {
+            return nil
+        }
+        
+        return NSImage(cgImage: cgImage, size: bounds.size)
+    }
 }
