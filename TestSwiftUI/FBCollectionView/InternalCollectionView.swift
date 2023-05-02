@@ -5,6 +5,9 @@ final class InternalCollectionView: NSCollectionView {
     var keyDownHandler: KeyDownHandler? = nil
     
     var lastClickedIndexPath: IndexPath? = nil
+    
+    // Do notnhing on Cmd+A
+    override func selectAll(_ sender: Any?) { }
 }
 
 public extension IndexPath {
