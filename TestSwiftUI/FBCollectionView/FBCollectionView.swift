@@ -22,21 +22,21 @@ import Combine
 
 // TODO: ItemType extends identifiable?
 // TODO: Move the delegates to a coordinator.
-struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepresentable /* NSObject, NSCollectionViewDelegateFlowLayout */ {
+struct FBCollectionView<Content: View>: NSViewControllerRepresentable /* NSObject, NSCollectionViewDelegateFlowLayout */ {
     //Need to locate here for topScroller
     var scrollView: NSScrollView = NSScrollView()
     
     private let layout: NSCollectionViewFlowLayout = flowLayout()
     
-    let items: [ItemType]
+    let items: [URL?]
     var selection : IndexSet { CollectionState.shared.selection }
     
     let topScroller: AnyPublisher<Void, Never>?
     
-    let factory: (ItemType, IndexPath) -> Content
+    let factory: (URL?, IndexPath) -> Content
     
-    init(items: [ItemType], topScroller: AnyPublisher<Void, Never>? = nil, factory: @escaping (ItemType, IndexPath) -> Content) {
-        self.items = items
+    init(items: [URL?], topScroller: AnyPublisher<Void, Never>? = nil, factory: @escaping (URL?, IndexPath) -> Content) {
+        self.items = items.appendEmpties()
         self.topScroller = topScroller
         self.factory = factory
     }
@@ -85,7 +85,7 @@ extension FBCollectionView {
     fileprivate func dataRefreshLogic(_ viewController: NSViewController) {
         guard let scrollView = viewController.view as? NSScrollView else { return }
         guard let collectionView = scrollView.documentView as? NSCollectionView else { return }
-        guard let controller = viewController as? NSCollectionController<[ItemType],Content> else { return }
+        guard let controller = viewController as? NSCollectionController<[URL?],Content> else { return }
         
         collectionView.dataSource = controller
         collectionView.delegate = controller
@@ -122,4 +122,33 @@ fileprivate func flowLayout() -> NSCollectionViewFlowLayout{
     flowLayout.minimumLineSpacing = 30.0
     
     return flowLayout
+}
+
+
+fileprivate extension Array where Element == Optional<URL> {
+    func appendEmpties() -> [URL?] {
+        var arr = self
+        // remove all nil elements from end of array
+        for i in arr.indices.reversed() {
+            if arr[i] == nil {
+                arr.remove(at: i)
+            } else {
+                break
+            }
+        }
+        
+        // fill in case of empty
+        if self.count < 12 {
+            let empties = (0..<(12 - self.count)).map{ _ -> URL? in nil }
+            
+            return arr.appending(contentsOf: empties)
+        }
+        
+        // add needed count of empties
+        let emptiesCount = arr.count % 6
+        
+        let empties = (0..<emptiesCount).map{ _ -> URL? in nil }
+        
+        return arr.appending(contentsOf: empties)
+    }
 }
