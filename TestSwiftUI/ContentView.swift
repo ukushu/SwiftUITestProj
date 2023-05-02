@@ -9,12 +9,7 @@ struct ContentView: View {
         VStack {
             ButtonsPanel()
             
-            Text("Selected: \(CollectionState.shared.selection.map{ "\($0)" }.joined(separator: ", ") )")
-            
-            FBCollectionView(items: model.filesList,
-                             layout: model.layout,
-                             topScroller: model.topScroller.eraseToAnyPublisher()
-            ) { url, indexPath in
+            FBCollectionView(items: model.filesList, topScroller: model.topScroller.eraseToAnyPublisher() ) { url, indexPath in
                 FileItem(url: url, indexPath: indexPath)
             }
         }
@@ -66,7 +61,7 @@ extension ContentView {
             }
             
             Button("Empty") {
-                model.filesList = [].appendEmpties()
+                model.filesList = []
             }
             
             Button("Select 1") {

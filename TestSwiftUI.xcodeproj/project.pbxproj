@@ -131,16 +131,16 @@
 		1D4A87B3298EE5390062686C /* TestSwiftUI */ = {
 			isa = PBXGroup;
 			children = (
+				1D4A87B4298EE5390062686C /* TestSwiftUIApp.swift */,
 				1DDDEDA429B75FC100C48216 /* Helpers */,
 				1DDDED9829B75DE300C48216 /* FBCollectionView */,
-				1D4A87B4298EE5390062686C /* TestSwiftUIApp.swift */,
 				1D4A87B6298EE5390062686C /* ContentView.swift */,
 				1D671EE429F78B7300C77C6D /* ContentViewModel.swift */,
 				1D671EE629F78BD500C77C6D /* OtherFuncs.swift */,
+				1DFB4E392A00C31300CDE067 /* Garbage.swift */,
 				1D4A87B8298EE53B0062686C /* Assets.xcassets */,
 				1D4A87BD298EE53B0062686C /* TestSwiftUI.entitlements */,
 				1D4A87BA298EE53B0062686C /* Preview Content */,
-				1DFB4E392A00C31300CDE067 /* Garbage.swift */,
 			);
 			path = TestSwiftUI;
 			sourceTree = "<group>";

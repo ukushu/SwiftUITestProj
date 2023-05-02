@@ -15,26 +15,9 @@ import Combine
                   layout: model.layout,
                   topScroller: model.topScroller.eraseToAnyPublisher()
  ) { item, indexPath in
-     
      AppTile(app: item, isSelected: model.selection.contains(indexPath.intValue) )
-     
  }
  
- 
- 
- 
-/////////////////FlowLayout Sample/////////////////////////////
- 
- func flowLayout() -> NSCollectionViewFlowLayout{
-     let flowLayout = NSCollectionViewFlowLayout()
-             flowLayout.itemSize = NSSize(width: 160.0, height: 140.0)
-             flowLayout.sectionInset = NSEdgeInsets(top: 30.0, left: 20.0, bottom: 30.0, right: 20.0)
-             flowLayout.minimumInteritemSpacing = 20.0
-             flowLayout.minimumLineSpacing = 20.0
-             flowLayout.sectionHeadersPinToVisibleBounds = true
-     
-     return flowLayout
- }
  */
 
 // TODO: ItemType extends identifiable?
@@ -43,7 +26,7 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
     //Need to locate here for topScroller
     var scrollView: NSScrollView = NSScrollView()
     
-    private let layout: NSCollectionViewFlowLayout
+    private let layout: NSCollectionViewFlowLayout = flowLayout()
     
     let items: [ItemType]
     var selection : IndexSet { CollectionState.shared.selection }
@@ -52,9 +35,8 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
     
     let factory: (ItemType, IndexPath) -> Content
     
-    init(items: [ItemType], layout: NSCollectionViewFlowLayout, topScroller: AnyPublisher<Void, Never>? = nil, factory: @escaping (ItemType, IndexPath) -> Content) {
+    init(items: [ItemType], topScroller: AnyPublisher<Void, Never>? = nil, factory: @escaping (ItemType, IndexPath) -> Content) {
         self.items = items
-        self.layout = layout
         self.topScroller = topScroller
         self.factory = factory
     }
@@ -71,7 +53,6 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
 //////////////////////////////
 ///HELPERS
 /////////////////////////////
-
 extension FBCollectionView {
     fileprivate func createViewController() -> NSViewController {
         let collectionView = InternalCollectionView()
@@ -130,4 +111,15 @@ extension FBCollectionView {
 //              updateNSViewController: selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.map{ $0 })
 //              """ )
     }
+}
+
+fileprivate func flowLayout() -> NSCollectionViewFlowLayout{
+    let flowLayout = NSCollectionViewFlowLayout()
+    
+    flowLayout.itemSize = NSSize(width: 130.0, height: 173.0)
+    flowLayout.sectionInset = NSEdgeInsets(top: 5.0, left: 20.0, bottom: 30.0, right: 15.0)
+    flowLayout.minimumInteritemSpacing = 15.0
+    flowLayout.minimumLineSpacing = 30.0
+    
+    return flowLayout
 }

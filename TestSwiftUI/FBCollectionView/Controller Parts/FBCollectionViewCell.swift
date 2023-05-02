@@ -1,5 +1,4 @@
 import Foundation
-import AppKit
 import SwiftUI
 
 final class FBCItemView : NSCollectionViewItem {

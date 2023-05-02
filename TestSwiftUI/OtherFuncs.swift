@@ -35,18 +35,11 @@ func getDirContentsFor(url: URL) -> [URL] {
     return []
 }
 
-func flowLayout() -> NSCollectionViewFlowLayout{
-    let flowLayout = NSCollectionViewFlowLayout()
-    
-    flowLayout.itemSize = NSSize(width: 130.0, height: 173.0)
-    flowLayout.sectionInset = NSEdgeInsets(top: 5.0, left: 20.0, bottom: 30.0, right: 15.0)
-    flowLayout.minimumInteritemSpacing = 15.0
-    flowLayout.minimumLineSpacing = 30.0
-    
-    return flowLayout
-}
+///////////////////////////
+///HELPERS
+//////////////////////////
 
-extension Array where Element == Optional<URL> {
+fileprivate extension Array where Element == Optional<URL> {
     func appendEmpties() -> [URL?] {
         var arr = self
         // remove all nil elements from end of array

@@ -39,8 +39,6 @@ public class FBCollectionCache {
     }
     
     static func automaticCacheCleanup() {
-//        let oldCache = cache.count
-        
         let minCountToLeave = 18
         let countToLeave = 300
         let countToDoCleanup = Int( 1.2 * Double(countToLeave) )
