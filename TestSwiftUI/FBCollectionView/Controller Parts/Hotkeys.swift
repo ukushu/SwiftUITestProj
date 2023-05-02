@@ -68,7 +68,7 @@ extension NSCollectionController {
 fileprivate extension NSCollectionController {
     func openFirstSelectedItemInAssociatedApp() {
         if let itemIdx = selection.sorted().first,
-           let item = items[itemIdx] as? URL? {
+           let item = items[itemIdx] {
             _ = FS.openWithAssociatedApp(item)
         }
     }
@@ -76,10 +76,10 @@ fileprivate extension NSCollectionController {
     func copySelectedItems() {
         if selection.count == 1,
            let itemIdx = selection.sorted().first,
-           let url = items[itemIdx] as? URL? {
+           let url = items[itemIdx]{
             Clipboard.copyFileContent(withUrl: url)
         } else if selection.count > 1 {
-            let urls = selection.compactMap{ items[$0] as? URL? }.compactMap{ $0 }
+            let urls = selection.compactMap{ items[$0] }
             
             Clipboard.copyFilesContent(urls)
         }
