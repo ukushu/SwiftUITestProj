@@ -177,7 +177,7 @@ fileprivate extension NSCollectionController {
     func makeItemForCV(byIndexPath indexPath: IndexPath, collectionView: NSCollectionView) -> NSCollectionViewItem {
         let item = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier("NSCollectionViewItem"), for: indexPath)
         
-        if let item = item as? CollectionViewItem {
+        if let item = item as? FBCItemView {
             let hosting = NSHostingView(rootView: factory(items[indexPath.item], indexPath))
             
             item.container.views.forEach { item.container.removeView($0) }

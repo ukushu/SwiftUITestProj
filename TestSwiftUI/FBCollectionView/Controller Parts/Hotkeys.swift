@@ -49,6 +49,13 @@ extension NSCollectionController {
             AudioServicesPlaySystemSound(0x10)
             
             return true
+        case _ where event.keyCode == FBKey.esc:
+            if self.selection.count == 0 {
+                self.selection = [0]
+            } else if self.selection.count > 1 {
+                self.selection = [self.selection.sorted().first!]
+            }
+            return true
         default:
             return false
         }

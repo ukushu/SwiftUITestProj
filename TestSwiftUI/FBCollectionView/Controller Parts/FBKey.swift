@@ -7,6 +7,7 @@ struct FBKey {
     static let space: UInt16 = 49
     
     static let enter: UInt16 = 36
+    static let esc: UInt16 = 53
     
     static let delete: UInt16 = 51
     

@@ -2,13 +2,13 @@ import Foundation
 import AppKit
 import SwiftUI
 
-final class CollectionViewItem : NSCollectionViewItem {
+final class FBCItemView : NSCollectionViewItem {
     let container = NSStackView()
     
     var acceptsMouseDown: Bool = true
 }
 
-extension CollectionViewItem {
+extension FBCItemView {
     override func loadView() {
         container.orientation = NSUserInterfaceLayoutOrientation.vertical
         container.wantsLayer = true

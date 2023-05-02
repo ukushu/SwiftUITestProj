@@ -283,7 +283,7 @@ public class FS {
         
         pBoard.writeObjects(urls as [NSPasteboardWriting])
         
-        NSPerformService("Finder/Show Info", pBoard);
+        NSPerformService("Finder/Show Info", pBoard)
     }
 }
 

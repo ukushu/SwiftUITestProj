@@ -24,7 +24,6 @@
 		1DC7B18C29DD971F00FCE4EC /* FBCollectionCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC7B18B29DD971F00FCE4EC /* FBCollectionCache.swift */; };
 		1DDDED9C29B75DE300C48216 /* FBCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDDED9929B75DE300C48216 /* FBCollectionViewCell.swift */; };
 		1DDDED9D29B75DE300C48216 /* FBCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDDED9A29B75DE300C48216 /* FBCollectionView.swift */; };
-		1DDDED9E29B75DE300C48216 /* FBCollectionView.CoordinatorAndDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDDED9B29B75DE300C48216 /* FBCollectionView.CoordinatorAndDataSource.swift */; };
 		1DDDEDA029B75E3100C48216 /* RecentFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDDED9F29B75E3100C48216 /* RecentFile.swift */; };
 		1DDDEDAB29B75FD900C48216 /* URL+FS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDDEDA629B75FD900C48216 /* URL+FS.swift */; };
 		1DDDEDAC29B75FD900C48216 /* FS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDDEDA729B75FD900C48216 /* FS.swift */; };
@@ -40,6 +39,7 @@
 		1DDDEDC129B764B200C48216 /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDDEDC029B764B200C48216 /* Date+Ext.swift */; };
 		1DFB4E3229FDFA6A00CDE067 /* ScrollToTop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFB4E3129FDFA6A00CDE067 /* ScrollToTop.swift */; };
 		1DFB4E3429FF601D00CDE067 /* Selection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFB4E3329FF601D00CDE067 /* Selection.swift */; };
+		1DFB4E362A00BDFE00CDE067 /* InternalCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFB4E352A00BDFE00CDE067 /* InternalCollectionView.swift */; };
 		E6CBE36029D21BA2006373E2 /* FBCollectionViewConroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CBE35F29D21BA2006373E2 /* FBCollectionViewConroller.swift */; };
 /* End PBXBuildFile section */
 
@@ -63,7 +63,6 @@
 		1DC7B18B29DD971F00FCE4EC /* FBCollectionCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBCollectionCache.swift; sourceTree = "<group>"; };
 		1DDDED9929B75DE300C48216 /* FBCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBCollectionViewCell.swift; sourceTree = "<group>"; };
 		1DDDED9A29B75DE300C48216 /* FBCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBCollectionView.swift; sourceTree = "<group>"; };
-		1DDDED9B29B75DE300C48216 /* FBCollectionView.CoordinatorAndDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBCollectionView.CoordinatorAndDataSource.swift; sourceTree = "<group>"; };
 		1DDDED9F29B75E3100C48216 /* RecentFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentFile.swift; sourceTree = "<group>"; };
 		1DDDEDA629B75FD900C48216 /* URL+FS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+FS.swift"; sourceTree = "<group>"; };
 		1DDDEDA729B75FD900C48216 /* FS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FS.swift; sourceTree = "<group>"; };
@@ -78,6 +77,7 @@
 		1DDDEDC029B764B200C48216 /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
 		1DFB4E3129FDFA6A00CDE067 /* ScrollToTop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollToTop.swift; sourceTree = "<group>"; };
 		1DFB4E3329FF601D00CDE067 /* Selection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Selection.swift; sourceTree = "<group>"; };
+		1DFB4E352A00BDFE00CDE067 /* InternalCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalCollectionView.swift; sourceTree = "<group>"; };
 		E6CBE35F29D21BA2006373E2 /* FBCollectionViewConroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FBCollectionViewConroller.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -96,6 +96,7 @@
 		1D10340F29FBA1490021A8E1 /* Controller Parts */ = {
 			isa = PBXGroup;
 			children = (
+				1DDDED9929B75DE300C48216 /* FBCollectionViewCell.swift */,
 				1D10341029FBA1690021A8E1 /* QuickLook.swift */,
 				1D10341229FBA2F20021A8E1 /* DragAndDrop.swift */,
 				1D10341429FBA3A80021A8E1 /* FBKey.swift */,
@@ -150,13 +151,12 @@
 		1DDDED9829B75DE300C48216 /* FBCollectionView */ = {
 			isa = PBXGroup;
 			children = (
-				1DDDEDB629B762C800C48216 /* FileTile.swift */,
-				1D671EE229F4867700C77C6D /* FileTileEmpty2.swift */,
-				1DDDED9929B75DE300C48216 /* FBCollectionViewCell.swift */,
 				1DDDED9A29B75DE300C48216 /* FBCollectionView.swift */,
+				1DFB4E352A00BDFE00CDE067 /* InternalCollectionView.swift */,
 				E6CBE35F29D21BA2006373E2 /* FBCollectionViewConroller.swift */,
 				1D10340F29FBA1490021A8E1 /* Controller Parts */,
-				1DDDED9B29B75DE300C48216 /* FBCollectionView.CoordinatorAndDataSource.swift */,
+				1DDDEDB629B762C800C48216 /* FileTile.swift */,
+				1D671EE229F4867700C77C6D /* FileTileEmpty2.swift */,
 			);
 			path = FBCollectionView;
 			sourceTree = "<group>";
@@ -284,7 +284,6 @@
 				1D671EE329F4867700C77C6D /* FileTileEmpty2.swift in Sources */,
 				1DDDEDAC29B75FD900C48216 /* FS.swift in Sources */,
 				1DDDEDAD29B75FD900C48216 /* String+FS+FileInfo.swift in Sources */,
-				1DDDED9E29B75DE300C48216 /* FBCollectionView.CoordinatorAndDataSource.swift in Sources */,
 				1DDDEDBA29B762F800C48216 /* Space.swift in Sources */,
 				1DDDEDAE29B75FD900C48216 /* String+FS.swift in Sources */,
 				1DDDEDC129B764B200C48216 /* Date+Ext.swift in Sources */,
@@ -301,6 +300,7 @@
 				1D671EE529F78B7300C77C6D /* ContentViewModel.swift in Sources */,
 				1DDDEDB129B7604300C48216 /* URL+Ext.swift in Sources */,
 				1D10341B29FC8BDB0021A8E1 /* Hotkeys.swift in Sources */,
+				1DFB4E362A00BDFE00CDE067 /* InternalCollectionView.swift in Sources */,
 				1DDDEDAB29B75FD900C48216 /* URL+FS.swift in Sources */,
 				1DDDED9C29B75DE300C48216 /* FBCollectionViewCell.swift in Sources */,
 				1D10341529FBA3A80021A8E1 /* FBKey.swift in Sources */,
