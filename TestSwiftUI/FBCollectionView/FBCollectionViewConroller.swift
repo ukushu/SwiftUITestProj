@@ -79,42 +79,6 @@ public class NSCollectionController<Content: View>:
         preventHidingDuringDrag(collectionView, indexPaths: indexPaths)
     }
     
-   
-//    public func collectionView(_ collectionView: NSCollectionView, viewForSupplementaryElementOfKind kind: NSCollectionView.SupplementaryElementKind, at indexPath: IndexPath) -> NSView {
-//
-//        print("SupplementaryElementKind")
-//
-//        return collectionView.item(at: indexPath.item)!.view
-//    }
-    
-//    public func collectionView(_ collectionView: NSCollectionView, draggingImageForItemsAt indexPaths: Set<IndexPath>,
-//                                 with event: NSEvent, offset dragImageOffset: NSPointPointer ) -> NSImage {
-//
-//        collectionView.item(at: indexPaths.first!.item)!.view.asNSImage()!
-//    }
-    
-    
-    
-//    func collectionView(collectionView: NSCollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> NSView {
-//        // 1
-////        let identifier: String = kind == NSCollectionElementKindSectionHeader ? "HeaderView" : ""
-////        let view = collectionView.makeSupplementaryViewOfKind(kind, withIdentifier: identifier, forIndexPath: indexPath)
-////        // 2
-////        if kind == NSCollectionElementKindSectionHeader {
-////          let headerView = view as! HeaderView
-////          headerView.sectionTitle.stringValue = "Section \(indexPath.section)"
-////          let numberOfItemsInSection = imageDirectoryLoader.numberOfItemsInSection(indexPath.section)
-////          headerView.imageCount.stringValue = "\(numberOfItemsInSection) image files"
-////        }
-//
-//        let identifier: String = kind == NSCollectionView.elementKindSectionHeader ? "HeaderView" : ""
-////        let view = collectionView.makeSupplementaryViewOfKind(kind, withIdentifier: identifier, forIndexPath: indexPath as IndexPath)
-//
-////        let view = collectionView.item(at: indexPath.item)!.view
-//
-//        return view
-//      }
-    
     //////////////////////////////
     //QuickLook
     //////////////////////////////
