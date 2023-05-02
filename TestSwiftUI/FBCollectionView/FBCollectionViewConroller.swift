@@ -41,7 +41,6 @@ where T.Index == Int {
         return makeItemForCV(byIndexPath: indexPath, collectionView: collectionView)
     }
     
-    
     ///////////////////////////////
     // HELPERS Selection update
     ///////////////////////////////
@@ -69,24 +68,9 @@ where T.Index == Int {
         return exceptNilItems(indexPaths)
     }
     
-    
-    
     ///////////////////////////////
     // HELPERS Drag
     ///////////////////////////////
-    
-    
-    
-    //NSCollectionViewDelegate
-//    public func collectionView(_ collectionView: NSCollectionView, updateDraggingItemsForDrag draggingInfo: NSDraggingInfo) {
-//        print("collectionView")
-//    }
-    
-    //NSCollectionViewDelegate
-//    public func collectionView(_ collectionView: NSCollectionView, draggingImageForItemsAt indexPaths: Set<IndexPath>, with event: NSEvent, offset dragImageOffset: NSPointPointer) -> NSImage {
-//
-//        NSImage(named: "square.and.arrow.down.on.square.fill")!
-//    }
     
     // NSCollectionViewDelegate
     public func collectionView(_ collectionView: NSCollectionView, pasteboardWriterForItemAt index: Int) -> NSPasteboardWriting? {
@@ -164,16 +148,6 @@ fileprivate extension NSCollectionController {
         return indexPaths.filter{ items[$0.intValue] != nil }
     }
     
-    func selectionLog(_ title: String, _ indexPaths: Set<IndexPath>, _ collectionView: NSCollectionView) {
-//        print("""
-//              \(title):\t changes: \(indexPaths.map{ $0.intValue })\t|\tselInternal: \(collectionView.selectionIndexes.map{ $0 })\t|\tselExternal: \(self.selection.map{ $0 })
-//              """ )
-    }
-    
-//    public func collectionView(_ collectionView: NSCollectionView, shouldDeselectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
-//        return indexPaths
-//    }
-    
     func makeItemForCV(byIndexPath indexPath: IndexPath, collectionView: NSCollectionView) -> NSCollectionViewItem {
         let item = collectionView.makeItem(withIdentifier: NSUserInterfaceItemIdentifier("NSCollectionViewItem"), for: indexPath)
         
@@ -190,4 +164,16 @@ fileprivate extension NSCollectionController {
         
         return item
     }
+}
+
+fileprivate extension NSCollectionController {
+    func selectionLog(_ title: String, _ indexPaths: Set<IndexPath>, _ collectionView: NSCollectionView) {
+//        print("""
+//              \(title):\t changes: \(indexPaths.map{ $0.intValue })\t|\tselInternal: \(collectionView.selectionIndexes.map{ $0 })\t|\tselExternal: \(self.selection.map{ $0 })
+//              """ )
+    }
+    
+//    public func collectionView(_ collectionView: NSCollectionView, shouldDeselectItemsAt indexPaths: Set<IndexPath>) -> Set<IndexPath> {
+//        return indexPaths
+//    }
 }

@@ -15,19 +15,23 @@ struct ContentView: View {
                              layout: model.layout,
                              topScroller: model.topScroller.eraseToAnyPublisher()
             ) { url, indexPath in
-//                Text(item.lastPathComponent)
-                
                 FileItem(url: url, indexPath: indexPath)
             }
         }
     }
-    
+}
+
+////////////////////////////////
+///HELPERS
+////////////////////////////////
+
+extension ContentView {
     @ViewBuilder
     func FileItem(url: URL?, indexPath: IndexPath) -> some View {
         if let url = url {
             FileTile(url: url, indexPath: indexPath)
         } else {
-            FileTileEmpty2()
+            FileTileEmpty()
         }
     }
     
@@ -83,4 +87,3 @@ struct ContentView: View {
         }
     }
 }
-

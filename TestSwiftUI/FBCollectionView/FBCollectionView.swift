@@ -40,7 +40,6 @@ import Combine
 // TODO: ItemType extends identifiable?
 // TODO: Move the delegates to a coordinator.
 struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepresentable /* NSObject, NSCollectionViewDelegateFlowLayout */ {
-    
     //Need to locate here for topScroller
     var scrollView: NSScrollView = NSScrollView()
     
@@ -60,7 +59,21 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
         self.factory = factory
     }
     
-    func makeNSViewController(context: Context) -> NSViewController {
+    func makeNSViewController(context: Context) -> NSViewController { createViewController() }
+    
+    func updateNSViewController(_ viewController: NSViewController, context: Context) { dataRefreshLogic(viewController) }
+    
+    func updateNSView(_ scrollView: NSScrollView, context: Context) {
+        print("updateNSView")
+    }
+}
+
+//////////////////////////////
+///HELPERS
+/////////////////////////////
+
+extension FBCollectionView {
+    fileprivate func createViewController() -> NSViewController {
         let collectionView = InternalCollectionView()
         
         let viewController = NSCollectionController(collection: self.items,
@@ -88,7 +101,7 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
         return viewController
     }
     
-    func updateNSViewController(_ viewController: NSViewController, context: Context) {
+    fileprivate func dataRefreshLogic(_ viewController: NSViewController) {
         guard let scrollView = viewController.view as? NSScrollView else { return }
         guard let collectionView = scrollView.documentView as? NSCollectionView else { return }
         guard let controller = viewController as? NSCollectionController<[ItemType],Content> else { return }
@@ -96,19 +109,11 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
         collectionView.dataSource = controller
         collectionView.delegate = controller
         
-        print("""
-              updateNSViewController: selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.map{ $0 })
-              """ )
+        logDataInfo()
         
         collectionView.selectionIndexes = selection
         
-//        print("Update: \n| items.count: \(items.count) \n| selection: \(String(describing: selection?.wrappedValue)) \n| collectionView.selectionIndexPaths \( collectionView.selectionIndexPaths )")
-        
-//        let itemsToUpd = Set(controller.collection).subtracting(self.items)
-        
-//        let idxToUpd = controller.collection.filter{ itemsToUpd.contains($0) }.indices.map{ IndexPath(index: $0) }
-//        
-//        let selections = self.selection?.wrappedValue.map{ IndexPath(index: $0) } ?? []
+        logDataInfo()
         
         if controller.items == self.items {
             collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems())
@@ -117,14 +122,12 @@ struct FBCollectionView<ItemType: Hashable, Content: View>: NSViewControllerRepr
             collectionView.reloadData()
         }
     }
-    
-    func updateNSView(_ scrollView: NSScrollView, context: Context) {
-        print("updateNSView")
-    }
 }
 
-//////////////////////////////
-///HELPERS
-/////////////////////////////
-
-
+extension FBCollectionView {
+    private func logDataInfo() {
+//        print("""
+//              updateNSViewController: selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.map{ $0 })
+//              """ )
+    }
+}

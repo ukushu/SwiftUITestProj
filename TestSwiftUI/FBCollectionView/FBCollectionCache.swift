@@ -72,21 +72,20 @@ public class FBCollectionCache {
     }
     
     static func automaticCacheCleanupMeta() {
-//        let oldCache = metadata.count
-//        let maxTime = Date.now.addingTimeInterval(TimeInterval(-60) )
+        let oldCache = metadata.count
+        let maxTime = Date.now.addingTimeInterval(TimeInterval(-30) )
         
-        //remove cache older than 10 sec
-//        metadata
-//            .sorted { $0.value.lastAccessDate > $1.value.lastAccessDate }
-//            .filter { maxTime > $0.value.lastAccessDate }
-//            .forEach {
-//                metadata.remove(key: $0.key)
-//            }
+//        remove cache older than N sec
+        metadata
+            .sorted { $0.value.lastAccessDate > $1.value.lastAccessDate }
+            .filter { maxTime > $0.value.lastAccessDate }
+            .forEach {
+                metadata.remove(key: $0.key)
+            }
         
-        
-//        if oldCache != metadata.count {
-//            print("cacheCleanup: \(oldCache) -> \(metadata.count)")
-//        }
+        if oldCache != metadata.count {
+            print("cacheCleanup: \(oldCache) -> \(metadata.count)")
+        }
 //        print("dict weight: \(metadata.sizeInBytes)")
     }
     
@@ -131,18 +130,9 @@ class FBCCacheMeta {
     }
 }
 
-
 //////////////////////////////////
 ///HELPERS
 /////////////////////////////////
-
-extension NSImage {
-    var pixelSize: NSSize? {
-        guard let rep = self.representations.first else { return nil }
-        
-        return NSSize(width: rep.pixelsWide, height: rep.pixelsHigh)
-    }
-}
 
 class IconCache {
     private static let musicIcon = NSImage(named: "MusicIcon")
@@ -164,23 +154,5 @@ class IconCache {
         }
         
         return path.FS.info.hiresIcon(size: Int(FBCollectionCache.thumbnailSize))
-    }
-}
-
-extension Dictionary {
-    var sizeInBytes: Int {
-        if let type_ = Value.self as? AnyClass {
-            return class_getInstanceSize(type_) * self.count
-        }
-        
-        return 0
-    }
-}
-
-extension Dictionary {
-    mutating func remove(key: Key) {
-        guard let idx = self.index(forKey: key) else { return }
-        
-        self.remove(at: idx)
     }
 }

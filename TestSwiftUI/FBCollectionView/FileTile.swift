@@ -1,4 +1,3 @@
-import Foundation
 import SwiftUI
 
 struct FileTile: View {
@@ -32,7 +31,6 @@ struct FileTile: View {
         .help(recent.name)
     }
 }
-
 
 extension FileTile {
     func FileIcon() -> some View {
@@ -77,26 +75,3 @@ extension FileTile {
         }
     }
 }
-
-////////////////////////////
-///AppTileEmpty
-///////////////////////////
-
-
-
-//    .onDrag {
-//        appState.isDragging = true
-//        DispatchQueue.main.asyncAfter(deadline: .now()+2.0) {
-//            appDelegate.hideMainWindows()
-//        }
-//        let provider = NSItemProvider(item: app.url! as NSSecureCoding?, typeIdentifier: UTType.fileURL.identifier as String)
-//        provider.suggestedName = app.url!.lastPathComponent
-//        return provider
-//    } preview: {
-//        if let icon = app.icon {
-//            Image(nsImage: icon)
-//                .resizable()
-//                .frame(width: 125, height: 125)
-//        }
-//    }
-

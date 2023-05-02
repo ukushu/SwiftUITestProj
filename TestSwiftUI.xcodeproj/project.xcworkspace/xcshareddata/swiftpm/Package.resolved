@@ -6,7 +6,7 @@
       "location" : "git@github.com:serg-vinnie/AsyncNinja.git",
       "state" : {
         "branch" : "master",
-        "revision" : "b3e68c3bfee363112311c5e6f1eae2de84c4321b"
+        "revision" : "7f76d8d1573760a1cc32548dba4a0f484795f9ff"
       }
     },
     {
@@ -15,7 +15,7 @@
       "location" : "https://gitlab.com/sergiy.vynnychenko/essentials.git",
       "state" : {
         "branch" : "master",
-        "revision" : "e424c459ecff852999c9e54ec094cf79e1ce0e0b"
+        "revision" : "390bad500b02bb9f8f381232cfa054821ec9fe09"
       }
     }
   ],

@@ -35,7 +35,6 @@ func getDirContentsFor(url: URL) -> [URL] {
     return []
 }
 
-
 func flowLayout() -> NSCollectionViewFlowLayout{
     let flowLayout = NSCollectionViewFlowLayout()
     
@@ -45,12 +44,6 @@ func flowLayout() -> NSCollectionViewFlowLayout{
     flowLayout.minimumLineSpacing = 30.0
     
     return flowLayout
-}
-
-extension URL : Comparable {
-    public static func < (lhs: URL, rhs: URL) -> Bool {
-        lhs.path < rhs.path
-    }
 }
 
 extension Array where Element == Optional<URL> {
