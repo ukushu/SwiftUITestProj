@@ -2,16 +2,16 @@ import SwiftUI
 import Combine
 import Quartz
 
-public class NSCollectionController<T: RandomAccessCollection, Content: View>:
-    NSViewController, NSCollectionViewDelegate, NSCollectionViewDataSource
-//QuickLook
-, QLPreviewPanelDataSource, QLPreviewPanelDelegate
-where T.Index == Int {
+public class NSCollectionController<Content: View>:
+                    NSViewController, NSCollectionViewDelegate, NSCollectionViewDataSource
+                    //QuickLook
+                    , QLPreviewPanelDataSource, QLPreviewPanelDelegate
+{
     
-    let factory: (T.Element, IndexPath) -> Content
+    let factory: (URL?, IndexPath) -> Content
     
     let         id : String
-    var         items : T
+    var         items : [URL?]
     weak var    collectionView: NSCollectionView?
     var         selection : IndexSet {
         get { CollectionState.shared.selection }
@@ -20,7 +20,7 @@ where T.Index == Int {
     
     let scrollToTopCancellable: AnyCancellable?
     
-    init(id: String = "", collection: T, factory: @escaping (T.Element, IndexPath) -> Content, collectionView: NSCollectionView? = nil, scrollToTopCancellable: AnyCancellable?) {
+    init(id: String = "", collection: [URL?], factory: @escaping (URL?, IndexPath) -> Content, collectionView: NSCollectionView? = nil, scrollToTopCancellable: AnyCancellable?) {
         print("Controller init")
         
         self.id = id
@@ -31,7 +31,7 @@ where T.Index == Int {
         
         super.init(nibName: nil, bundle: nil)
         
-        self.quickLookHandler = { [weak self] in self?.items.compactMap{ $0 as? URL } ?? []  }
+        self.quickLookHandler = { [weak self] in self?.items.compactMap{ $0 } }
     }
     
     public func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
@@ -111,13 +111,13 @@ where T.Index == Int {
     var quickLookHandler: ( () -> [URL]? )!
     
     // QLPreviewPanelDataSource
-    public func numberOfPreviewItems(in panel: QLPreviewPanel!) -> Int { isQuickLookEnabled ? quickLookHandler()?.count ?? 0 : 0 }
+    public func numberOfPreviewItems(in panel: QLPreviewPanel) -> Int { isQuickLookEnabled ? quickLookHandler()?.count ?? 0 : 0 }
     
     // QLPreviewPanelDelegate               | Inspired by https://stackoverflow.com/a/33923618/788168
-    public func previewPanel(_ panel: QLPreviewPanel!, handle event: NSEvent!) -> Bool { quickLookKeyboardArrowsController(event: event) }
+    public func previewPanel(_ panel: QLPreviewPanel, handle event: NSEvent) -> Bool { quickLookKeyboardArrowsController(event: event) }
     
     //QLPreviewPanelDataSource
-    public func previewPanel(_ panel: QLPreviewPanel!, previewItemAt index: Int) -> QLPreviewItem! { previewItemAt(index: index) }
+    public func previewPanel(_ panel: QLPreviewPanel, previewItemAt index: Int) -> QLPreviewItem! { previewItemAt(index: index) }
     
     ///////////////////////////////
     // HELPERS

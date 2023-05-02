@@ -85,7 +85,7 @@ extension FBCollectionView {
     fileprivate func dataRefreshLogic(_ viewController: NSViewController) {
         guard let scrollView = viewController.view as? NSScrollView else { return }
         guard let collectionView = scrollView.documentView as? NSCollectionView else { return }
-        guard let controller = viewController as? NSCollectionController<[URL?],Content> else { return }
+        guard let controller = viewController as? NSCollectionController<Content> else { return }
         
         collectionView.dataSource = controller
         collectionView.delegate = controller

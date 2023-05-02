@@ -22,6 +22,7 @@ extension NSCollectionController {
         switch event {
         case _ where event.keyCode == FBKey.space:
             guard isQuickLookEnabled else { return false }
+            
             enableQuickLookPanel()
             return true
         case _ where event.keyCode == FBKey.enter:
@@ -34,14 +35,14 @@ extension NSCollectionController {
         case _ where event.keyCode == FBKey.i && event.modifierFlags.check(equals: .command ):
 //            guard  else { return false }
             
-            let urls = self.selection.map{ $0 as Int }.compactMap{ items[$0] as? URL? }.compactMap{ $0 }
+            let urls = self.selection.map{ $0 as Int }.compactMap{ items[$0] }
             
             FS.openGetInfoWnd(for: urls)
             
             return true
             
         case _ where event.keyCode == FBKey.delete && event.modifierFlags.check(equals: .command ):
-            let urls = self.selection.map{ $0 as Int }.compactMap{ items[$0] as? URL? }.compactMap{ $0 }
+            let urls = self.selection.map{ $0 as Int }.compactMap{ items[$0] }
             
             urls.forEach{ $0.FS.deleteToTrash() }
             
