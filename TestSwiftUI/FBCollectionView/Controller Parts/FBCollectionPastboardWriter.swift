@@ -49,9 +49,8 @@ class FBCollectionPasteboardWriter: NSObject, NSPasteboardWriting, NSDraggingSou
     }
 }
 
-func hideApp() {
+@MainActor func hideApp() {
     print("hide - appHide call")
-    DispatchQueue.main.async {
-        NSApplication.shared.hide(nil)
-    }
+    
+    NSApplication.shared.hide(nil)
 }
