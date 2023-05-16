@@ -15,14 +15,12 @@ public class NSCollectionController<Content: View>:
     weak var    collectionView: NSCollectionView?
     var         selection : IndexSet {
         get { CollectionState.shared.selection }
-        set { CollectionState.shared.selection = newValue }
+        set { CollectionState.shared.setSelection(newValue) }
     }
     
     let scrollToTopCancellable: AnyCancellable?
     
-    init(id: String = "", collection: [URL?], factory: @escaping (URL?, IndexPath) -> Content, collectionView: NSCollectionView? = nil, scrollToTopCancellable: AnyCancellable?) {
-        print("Controller init")
-        
+    init(id: String = "", collection: [URL?], factory: @escaping (URL?, IndexPath) -> Content, collectionView: NSCollectionView, scrollToTopCancellable: AnyCancellable?) {
         self.id = id
         self.items = collection
         self.factory = factory
@@ -32,6 +30,8 @@ public class NSCollectionController<Content: View>:
         super.init(nibName: nil, bundle: nil)
         
         self.quickLookHandler = { [weak self] in self?.items.compactMap{ $0 } }
+        
+        CollectionState.shared.setSelection(collectionView.selectionIndexes)
     }
     
     public func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
@@ -75,8 +75,36 @@ public class NSCollectionController<Content: View>:
         return items[index] as? NSURL
     }
     
+    private var eventMonitor: Any?
+    private var isDragging = false
+    
     public func collectionView(_ collectionView: NSCollectionView, draggingSession session: NSDraggingSession, willBeginAt screenPoint: NSPoint, forItemsAt indexPaths: Set<IndexPath>) {
-        preventHidingDuringDrag(collectionView, indexPaths: indexPaths)
+//        isDragging = true
+//
+//        eventMonitor = NSEvent.addLocalMonitorForEvents(matching: [.leftMouseUp, .mouseMoved]) { [weak self] event in
+//            guard let self = self else { return event }
+//
+//            if event.type == .leftMouseUp {
+//                self.isDragging = false
+//            }
+//
+//            if self.isDragging, event.type == .mouseMoved {
+//                guard let window = self.view.window else { return event }
+//
+//                let mouseLocation = event.locationInWindow
+//                let windowRect = window.contentView?.bounds ?? NSRect.zero
+//
+//                if !windowRect.contains(mouseLocation) {
+//                    TheApp.appDelegate.mainWnddd.hideMainWnd()
+//                }
+//            }
+//
+//            return event
+//        }
+        
+        self.preventHidingDuringDrag(collectionView, indexPaths: indexPaths)
+        
+        print("preventHidingDuringDrag")
     }
     
     //////////////////////////////
@@ -126,6 +154,7 @@ fileprivate extension NSCollectionController {
             item.container.addView(hosting, in: .center)
             item.container.addView(hosting, in: .center)
             
+            item.url = items[indexPath.item]
 //            if urlIsNilBy(indexPath) {
 //                item.acceptsMouseDown = false
 //            }

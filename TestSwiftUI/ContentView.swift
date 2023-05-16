@@ -64,18 +64,6 @@ extension ContentView {
                 model.filesList = []
             }
             
-            Button("Select 1") {
-                CollectionState.shared.selection = [1]
-            }
-            
-            Button("Select 1-3") {
-                CollectionState.shared.selection = [1,2,3]
-            }
-            
-            Button("Select 4") {
-                CollectionState.shared.selection = [4]
-            }
-            
             Button("Scroll to top") {
                 model.topScroller.send()
             }

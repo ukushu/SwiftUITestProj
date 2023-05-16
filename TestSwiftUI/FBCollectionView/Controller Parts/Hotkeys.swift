@@ -1,8 +1,11 @@
 import AppKit
 import AudioToolbox
+import Essentials
 
 extension InternalCollectionView {
     override func keyDown(with event: NSEvent) {
+        print("keyCode = \(event.keyCode)")
+        
         if let keyDownHandler = keyDownHandler {
             let didHandle = keyDownHandler(event)
             
@@ -10,6 +13,16 @@ extension InternalCollectionView {
                 return
             }
         }
+        
+        
+        let intVal = self.selectionIndexPaths.first?.intValue
+        
+//        if event.keyCode == FBKey.rightArrow,
+//           self.selectionIndexPaths.count == 1,
+//           let first = self.selectionIndexPaths.first,
+//           (first.intValue + 1) % 8 == 0
+//        {
+//        }
         
         super.keyDown(with: event)
     }
@@ -37,7 +50,9 @@ extension NSCollectionController {
             
             let urls = self.selection.map{ $0 as Int }.compactMap{ items[$0] }
             
-            FS.openGetInfoWnd(for: urls)
+            //try to get GetInfo in single window
+            // if failed - in separated windows
+//            _ = AppleScript.getInfo(of: urls)
             
             return true
             
@@ -51,11 +66,14 @@ extension NSCollectionController {
             
             return true
         case _ where event.keyCode == FBKey.esc:
-            if self.selection.count == 0 {
-                self.selection = [0]
-            } else if self.selection.count > 1 {
-                self.selection = [self.selection.sorted().first!]
+            if self.selection.count > 1,
+               let first = self.selection.first
+            {
+                self.selection = [first]
+            } else {
+                self.selection = []
             }
+            
             return true
         default:
             return false
@@ -69,7 +87,7 @@ fileprivate extension NSCollectionController {
     func openFirstSelectedItemInAssociatedApp() {
         if let itemIdx = selection.sorted().first,
            let item = items[itemIdx] {
-            FS.openWithAssociatedApp(item)
+//            item.FS.openWithAssociatedApp()
         }
     }
     

@@ -2,6 +2,7 @@ import SwiftUI
 import QuickLookThumbnailing
 import Essentials
 
+// REWRITE TO SINGLETONE!
 public class FBCollectionCache {
     static let thumbnailSize: Int = 125
     
@@ -10,15 +11,16 @@ public class FBCollectionCache {
     
     private static let timer = TimerCall(.continious(interval: 1)) {
         automaticCacheCleanup()
-        automaticCacheCleanupMeta()
+//        automaticCacheCleanupMeta()
     }
     
     static func getFor(url: URL) -> FBCCacheItem {
         let _ = FBCollectionCache.timer
         
         if let item = cache[url] {
-            item.updLastAccessDate()
-            return item
+            let itemNew = FBCCacheItem(from: item)
+            cache[url] = itemNew
+            return itemNew
         }
         
         let newItem = FBCCacheItem(url: url)
@@ -28,6 +30,8 @@ public class FBCollectionCache {
     }
     
     static func getMetaFor(url: URL) -> RecentFile {
+//        AppCore.log(title: "1", msg: "getMetaFor", thread: true)
+        
         if let item = metadata[url] {
             return item.model
         }
@@ -36,6 +40,17 @@ public class FBCollectionCache {
         metadata[url] = newItem
         
         return newItem.model
+    }
+    
+    static func setMetaFor(mdItems: [MDItem]) {
+        metadata = mdItems.map{ FBCCacheMeta(mdItem: $0) }
+            .toDictionary(key: \.model.url, block: { $0 } )
+    }
+    
+    static func setMetaFor(urls: [URL]) {
+        metadata = urls.chunked(by: 100).map{ $0.map{ FBCCacheMeta(url: $0) } }
+            .flatMap{ $0 }
+            .toDictionary(key: \.model.url, block: { $0 } )
     }
     
     static func automaticCacheCleanup() {
@@ -108,12 +123,13 @@ class FBCCacheItem {
         self.model = FilePreviewVM(url: url)
     }
     
-    func updLastAccessDate() {
-        self.lastAccessDate = Date.now
+    init(from item: FBCCacheItem) {
+        self.url = item.url
+        self.model = item.model
     }
 }
 
-class FBCCacheMeta {
+struct FBCCacheMeta {
     private(set) var model: RecentFile
     private(set) var lastAccessDate: Date = Date.now
     private let url: URL
@@ -123,8 +139,9 @@ class FBCCacheMeta {
         self.model = RecentFile(url)
     }
     
-    func updLastAccessDate() {
-        self.lastAccessDate = Date.now
+    init(mdItem: MDItem) {
+        self.url = mdItem.path!.asURL()
+        self.model = RecentFile(url)
     }
 }
 

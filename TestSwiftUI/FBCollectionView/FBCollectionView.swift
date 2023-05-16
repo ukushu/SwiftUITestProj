@@ -24,19 +24,18 @@ import Combine
 // TODO: Move the delegates to a coordinator.
 struct FBCollectionView<Content: View>: NSViewControllerRepresentable /* NSObject, NSCollectionViewDelegateFlowLayout */ {
     //Need to locate here for topScroller
-    var scrollView: NSScrollView = NSScrollView()
+    var scrollView = NSScrollView()
+    let topScroller: AnyPublisher<Void, Never>?
     
     private let layout: NSCollectionViewFlowLayout = flowLayout()
+    
+    private let factory: (URL?, IndexPath) -> Content
     
     let items: [URL?]
     var selection : IndexSet { CollectionState.shared.selection }
     
-    let topScroller: AnyPublisher<Void, Never>?
-    
-    let factory: (URL?, IndexPath) -> Content
-    
-    init(items: [URL?], topScroller: AnyPublisher<Void, Never>? = nil, factory: @escaping (URL?, IndexPath) -> Content) {
-        self.items = items.appendEmpties()
+    init(items: ArraySlice<URL>, topScroller: AnyPublisher<Void, Never>? = nil, factory: @escaping (URL?, IndexPath) -> Content) {
+        self.items = items.map{ $0 as URL? }.appendEmpties()
         self.topScroller = topScroller
         self.factory = factory
     }
@@ -44,10 +43,6 @@ struct FBCollectionView<Content: View>: NSViewControllerRepresentable /* NSObjec
     func makeNSViewController(context: Context) -> NSViewController { createViewController() }
     
     func updateNSViewController(_ viewController: NSViewController, context: Context) { dataRefreshLogic(viewController) }
-    
-    func updateNSView(_ scrollView: NSScrollView, context: Context) {
-        print("updateNSView")
-    }
 }
 
 //////////////////////////////
@@ -59,6 +54,7 @@ extension FBCollectionView {
         
         let viewController = NSCollectionController(collection: self.items,
                                                     factory: factory,
+                                                    collectionView: collectionView,
                                                     scrollToTopCancellable: getScrollToTopCancellable() )
         
         viewController.view = scrollView
@@ -99,7 +95,7 @@ extension FBCollectionView {
         if controller.items == self.items {
             collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems())
         } else {
-            controller.items = self.items
+            controller.items = self.items.appendEmpties()
             collectionView.reloadData()
         }
     }
@@ -107,7 +103,7 @@ extension FBCollectionView {
 
 extension FBCollectionView {
     private func logDataInfo() {
-//        print("""
+//        Log.print("""
 //              updateNSViewController: selInternal: \(collectionView.selectionIndexes.map{ $0 }) | selExternal: \(self.selection.map{ $0 })
 //              """ )
     }
@@ -117,9 +113,9 @@ fileprivate func flowLayout() -> NSCollectionViewFlowLayout{
     let flowLayout = NSCollectionViewFlowLayout()
     
     flowLayout.itemSize = NSSize(width: 130.0, height: 173.0)
-    flowLayout.sectionInset = NSEdgeInsets(top: 5.0, left: 20.0, bottom: 30.0, right: 15.0)
-    flowLayout.minimumInteritemSpacing = 15.0
-    flowLayout.minimumLineSpacing = 30.0
+    flowLayout.sectionInset = NSEdgeInsets(top: 15.0, left: 20.0, bottom: 26.0, right: 20.0)
+    flowLayout.minimumInteritemSpacing = 1.0
+    flowLayout.minimumLineSpacing = 22.0
     
     return flowLayout
 }
@@ -127,28 +123,35 @@ fileprivate func flowLayout() -> NSCollectionViewFlowLayout{
 
 fileprivate extension Array where Element == Optional<URL> {
     func appendEmpties() -> [URL?] {
-        var arr = self
-        // remove all nil elements from end of array
-        for i in arr.indices.reversed() {
-            if arr[i] == nil {
-                arr.remove(at: i)
-            } else {
-                break
-            }
-        }
+        let itemsInRow = 8 // or 16
+        
+        let arr: [URL?] = self
         
         // fill in case of empty
-        if self.count < 12 {
-            let empties = (0..<(12 - self.count)).map{ _ -> URL? in nil }
+        if self.count == 0 && arr.count % itemsInRow == 0 {
+            let empties = (1...itemsInRow).map{ _ -> URL? in nil }
+            return arr.appending(contentsOf: empties)
+        }
+        
+        // DELETE ME????
+        //remove all nil elements from end of array
+//        for i in arr.indices.reversed() {
+//            if arr[i] == nil {
+//                arr.remove(at: i)
+//            } else {
+//                break
+//            }
+//        }
+        
+        // need to add N nil elements
+        if self.count > 0 && self.count % itemsInRow > 0 {
+            let emptiesCount = itemsInRow - arr.count % itemsInRow
+            
+            let empties = (0..<emptiesCount).map{ _ -> URL? in nil }
             
             return arr.appending(contentsOf: empties)
         }
         
-        // add needed count of empties
-        let emptiesCount = arr.count % 6
-        
-        let empties = (0..<emptiesCount).map{ _ -> URL? in nil }
-        
-        return arr.appending(contentsOf: empties)
+        return arr
     }
 }

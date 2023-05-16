@@ -2,26 +2,39 @@ import Foundation
 import SwiftUI
 
 struct FileTileEmpty: View {
-    let size: CGFloat = 125
+    let size: CGFloat = 126 + 7
     
     var body: some View {
-        VStack(spacing: 5) {
+        ZStack(alignment:.top) {
+            Space(173, .v)
+            
             RRect2()
+                .padding(8)
                 .frame(width: size, height: size)
-                .padding(.bottom, 5)
             
-            RRect2()
-                .frame(width: size - 10, height: 10)
+            RRect2(4)
+                .padding(4)
+                .frame(width: size - 30, height: 19)
+                .padding(.top, size + 5)
             
-            RRect2()
-                .frame(width: size - 20, height: 8)
+            RRect2(4)
+                .padding(6)
+                .frame(width: size - 50, height: 21)
+                .padding(.top, size + 23)
         }
+        .opacity(0.4)
     }
 }
 
 fileprivate struct RRect2: View {
+    let cornerRadius: CGFloat
+    
+    init(_ radius: CGFloat = 7) {
+        self.cornerRadius = radius
+    }
+    
     var body: some View {
-        RoundedRectangle(cornerRadius: 12)
+        RoundedRectangle(cornerRadius: cornerRadius)
             .fill(Color("Filler"))
     }
 }

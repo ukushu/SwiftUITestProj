@@ -5,6 +5,9 @@ final class FBCItemView : NSCollectionViewItem {
     let container = NSStackView()
     
     var acceptsMouseDown: Bool = true
+    
+    var url: URL?
+    var index: Int?
 }
 
 extension FBCItemView {
@@ -19,6 +22,10 @@ extension FBCItemView {
             super.mouseDown(with: event)
         } else {
             
+        }
+        
+        if event.clickCount == 2 {
+//            self.url?.FS.openWithAssociatedApp()
         }
     }
 }

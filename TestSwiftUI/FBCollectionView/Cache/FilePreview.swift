@@ -18,6 +18,7 @@ struct FilePreview: View {
     func TrueBody() -> some View {
         if let thumbnail = model.thumbnail {
             Image(nsImage: thumbnail)
+                .resizable()
         }
     }
 }
