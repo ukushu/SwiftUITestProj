@@ -2,7 +2,7 @@ import SwiftUI
 import Combine
 import Quartz
 
-public class NSCollectionController<Content: View>:
+public class FBCollectionViewConroller<Content: View>:
                     NSViewController, NSCollectionViewDelegate, NSCollectionViewDataSource
                     //QuickLook
                     , QLPreviewPanelDataSource, QLPreviewPanelDelegate
@@ -70,41 +70,18 @@ public class NSCollectionController<Content: View>:
     ///////////////////////////////
     
     // NSCollectionViewDelegate
-    
     public func collectionView(_ collectionView: NSCollectionView, pasteboardWriterForItemAt index: Int) -> NSPasteboardWriting? {
         return items[index] as? NSURL
     }
     
-    private var eventMonitor: Any?
-    private var isDragging = false
+    // This function is called when the user starts dragging an item.
+    // We return our custom pasteboard writer, which also conforms to NSDraggingSource, for the dragged item.
+    public func collectionView(_ collectionView: NSCollectionView, pasteboardWriterForItemAt indexPath: IndexPath) -> NSPasteboardWriting? {
+        FBCollectionPasteboardWriter()
+    }
     
     public func collectionView(_ collectionView: NSCollectionView, draggingSession session: NSDraggingSession, willBeginAt screenPoint: NSPoint, forItemsAt indexPaths: Set<IndexPath>) {
-//        isDragging = true
-//
-//        eventMonitor = NSEvent.addLocalMonitorForEvents(matching: [.leftMouseUp, .mouseMoved]) { [weak self] event in
-//            guard let self = self else { return event }
-//
-//            if event.type == .leftMouseUp {
-//                self.isDragging = false
-//            }
-//
-//            if self.isDragging, event.type == .mouseMoved {
-//                guard let window = self.view.window else { return event }
-//
-//                let mouseLocation = event.locationInWindow
-//                let windowRect = window.contentView?.bounds ?? NSRect.zero
-//
-//                if !windowRect.contains(mouseLocation) {
-//                    TheApp.appDelegate.mainWnddd.hideMainWnd()
-//                }
-//            }
-//
-//            return event
-//        }
-        
-        self.preventHidingDuringDrag(collectionView, indexPaths: indexPaths)
-        
-        print("preventHidingDuringDrag")
+        preventHidingDuringDrag(collectionView)
     }
     
     //////////////////////////////
@@ -129,7 +106,7 @@ public class NSCollectionController<Content: View>:
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 }
 
-fileprivate extension NSCollectionController {
+fileprivate extension FBCollectionViewConroller {
     func reloadVisibles() {
         guard let collectionView = collectionView else { return }
         
@@ -164,7 +141,7 @@ fileprivate extension NSCollectionController {
     }
 }
 
-fileprivate extension NSCollectionController {
+fileprivate extension FBCollectionViewConroller {
     func selectionLog(_ title: String, _ indexPaths: Set<IndexPath>, _ collectionView: NSCollectionView) {
 //        print("""
 //              \(title):\t changes: \(indexPaths.map{ $0.intValue })\t|\tselInternal: \(collectionView.selectionIndexes.map{ $0 })\t|\tselExternal: \(self.selection.map{ $0 })

@@ -28,7 +28,7 @@ extension InternalCollectionView {
     }
 }
 
-extension NSCollectionController {
+extension FBCollectionViewConroller {
     func handleKeyDown(_ event: NSEvent) -> Bool {
         print("handleKeyDown: \(event.keyCode)")
         
@@ -83,7 +83,7 @@ extension NSCollectionController {
 }
 
 
-fileprivate extension NSCollectionController {
+fileprivate extension FBCollectionViewConroller {
     func openFirstSelectedItemInAssociatedApp() {
         if let itemIdx = selection.sorted().first,
            let item = items[itemIdx] {

@@ -43,6 +43,7 @@ class CollectionState: NinjaContext.Main, ObservableObject {
     func setSelectionIfNotContains(_ idx: Int) {
         if !selection.contains(idx) {
             selection = IndexSet(integer: idx)
+            print("selection Changed")
         }
     }
     

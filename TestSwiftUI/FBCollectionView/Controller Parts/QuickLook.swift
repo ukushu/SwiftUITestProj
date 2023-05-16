@@ -1,6 +1,6 @@
 import Quartz
 
-extension NSCollectionController {
+extension FBCollectionViewConroller {
     var isQuickLookEnabled: Bool { quickLookHandler() != nil && items.compactMap({ $0 }).count > 0 }
     
     var isQuickLookShowing: Bool { QLPreviewPanel.sharedPreviewPanelExists() && (QLPreviewPanel.shared()?.isVisible ?? false) }

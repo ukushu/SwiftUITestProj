@@ -1,6 +1,6 @@
 import AppKit
 
-extension NSCollectionController {
+extension FBCollectionViewConroller {
     func shiftIsPressedItemsToAdd(_ collectionView: NSCollectionView, indexPaths: Set<IndexPath>) -> [IndexPath] {
         let new = indexPaths.sorted().last!
         let newIdx = new.item
