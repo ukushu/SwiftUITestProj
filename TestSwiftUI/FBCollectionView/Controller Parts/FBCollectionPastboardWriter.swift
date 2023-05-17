@@ -38,19 +38,28 @@ class FBCollectionPasteboardWriter: NSObject, NSPasteboardWriting, NSDraggingSou
     
     // This function is called when the dragging image is moved.
     // Here we check if the mouse is outside the app window, and if so, we hide the app.
-    func draggingSession(_ session: NSDraggingSession, movedTo screenPoint: NSPoint) {
+    @MainActor func draggingSession(_ session: NSDraggingSession, movedTo screenPoint: NSPoint) {
         print("hide - movedTo")
         
         guard let window = NSApplication.shared.mainWindow else { return }
+        
         let windowRectInScreenCoordinates = window.convertToScreen(window.frame)
+        
         if !windowRectInScreenCoordinates.contains(screenPoint) {
             hideApp()
         }
     }
+    
+    @MainActor func ignoreModifierKeys(for session: NSDraggingSession) -> Bool { true }
 }
 
-@MainActor func hideApp() {
+func hideApp() {
     print("hide - appHide call")
+    
+    //Willeke's idea
+    NSApp.windows.compactMap{$0}.forEach{
+        $0.setIsVisible(false)
+    }
     
     NSApplication.shared.hide(nil)
 }
