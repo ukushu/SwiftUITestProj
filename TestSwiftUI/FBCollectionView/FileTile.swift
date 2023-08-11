@@ -1,14 +1,23 @@
-import Foundation
 import SwiftUI
 
-struct AppTile: View {
-    let app: RecentFile
-    let isSelected: Bool
-//    @Binding var selections: Set<String>
+struct FileTile: View {
+    let url: URL
+    
+    private let indexPath: IndexPath
+    var isSelected: Bool { collectionState.selection.contains(indexPath.intValue) }
+    @ObservedObject var collectionState: CollectionState = CollectionState.shared
+    
+    let recent: RecentFile
+    
+    init(url: URL, indexPath: IndexPath) {
+        self.url = url
+        self.indexPath = indexPath
+        self.recent = FBCollectionCache.getMetaFor(url: url)
+    }
     
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
-            AppIcon()
+            FileIcon()
             
             Space(6)
             
@@ -19,12 +28,12 @@ struct AppTile: View {
             AppTimeStamp()
         }
         .background(Color.clickableAlpha)
-        .help(app.name)
+        .help(recent.name)
     }
 }
 
-extension AppTile {
-    func AppIcon() -> some View {
+extension FileTile {
+    func FileIcon() -> some View {
         RoundedRectangle(cornerRadius: 8)
             .background{
                 if isSelected {
@@ -39,14 +48,12 @@ extension AppTile {
             .foregroundColor(.clear)
             .frame(width: 126, height: 126)
             .overlay {
-                //UKSImage(url: app.url, size: 125)
-                UKSImagePath(path: app.path, size: 125)
-                    .frame(width: 125, height: 125)
+                FilePreview(url: url)
             }
     }
     
     func AppTitle() -> some View {
-        Text(app.name)
+        Text(recent.name)
             .fontWeight(.regular)
             .lineLimit(1)
             .truncationMode(.middle)
@@ -58,7 +65,7 @@ extension AppTile {
     
     @ViewBuilder
     func AppTimeStamp() -> some View {
-        if let date = app.lastUseDate {
+        if let date = recent.lastUseDate {
             Text(date.readableString)
                 .multilineTextAlignment(.center)
                 .font(.system(size: 11))
@@ -68,20 +75,3 @@ extension AppTile {
         }
     }
 }
-
-//    .onDrag {
-//        appState.isDragging = true
-//        DispatchQueue.main.asyncAfter(deadline: .now()+2.0) {
-//            appDelegate.hideMainWindows()
-//        }
-//        let provider = NSItemProvider(item: app.url! as NSSecureCoding?, typeIdentifier: UTType.fileURL.identifier as String)
-//        provider.suggestedName = app.url!.lastPathComponent
-//        return provider
-//    } preview: {
-//        if let icon = app.icon {
-//            Image(nsImage: icon)
-//                .resizable()
-//                .frame(width: 125, height: 125)
-//        }
-//    }
-

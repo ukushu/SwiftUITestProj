@@ -1,35 +1,24 @@
 import Foundation
 
-class RecentFile: Identifiable {
-    var id: String { self.path }
-    let path: String
-    lazy var url: URL = self.path.asURL()
+class RecentFile {
+//    var id: String { self.url.path }
+    var url: URL
     
-    private var urlComponentsCache: [URL] = []
-    var urlComponents: [URL] {
-        if urlComponentsCache.count == 0 {
-            self.urlComponentsCache = self.path.asURL().urlComponentsUrls()
-            return urlComponentsCache
-        }
-        
-        return urlComponentsCache
+    lazy var urlComponents: [URL] = url.urlComponentsUrls()
+    
+    lazy var urlComponentsDirsOnly: [URL] = urlComponents.last == nil ? [] : urlComponents.last!.isDirectory ? urlComponents : urlComponents.dropLast()
+    
+    lazy var name: String = url.path.FS.info.nameWithoutAppExt
+    
+    //static let attrToGrab = ["kMDItemDateAdded","kMDItemAttributeChangeDate","kMDItemContentModificationDate", "kMDItemFSCreationDate"]
+    lazy var metadata: [String : Any]? = url.path.FS.info.getAttributes()//(forAttributes: RecentFile.attrToGrab)
+    
+    func refreshMetadata() {
+        metadata = url.path.FS.info.getAttributes()//(forAttributes: RecentFile.attrToGrab)
     }
-    
-    var urlComponentsDirsOnly: [URL] {
-        if let last = urlComponents.last {
-            return last.isDirectory ? urlComponents : urlComponents.dropLast()
-        }
-        
-        return []
-    }
-    
-    var name: String { path.FS.info.nameWithoutAppExt }
-    
-    let mdItem: MDItem
-    let metadata: [String : Any]
     
     private var displayDateDir: Date? {
-        path.FS.info.creationDate ?? path.FS.info.lastUseDate ??  path.FS.info.modificationDate
+        url.path.FS.info.creationDate ?? url.path.FS.info.lastUseDate ?? url.path.FS.info.modificationDate
     }
     
 //    var displayDate: Date? {
@@ -50,46 +39,37 @@ class RecentFile: Identifiable {
 //    }
     
     var lastUseDate: Date? {
-        if self.path.FS.info.isDirectory {
-            if let dateAdded = self.metadata.kMDItemDateAdded {
+        if self.url.path.FS.info.isDirectory {
+            if let dateAdded = self.metadata?.kMDItemDateAdded {
                 return dateAdded
             }
             
-            return self.metadata.kMDItemAttributeChangeDate ?? self.metadata.kMDItemFSCreationDate ?? addedToCacheDate
+            return self.metadata?.kMDItemAttributeChangeDate ?? self.metadata?.kMDItemFSCreationDate ?? addedToCacheDate
         }
         
 //        if let lastUse = path.FS.info.lastUseDate { //mdItem.dateLastUse {
 //            return lastUse
 //        }
         
-        if let contentMod = self.metadata.kMDItemContentModificationDate,
-           let dateAdded = self.metadata.kMDItemDateAdded
+        if let contentMod = self.metadata?.kMDItemContentModificationDate,
+           let dateAdded = self.metadata?.kMDItemDateAdded
         {
             return max(contentMod, dateAdded)
-        } else if let contentMod = self.metadata.kMDItemContentModificationDate {
+        } else if let contentMod = self.metadata?.kMDItemContentModificationDate {
             return contentMod
-        } else if let dateAdded = self.metadata.kMDItemDateAdded {
+        } else if let dateAdded = self.metadata?.kMDItemDateAdded {
             return dateAdded
         }
         
-        return self.metadata.kMDItemAttributeChangeDate ?? self.metadata.kMDItemFSCreationDate ?? addedToCacheDate
+        return self.metadata?.kMDItemAttributeChangeDate ?? self.metadata?.kMDItemFSCreationDate ?? addedToCacheDate
     }
     
-    private let addedToCacheDate: Date
+    private let addedToCacheDate: Date = Date.now
     
-    let isDirectory: Bool
+    lazy var isDirectory: Bool = self.url.FS.info.isDirectory
     
-    init?(_ mdItem: MDItem) {
-        guard let path = mdItem.path else { return nil }
-        
-        self.path = path
-        
-        self.isDirectory = path.FS.info.isDirectory
-        
-        self.mdItem = mdItem
-        
-        self.metadata = path.FS.info.getAttributes()
-        self.addedToCacheDate = Date()
+    init(_ url: URL) {
+        self.url = url
     }
 }
 
@@ -99,7 +79,7 @@ extension RecentFile: Hashable {
     }
     
     func hash(into hasher: inout Hasher) {
-        hasher.combine(self.path)
+        hasher.combine(self.url.path)
     }
 }
 

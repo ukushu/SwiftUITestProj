@@ -1,31 +1,32 @@
-//
-//  ContentView.swift
-//  TestSwiftUI
-//
-//  Created by UKS on 04.02.2023.
-//
-
 import Combine
 import SwiftUI
 
 @available(macOS 12.0, *)
 struct ContentView: View {
-    @ObservedObject var model = SuperViewModel()
+    @ObservedObject var model = ContentViewModel()
     
     var body: some View {
         VStack {
             ButtonsPanel()
             
-            FBCollectionView(items: model.filesList,
-                             selection: $model.selectedItems,
-                             layout: model.layout,
-                             topScroller: model.topScroller.eraseToAnyPublisher()
-            ) { item, indexPath in
-                
-                AppTile(app: item, isSelected: model.selectedItems.contains(indexPath.intValue) )
-                    .id(item)
-                
+            FBCollectionView(items: model.filesList, topScroller: model.topScroller.eraseToAnyPublisher() ) { url, indexPath in
+                FileItem(url: url, indexPath: indexPath)
             }
+        }
+    }
+}
+
+////////////////////////////////
+///HELPERS
+////////////////////////////////
+
+extension ContentView {
+    @ViewBuilder
+    func FileItem(url: URL?, indexPath: IndexPath) -> some View {
+        if let url = url {
+            FileTile(url: url, indexPath: indexPath)
+        } else {
+            FileTileEmpty()
         }
     }
     
@@ -40,10 +41,8 @@ struct ContentView: View {
             }
             
             Button("append at 0") {
-                let e = RecentFile(MDItemCreate(nil, "/Users" as CFString))!
-                model.filesList.insert(e, at: 0)
-                //filesList.append(RecentFile(MDItemCreate(nil, "/Users" as CFString))! )
-                //filesList.sort { $0.name < $1.name }
+                model.filesList.insert("/Users".asURLdir(), at: 0)
+                
                 print("filesLst.count: \(model.filesList.count )")
             }
             
@@ -55,16 +54,14 @@ struct ContentView: View {
                 model.filesList = getDirContents2()
             }
             
-            Button("Select 1") {
-                model.selectedItems = [1]
+            if URL.userHome.appendingPathComponent("/Desktop/Test").exists {
+                Button("Test") {
+                    model.filesList = getDirContents3()
+                }
             }
             
-            Button("Select 1-3") {
-                model.selectedItems = [1,2,3]
-            }
-            
-            Button("Select 4") {
-                model.selectedItems = [4]
+            Button("Empty") {
+                model.filesList = []
             }
             
             Button("Scroll to top") {
@@ -72,53 +69,4 @@ struct ContentView: View {
             }
         }
     }
-}
-
-func getDirContents1() -> [RecentFile] {
-    getDirContentsFor(url: URL.userHome.appendingPathComponent("Desktop") )
-        .map { $0.path }
-        .compactMap { MDItemCreate(nil, $0 as CFString) }
-        .compactMap { RecentFile($0) }
-}
-
-func getDirContents2() -> [RecentFile] {
-    getDirContentsFor(url: URL.userHome.appendingPathComponent("Documents") )
-        .map { $0.path }
-        .compactMap { MDItemCreate(nil, $0 as CFString) }
-        .compactMap { RecentFile($0) }
-}
-
-func getDirContentsFor(url: URL) -> [URL] {
-    let fileManager = FileManager.default
-    
-    do {
-        let directoryContents = try fileManager.contentsOfDirectory(at: url, includingPropertiesForKeys: nil, options: [])
-        
-        return directoryContents
-    } catch {
-        print("Error while enumerating files \(url.path): \(error.localizedDescription)")
-    }
-    
-    return []
-}
-
-class SuperViewModel: ObservableObject {
-    let topScroller = PassthroughSubject<Void, Never>()
-    
-    @Published var selectedItems: Set<Int> = [] { didSet { print("selection changed! Yo!")} }
-    
-    let layout = flowLayout()
-    
-    @Published var filesList: [RecentFile] = getDirContents1().sorted { $0.name < $1.name }
-}
-
-func flowLayout() -> NSCollectionViewFlowLayout{
-    let flowLayout = NSCollectionViewFlowLayout()
-    
-    flowLayout.itemSize = NSSize(width: 130.0, height: 173.0)
-    flowLayout.sectionInset = NSEdgeInsets(top: 5.0, left: 20.0, bottom: 30.0, right: 15.0)
-    flowLayout.minimumInteritemSpacing = 15.0
-    flowLayout.minimumLineSpacing = 30.0
-    
-    return flowLayout
 }
