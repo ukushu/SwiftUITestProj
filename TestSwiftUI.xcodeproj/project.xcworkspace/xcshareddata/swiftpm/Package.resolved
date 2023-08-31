@@ -6,16 +6,25 @@
       "location" : "git@github.com:serg-vinnie/AsyncNinja.git",
       "state" : {
         "branch" : "master",
-        "revision" : "7f76d8d1573760a1cc32548dba4a0f484795f9ff"
+        "revision" : "f1ca0c63995584ed9e1ed932994f5ec863308e8e"
       }
     },
     {
       "identity" : "essentials",
       "kind" : "remoteSourceControl",
-      "location" : "https://gitlab.com/sergiy.vynnychenko/essentials.git",
+      "location" : "git@gitlab.com:sergiy.vynnychenko/essentials.git",
       "state" : {
         "branch" : "master",
-        "revision" : "390bad500b02bb9f8f381232cfa054821ec9fe09"
+        "revision" : "7f415fda61c3c393ec86e33ce7e73940960d9186"
+      }
+    },
+    {
+      "identity" : "moreswiftui",
+      "kind" : "remoteSourceControl",
+      "location" : "git@gitlab.com:UKS/moreswiftui.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "2de4ab9c48995fe1bfafae8f3e70c4167cdec8d3"
       }
     }
   ],

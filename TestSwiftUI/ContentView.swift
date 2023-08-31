@@ -3,70 +3,34 @@ import SwiftUI
 
 @available(macOS 12.0, *)
 struct ContentView: View {
-    @ObservedObject var model = ContentViewModel()
+    @State var text: String = textSample
     
     var body: some View {
         VStack {
-            ButtonsPanel()
+            Spacer()
             
-            FBCollectionView(items: model.filesList, topScroller: model.topScroller.eraseToAnyPublisher() ) { url, indexPath in
-                FileItem(url: url, indexPath: indexPath)
-            }
+            Text("Hello")
+            
+            Spacer()
+            
+            MacEditorTextView(text: $text)
+//            AttrTextEditor(text: $text, font: NSFont(name: "SF Pro", size: 17)! )
+//                .frame( maxHeight: 17 * 5 )
+//            TextField("", text: $text)
+//                .padding(10)
         }
+        .frame(minWidth: 450, minHeight: 300)
     }
 }
 
-////////////////////////////////
-///HELPERS
-////////////////////////////////
-
-extension ContentView {
-    @ViewBuilder
-    func FileItem(url: URL?, indexPath: IndexPath) -> some View {
-        if let url = url {
-            FileTile(url: url, indexPath: indexPath)
-        } else {
-            FileTileEmpty()
-        }
-    }
-    
-    @ViewBuilder
-    func ButtonsPanel() -> some View {
-        HStack {
-            Button("delete first") {
-                if !model.filesList.isEmpty {
-                    model.filesList.remove(at: 0)
-                }
-                print("filesLst.count: \(model.filesList.count )")
-            }
-            
-            Button("append at 0") {
-                model.filesList.insert("/Users".asURLdir(), at: 0)
-                
-                print("filesLst.count: \(model.filesList.count )")
-            }
-            
-            Button("Desktop") {
-                model.filesList = getDirContents1()
-            }
-            
-            Button("Documents") {
-                model.filesList = getDirContents2()
-            }
-            
-            if URL.userHome.appendingPathComponent("/Desktop/Test").exists {
-                Button("Test") {
-                    model.filesList = getDirContents3()
-                }
-            }
-            
-            Button("Empty") {
-                model.filesList = []
-            }
-            
-            Button("Scroll to top") {
-                model.topScroller.send()
-            }
-        }
-    }
-}
+let textSample =
+"""
+hello 1
+hello 2
+hello 3
+hello 4
+hello 5
+hello 6
+hello 7
+hello 8
+"""
