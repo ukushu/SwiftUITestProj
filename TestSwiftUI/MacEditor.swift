@@ -120,7 +120,6 @@ final class CustomTextView: NSView {
         
         layoutManager.addTextContainer(textContainer)
         
-        
         let textView                     = NSTextView(frame: .zero, textContainer: textContainer)
         textView.autoresizingMask        = .width
         textView.backgroundColor         = NSColor.clear
@@ -134,6 +133,7 @@ final class CustomTextView: NSView {
         textView.minSize                 = NSSize(width: 0, height: contentSize.height)
         textView.textColor               = NSColor.labelColor
         textView.allowsUndo              = true
+        textView.isRichText              = true
         
         return textView
     }()
@@ -162,6 +162,7 @@ final class CustomTextView: NSView {
     
     func setupScrollViewConstraints() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
         
         addSubview(scrollView)
         
