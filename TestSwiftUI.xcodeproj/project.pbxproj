@@ -16,7 +16,7 @@
 		1DE651AA2AA0E94B0081E1A3 /* MoreSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 1DE651A92AA0E94B0081E1A3 /* MoreSwiftUI */; };
 		1DE651AD2AA0E99B0081E1A3 /* Essentials in Frameworks */ = {isa = PBXBuildFile; productRef = 1DE651AC2AA0E99B0081E1A3 /* Essentials */; };
 		1DE651AE2AA0E99F0081E1A3 /* Essentials in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 1DE651AC2AA0E99B0081E1A3 /* Essentials */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		1DE651B12AA0F1BB0081E1A3 /* MacEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE651B02AA0F1BB0081E1A3 /* MacEditor.swift */; };
+		1DE651B12AA0F1BB0081E1A3 /* DescriptionTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE651B02AA0F1BB0081E1A3 /* DescriptionTextField.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -41,7 +41,7 @@
 		1D4A87BB298EE53B0062686C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		1D4A87BD298EE53B0062686C /* TestSwiftUI.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestSwiftUI.entitlements; sourceTree = "<group>"; };
 		1DE651A62AA0E8920081E1A3 /* AttrTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttrTextEditor.swift; sourceTree = "<group>"; };
-		1DE651B02AA0F1BB0081E1A3 /* MacEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacEditor.swift; sourceTree = "<group>"; };
+		1DE651B02AA0F1BB0081E1A3 /* DescriptionTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionTextField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,7 +83,7 @@
 				1D4A87B8298EE53B0062686C /* Assets.xcassets */,
 				1D4A87BD298EE53B0062686C /* TestSwiftUI.entitlements */,
 				1D4A87BA298EE53B0062686C /* Preview Content */,
-				1DE651B02AA0F1BB0081E1A3 /* MacEditor.swift */,
+				1DE651B02AA0F1BB0081E1A3 /* DescriptionTextField.swift */,
 			);
 			path = TestSwiftUI;
 			sourceTree = "<group>";
@@ -179,7 +179,7 @@
 			files = (
 				1D4A87B7298EE5390062686C /* ContentView.swift in Sources */,
 				1D4A87B5298EE5390062686C /* TestSwiftUIApp.swift in Sources */,
-				1DE651B12AA0F1BB0081E1A3 /* MacEditor.swift in Sources */,
+				1DE651B12AA0F1BB0081E1A3 /* DescriptionTextField.swift in Sources */,
 				1DE651A72AA0E8920081E1A3 /* AttrTextEditor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

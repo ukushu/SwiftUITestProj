@@ -6,18 +6,22 @@ struct ContentView: View {
     @State var text: String = textSample
     
     var body: some View {
-        VStack {
-            Spacer()
+        ZStack {
+            VStack {
+                Spacer()
+                
+                Text("Hello")
+                
+                Spacer()
+            }
             
-            Text("Hello")
-            
-            Spacer()
-            
-            MacEditorTextView(text: $text)
-//            AttrTextEditor(text: $text, font: NSFont(name: "SF Pro", size: 17)! )
-//                .frame( maxHeight: 17 * 5 )
-//            TextField("", text: $text)
-//                .padding(10)
+            VStack {
+                Spacer()
+                
+                DescriptionTextField(text: $text)
+                    .padding(EdgeInsets(top: 3, leading: 3, bottom: 6, trailing: 3) )
+                    .background(Color.green)
+            }
         }
         .frame(minWidth: 450, minHeight: 300)
     }

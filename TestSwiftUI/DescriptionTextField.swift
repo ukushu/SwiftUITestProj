@@ -2,25 +2,19 @@ import Foundation
 import SwiftUI
 import AppKit
 
-struct MacEditorTextView: NSViewRepresentable {
+struct DescriptionTextField: NSViewRepresentable {
     @Binding var text: String
     var isEditable: Bool = true
     var font: NSFont?    = .systemFont(ofSize: 17, weight: .regular)
     
-    var onEditingChanged: () -> Void       = {}
-    var onCommit        : () -> Void       = {}
+    var onEditingChanged: () -> Void       = { }
+    var onCommit        : () -> Void       = { }
     var onTextChange    : (String) -> Void = { _ in }
     
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
+    func makeCoordinator() -> Coordinator { Coordinator(self) }
     
     func makeNSView(context: Context) -> CustomTextView {
-        let textView = CustomTextView(
-            text: text,
-            isEditable: isEditable,
-            font: font
-        )
+        let textView = CustomTextView(text: text, isEditable: isEditable, font: font)
         
         textView.delegate = context.coordinator
         
@@ -33,13 +27,12 @@ struct MacEditorTextView: NSViewRepresentable {
     }
 }
 
-extension MacEditorTextView {
-    
+extension DescriptionTextField {
     class Coordinator: NSObject, NSTextViewDelegate {
-        var parent: MacEditorTextView
+        var parent: DescriptionTextField
         var selectedRanges: [NSValue] = []
         
-        init(_ parent: MacEditorTextView) {
+        init(_ parent: DescriptionTextField) {
             self.parent = parent
         }
         
@@ -62,16 +55,13 @@ extension MacEditorTextView {
         }
         
         func textDidEndEditing(_ notification: Notification) {
-            guard let textView = notification.object as? NSTextView else {
-                return
-            }
+            guard let textView = notification.object as? NSTextView else { return }
             
             self.parent.text = textView.string
             self.parent.onCommit()
         }
     }
 }
-
 
 // MARK: - CustomTextView
 final class CustomTextView: NSView {
@@ -80,9 +70,7 @@ final class CustomTextView: NSView {
     
     weak var delegate: NSTextViewDelegate?
     
-    var text: String {
-        didSet { textView.string = text }
-    }
+    var text: String { didSet { textView.string = text } }
     
     var selectedRanges: [NSValue] = [] {
         didSet {
@@ -94,6 +82,7 @@ final class CustomTextView: NSView {
     
     private lazy var scrollView: NSScrollView = {
         let scrollView = NSScrollView()
+        
         scrollView.drawsBackground = false
         scrollView.borderType = .noBorder
         scrollView.hasVerticalScroller = true
@@ -136,7 +125,7 @@ final class CustomTextView: NSView {
         textView.isRichText              = true
         
         return textView
-    }()
+    } ()
     
     // MARK: - Init
     init(text: String, isEditable: Bool, font: NSFont?) {
@@ -147,35 +136,52 @@ final class CustomTextView: NSView {
         super.init(frame: .zero)
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
     // MARK: - Life cycle
-    
     override func viewWillDraw() {
         super.viewWillDraw()
         
         setupScrollViewConstraints()
-        setupTextView()
+        
+        scrollView.documentView = textView
     }
     
-    func setupScrollViewConstraints() {
+    private func setupScrollViewConstraints() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        
         
         addSubview(scrollView)
         
+        refreshScrollViewConstrains()
+    }
+    
+    func refreshScrollViewConstrains() {
+//        let height1 = textView.contentSize.height
+        let height1 = font!.pointSize
+        let height2 = font!.pointSize
+        
+        let finalHeight = min(height1, height2)
+        
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: topAnchor),
+            scrollView.topAnchor.constraint(lessThanOrEqualTo: topAnchor),
             scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            scrollView.heightAnchor.constraint(lessThanOrEqualToConstant: font!.pointSize * 5 + font!.pointSize * 1)
+            scrollView.heightAnchor.constraint(lessThanOrEqualToConstant: finalHeight)
         ])
     }
-    
-    func setupTextView() {
-        scrollView.documentView = textView
+}
+
+extension NSTextView {
+    var contentSize: CGSize {
+        get {
+            guard let layoutManager = layoutManager, let textContainer = textContainer else {
+                print("textView no layoutManager or textContainer")
+                return .zero
+            }
+            
+            layoutManager.ensureLayout(for: textContainer)
+            return layoutManager.usedRect(for: textContainer).size
+        }
     }
 }
