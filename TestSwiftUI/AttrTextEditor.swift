@@ -48,27 +48,19 @@ struct AttrTextEditor: NSViewRepresentable {
         attributedText.mutableString.setString(self.text)
         attributedText.addAttribute(NSAttributedString.Key.font, value: font, range: NSRange(location: 0, length: attributedText.length))
         
+        let idx = text.indexInt(of: "\n\n")
         
+        // if there exist \n\n
+        if let idx = idx {
+            attributedText.addAttribute(NSAttributedString.Key.foregroundColor, value: NSColor.red, range: NSRange(location: 0, length: idx))
+            attributedText.addAttribute(NSAttributedString.Key.foregroundColor, value: NSColor.green, range: NSRange(location: idx, length: attributedText.length-idx))
+
+        // if there is only commit title
+        } else {
+            attributedText.addAttribute(NSAttributedString.Key.foregroundColor, value: NSColor.red, range: NSRange(location: 0, length: attributedText.length))
+        }
         
-        
-//        let idx = text.indexInt(of: "\n\n")
-//
-//        // if there exist \n\n
-//        if let idx = idx {
-//            attributedText.addAttribute(NSAttributedString.Key.foregroundColor, value: NSColor.red, range: NSRange(location: 0, length: idx))
-//            attributedText.addAttribute(NSAttributedString.Key.foregroundColor, value: NSColor.green, range: NSRange(location: idx, length: attributedText.length-idx))
-//
-//        // if there is only commit title
-//        } else {
-//            attributedText.addAttribute(NSAttributedString.Key.foregroundColor, value: NSColor.red, range: NSRange(location: 0, length: attributedText.length))
-//        }
-//
-//        textView.textStorage?.setAttributedString(attributedText)
-////
-////        if let str = view.textStorage?.string,
-////           text != str {
-////            text = str
-////        }
+        textView.textStorage?.setAttributedString(attributedText)
         
     }
 }
