@@ -52,6 +52,11 @@ extension DescriptionTextField {
             
             self.parent.text = textView.string
             self.selectedRanges = textView.selectedRanges
+            
+            if let txtView = textView.superview?.superview?.superview as? CustomTextView {
+                txtView.refreshScrollViewConstrains()
+                
+            }
         }
         
         func textDidEndEditing(_ notification: Notification) {
@@ -70,12 +75,7 @@ final class CustomTextView: NSView {
     
     weak var delegate: NSTextViewDelegate?
     
-    var text: String { didSet {
-        textView.string = text
-        
-        scrollView.documentView = textView
-        setupScrollViewConstraints()
-    } }
+    var text: String { didSet { textView.string = text } }
     
     var selectedRanges: [NSValue] = [] {
         didSet {
@@ -85,13 +85,15 @@ final class CustomTextView: NSView {
         }
     }
     
-    private lazy var scrollView: MyScrollView = {
-        let scrollView = MyScrollView()
+    private lazy var scrollView: NSScrollView = {
+        let scrollView = NSScrollView()
         
+        scrollView.drawsBackground = false
         scrollView.borderType = .noBorder
         scrollView.hasVerticalScroller = true
         scrollView.hasHorizontalRuler = false
         scrollView.autoresizingMask = [.width, .height]
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
         
         return scrollView
     }()
@@ -126,7 +128,6 @@ final class CustomTextView: NSView {
         textView.textColor               = NSColor.labelColor
         textView.allowsUndo              = true
         textView.isRichText              = true
-//        textView.lineBreakMode = .byWordWrapping
         
         return textView
     } ()
@@ -145,8 +146,10 @@ final class CustomTextView: NSView {
     // MARK: - Life cycle
     override func viewWillDraw() {
         super.viewWillDraw()
-        scrollView.documentView = textView
+        
         setupScrollViewConstraints()
+        
+        scrollView.documentView = textView
     }
     
     private func setupScrollViewConstraints() {
@@ -158,20 +161,19 @@ final class CustomTextView: NSView {
     }
     
     func refreshScrollViewConstrains() {
-        let contentHeight = textView.contentSize.height
-        let fiveLines = font!.pointSize * 6
+        print("Constrains updated!")
         
-        let finalHeight = min(contentHeight, fiveLines)
+        let finalHeight = min(textView.contentSize.height, font!.pointSize * 6)
         
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(lessThanOrEqualTo: topAnchor),
             scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            scrollView.heightAnchor.constraint(equalToConstant: finalHeight)
+            scrollView.heightAnchor.constraint(lessThanOrEqualToConstant: finalHeight)
         ])
         
-        scrollView.updateConstraints()
+        scrollView.needsUpdateConstraints = true
     }
 }
 
@@ -184,10 +186,7 @@ extension NSTextView {
             }
             
             layoutManager.ensureLayout(for: textContainer)
-            
             return layoutManager.usedRect(for: textContainer).size
         }
     }
 }
-
-class MyScrollView: NSScrollView { }
