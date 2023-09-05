@@ -22,7 +22,10 @@ struct DescriptionTextField: NSViewRepresentable {
     }
     
     func updateNSView(_ view: CustomTextView, context: Context) {
-        view.text = text
+        if view.text != text {
+            view.text = text
+        }
+        
         view.selectedRanges = context.coordinator.selectedRanges
     }
 }
@@ -161,19 +164,27 @@ final class CustomTextView: NSView {
     }
     
     func refreshScrollViewConstrains() {
-        print("Constrains updated!")
+        guard let scrollView = self.enclosingScrollView else {
+            return
+        }
         
-        let finalHeight = min(textView.contentSize.height, font!.pointSize * 6)
+        let contentHeight = self.intrinsicContentSize.height
+        let finalHeight = min(contentHeight, font!.pointSize * 6)
         
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(lessThanOrEqualTo: topAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            scrollView.heightAnchor.constraint(lessThanOrEqualToConstant: finalHeight)
-        ])
+        if let existingConstraint = scrollView.constraints.first(where: { $0.firstAttribute == .height }) {
+            existingConstraint.isActive = false
+        }
         
-        scrollView.needsUpdateConstraints = true
+        let newHeightConstraint = NSLayoutConstraint(item: scrollView,
+                                                    attribute: .height,
+                                                    relatedBy: .equal,
+                                                    toItem: nil,
+                                                    attribute: .notAnAttribute,
+                                                    multiplier: 1,
+                                                    constant: finalHeight)
+        
+        newHeightConstraint.priority = .defaultHigh
+        scrollView.addConstraint(newHeightConstraint)
     }
 }
 
