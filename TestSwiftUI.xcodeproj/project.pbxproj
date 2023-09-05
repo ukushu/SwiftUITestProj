@@ -81,11 +81,11 @@
 			children = (
 				1D4A87B4298EE5390062686C /* TestSwiftUIApp.swift */,
 				1D4A87B6298EE5390062686C /* ContentView.swift */,
-				1DE651A62AA0E8920081E1A3 /* AttrTextEditor.swift */,
+				1DE651B02AA0F1BB0081E1A3 /* DescriptionTextField.swift */,
 				1D4A87B8298EE53B0062686C /* Assets.xcassets */,
 				1D4A87BD298EE53B0062686C /* TestSwiftUI.entitlements */,
 				1D4A87BA298EE53B0062686C /* Preview Content */,
-				1DE651B02AA0F1BB0081E1A3 /* DescriptionTextField.swift */,
+				1DE651A62AA0E8920081E1A3 /* AttrTextEditor.swift */,
 				1DD156952AA1CBED00AE2475 /* AttributedText2.swift */,
 			);
 			path = TestSwiftUI;

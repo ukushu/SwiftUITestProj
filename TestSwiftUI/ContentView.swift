@@ -17,8 +17,8 @@ struct ContentView: View {
             }
             
             VStack {
-                AttributedText(attributedString: $attrStr)
-                    .frame(height: 300)
+//                AttributedText(attributedString: $attrStr)
+//                    .frame(height: 300)
                 
                 Spacer()
                 
