@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D2AF3482AAD689100346C45 /* DirectoryTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2AF3472AAD689100346C45 /* DirectoryTableView.swift */; };
 		1D4A87B5298EE5390062686C /* TestSwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4A87B4298EE5390062686C /* TestSwiftUIApp.swift */; };
 		1D4A87B7298EE5390062686C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4A87B6298EE5390062686C /* ContentView.swift */; };
 		1D4A87B9298EE53B0062686C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D4A87B8298EE53B0062686C /* Assets.xcassets */; };
@@ -35,6 +36,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1D2AF3472AAD689100346C45 /* DirectoryTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryTableView.swift; sourceTree = "<group>"; };
 		1D4A87B1298EE5390062686C /* TestSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D4A87B4298EE5390062686C /* TestSwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSwiftUIApp.swift; sourceTree = "<group>"; };
 		1D4A87B6298EE5390062686C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -60,6 +62,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1D2AF3462AAD688100346C45 /* TableView */ = {
+			isa = PBXGroup;
+			children = (
+				1D2AF3472AAD689100346C45 /* DirectoryTableView.swift */,
+			);
+			path = TableView;
+			sourceTree = "<group>";
+		};
 		1D4A87A8298EE5390062686C = {
 			isa = PBXGroup;
 			children = (
@@ -79,6 +89,7 @@
 		1D4A87B3298EE5390062686C /* TestSwiftUI */ = {
 			isa = PBXGroup;
 			children = (
+				1D2AF3462AAD688100346C45 /* TableView */,
 				1D4A87B4298EE5390062686C /* TestSwiftUIApp.swift */,
 				1D4A87B6298EE5390062686C /* ContentView.swift */,
 				1DE651B02AA0F1BB0081E1A3 /* DescriptionTextField.swift */,
@@ -181,6 +192,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D4A87B7298EE5390062686C /* ContentView.swift in Sources */,
+				1D2AF3482AAD689100346C45 /* DirectoryTableView.swift in Sources */,
 				1D4A87B5298EE5390062686C /* TestSwiftUIApp.swift in Sources */,
 				1DD156962AA1CBED00AE2475 /* AttributedText2.swift in Sources */,
 				1DE651B12AA0F1BB0081E1A3 /* DescriptionTextField.swift in Sources */,
