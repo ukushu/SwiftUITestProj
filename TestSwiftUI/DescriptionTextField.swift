@@ -4,12 +4,14 @@ import AppKit
 
 struct DescriptionTextField: NSViewRepresentable {
     @Binding var text: String
+//    @State var textToDisplay: NSAttributedString
+    
     var isEditable: Bool = true
     var font: NSFont?    = .systemFont(ofSize: 17, weight: .regular)
     
-    var onEditingChanged: () -> Void       = { }
-    var onCommit        : () -> Void       = { }
-    var onTextChange    : (String) -> Void = { _ in }
+    var onEditingChanged : () -> Void       = { }
+    var onCommit         : () -> Void       = { }
+    var onTextChange     : (String) -> Void = { _ in }
     
     func makeCoordinator() -> Coordinator { Coordinator(self) }
     
@@ -22,10 +24,7 @@ struct DescriptionTextField: NSViewRepresentable {
     }
     
     func updateNSView(_ view: CustomTextView, context: Context) {
-        if view.text != text {
-            view.text = text
-        }
-        
+        view.text = text
         view.selectedRanges = context.coordinator.selectedRanges
     }
 }
@@ -58,7 +57,6 @@ extension DescriptionTextField {
             
             if let txtView = textView.superview?.superview?.superview as? CustomTextView {
                 txtView.refreshScrollViewConstrains()
-                
             }
         }
         
@@ -164,27 +162,21 @@ final class CustomTextView: NSView {
     }
     
     func refreshScrollViewConstrains() {
-        guard let scrollView = self.enclosingScrollView else {
-            return
-        }
+        print("Constrains updated!")
         
-        let contentHeight = self.intrinsicContentSize.height
-        let finalHeight = min(contentHeight, font!.pointSize * 6)
+        let finalHeight = min(textView.contentSize.height, font!.pointSize * 6)
         
-        if let existingConstraint = scrollView.constraints.first(where: { $0.firstAttribute == .height }) {
-            existingConstraint.isActive = false
-        }
+        scrollView.removeConstraints(scrollView.constraints)
         
-        let newHeightConstraint = NSLayoutConstraint(item: scrollView,
-                                                    attribute: .height,
-                                                    relatedBy: .equal,
-                                                    toItem: nil,
-                                                    attribute: .notAnAttribute,
-                                                    multiplier: 1,
-                                                    constant: finalHeight)
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(lessThanOrEqualTo: topAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            scrollView.heightAnchor.constraint(equalToConstant: finalHeight)
+        ])
         
-        newHeightConstraint.priority = .defaultHigh
-        scrollView.addConstraint(newHeightConstraint)
+        scrollView.needsUpdateConstraints = true
     }
 }
 
@@ -199,5 +191,30 @@ extension NSTextView {
             layoutManager.ensureLayout(for: textContainer)
             return layoutManager.usedRect(for: textContainer).size
         }
+    }
+}
+
+fileprivate extension String {
+    func asDescr() -> NSAttributedString {
+        let font = NSFont(name: "SF Pro", size: 17)
+        let fontBold = NSFont.boldSystemFont(ofSize: 17)
+        
+        let attributedText = NSMutableAttributedString(string: self)
+        
+        attributedText.addAttribute(NSAttributedString.Key.font, value: font, range: NSRange(location: 0, length: attributedText.length))
+        
+        let idx = self.indexInt(of: "\n\n")
+        
+        // if there exist \n\n
+        if let idx = idx {
+            attributedText.addAttribute(NSAttributedString.Key.font, value: fontBold, range: NSRange(location: 0, length: idx))
+            attributedText.addAttribute(NSAttributedString.Key.font, value: font, range: NSRange(location: idx, length: attributedText.length-idx))
+
+        // if there is only commit title
+        } else {
+            attributedText.addAttribute(NSAttributedString.Key.foregroundColor, value: font, range: NSRange(location: 0, length: attributedText.length))
+        }
+        
+        return attributedText
     }
 }
