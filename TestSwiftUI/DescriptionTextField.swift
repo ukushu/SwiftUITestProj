@@ -193,7 +193,7 @@ extension NSTextView {
 
 fileprivate extension String {
     func asDescr() -> NSAttributedString {
-        let font = NSFont(name: "SF Pro", size: 17)!
+        let font     = NSFont.systemFont(ofSize: 17)
         let fontBold = NSFont.boldSystemFont(ofSize: 17)
         
         let attributedText = NSMutableAttributedString(string: self)
