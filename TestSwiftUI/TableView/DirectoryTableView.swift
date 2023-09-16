@@ -62,14 +62,32 @@ extension DirectoryTableView {
         
         func numberOfRows(in tableView: NSTableView) -> Int { dirContent.count }
         
-        func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
+        func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
             switch tableColumn?.identifier.rawValue {
             case "Name":
-                return dirContent[row].asURL().lastPathComponent
+//                var cell = NSTableCellView()
+//
+//                let imgView = NSImageView()
+//                imgView.image = NSImage(named: "trash")
+//
+//                cell.subviews.append(imgView)
+                
+                let lbl = NSLabel()
+                lbl.string = dirContent[row].asURL().lastPathComponent
+//                cell.subviews.append(lbl)
+                
+                return lbl
+                
             case "Size":
-                return "-"
+                let lbl = NSLabel()
+                lbl.string = "-"
+                return lbl
+                
             case "Modified":
-                return "-"
+                let lbl = NSLabel()
+                lbl.string = "-"
+                return lbl
+                
             default:
                 return nil
             }
@@ -82,4 +100,22 @@ extension DirectoryTableView {
         func tableView(_ tableView: NSTableView, setObjectValue object: Any?, for tableColumn: NSTableColumn?, row: Int) {
         }
     }
+}
+
+//func label(str: String) -> NSTextView {
+//    var view = NSTextView()
+//    view.string = str
+//    view.isEditable = false
+//    view.isSelectable = false
+//    view.backgroundColor = .clear
+//    view.hit
+//
+//    return view
+//}
+
+class NSLabel: NSTextView {
+    override var isEditable: Bool { get { false } set {  } }
+    override var isSelectable: Bool { get { false } set { } }
+    override var backgroundColor: NSColor { get { .clear } set { } }
+    override func hitTest(_ point: NSPoint) -> NSView? { nil }
 }
