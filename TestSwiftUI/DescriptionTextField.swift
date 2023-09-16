@@ -7,6 +7,8 @@ struct DescriptionTextField: NSViewRepresentable {
     
     var isEditable: Bool = true
     
+    let fontSize: CGFloat = 17
+    
     var onEditingChanged : () -> Void       = { }
     var onCommit         : () -> Void       = { }
     var onTextChange     : (String) -> Void = { _ in }
@@ -14,7 +16,7 @@ struct DescriptionTextField: NSViewRepresentable {
     func makeCoordinator() -> Coordinator { Coordinator(self) }
     
     func makeNSView(context: Context) -> CustomTextView {
-        let textView = CustomTextView(text: text, isEditable: isEditable)
+        let textView = CustomTextView(text: text, isEditable: isEditable, fontSize: fontSize)
         
         textView.delegate = context.coordinator
         
@@ -76,7 +78,9 @@ final class CustomTextView: NSView {
     
     weak var delegate: NSTextViewDelegate?
     
-    var text: String { didSet { textView.textStorage?.setAttributedString(text.asDescr() )  } }
+    let fontSize: CGFloat
+    
+    var text: String { didSet { textView.textStorage?.setAttributedString(text.asDescr(fontSize: fontSize) )  } }
     
     var selectedRanges: [NSValue] = [] {
         didSet {
@@ -133,9 +137,10 @@ final class CustomTextView: NSView {
     } ()
     
     // MARK: - Init
-    init(text: String, isEditable: Bool) {
+    init(text: String, isEditable: Bool, fontSize: CGFloat) {
         self.isEditable = isEditable
         self.text       = text
+        self.fontSize   = fontSize
         
         super.init(frame: .zero)
     }
@@ -161,7 +166,7 @@ final class CustomTextView: NSView {
     
     func refreshScrollViewConstrains() {
         //17 is font size from .asDescr()
-        let finalHeight = min(textView.contentSize.height, 17 * 6)
+        let finalHeight = min(textView.contentSize.height, fontSize * 6)
         
         scrollView.removeConstraints(scrollView.constraints)
         
@@ -192,9 +197,9 @@ extension NSTextView {
 }
 
 fileprivate extension String {
-    func asDescr() -> NSAttributedString {
-        let font     = NSFont.systemFont(ofSize: 17)
-        let fontBold = NSFont.boldSystemFont(ofSize: 17)
+    func asDescr(fontSize: CGFloat) -> NSAttributedString {
+        let font     = NSFont.systemFont(ofSize: fontSize)
+        let fontBold = NSFont.boldSystemFont(ofSize: fontSize)
         
         let attributedText = NSMutableAttributedString(string: self)
         
