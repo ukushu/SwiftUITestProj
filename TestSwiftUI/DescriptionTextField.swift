@@ -6,7 +6,6 @@ struct DescriptionTextField: NSViewRepresentable {
     @Binding var text: String
     
     var isEditable: Bool = true
-    var font: NSFont?    = .systemFont(ofSize: 17, weight: .regular)
     
     var onEditingChanged : () -> Void       = { }
     var onCommit         : () -> Void       = { }
@@ -15,7 +14,7 @@ struct DescriptionTextField: NSViewRepresentable {
     func makeCoordinator() -> Coordinator { Coordinator(self) }
     
     func makeNSView(context: Context) -> CustomTextView {
-        let textView = CustomTextView(text: text, isEditable: isEditable, font: font)
+        let textView = CustomTextView(text: text, isEditable: isEditable)
         
         textView.delegate = context.coordinator
         
@@ -73,7 +72,7 @@ extension DescriptionTextField {
 // MARK: - CustomTextView
 final class CustomTextView: NSView {
     private var isEditable: Bool
-    private var font: NSFont?
+//    private var font: NSFont?
     
     weak var delegate: NSTextViewDelegate?
     
@@ -121,7 +120,6 @@ final class CustomTextView: NSView {
         textView.backgroundColor         = NSColor.clear
         textView.delegate                = self.delegate
         textView.drawsBackground         = true
-        textView.font                    = self.font
         textView.isEditable              = self.isEditable
         textView.isHorizontallyResizable = false
         textView.isVerticallyResizable   = true
@@ -135,8 +133,7 @@ final class CustomTextView: NSView {
     } ()
     
     // MARK: - Init
-    init(text: String, isEditable: Bool, font: NSFont?) {
-        self.font       = font
+    init(text: String, isEditable: Bool) {
         self.isEditable = isEditable
         self.text       = text
         
@@ -163,7 +160,8 @@ final class CustomTextView: NSView {
     }
     
     func refreshScrollViewConstrains() {
-        let finalHeight = min(textView.contentSize.height, font!.pointSize * 6)
+        //17 is font size from .asDescr()
+        let finalHeight = min(textView.contentSize.height, 17 * 6)
         
         scrollView.removeConstraints(scrollView.constraints)
         
@@ -195,7 +193,7 @@ extension NSTextView {
 
 fileprivate extension String {
     func asDescr() -> NSAttributedString {
-        let font = NSFont(name: "SF Pro", size: 17)
+        let font = NSFont(name: "SF Pro", size: 17)!
         let fontBold = NSFont.boldSystemFont(ofSize: 17)
         
         let attributedText = NSMutableAttributedString(string: self)
@@ -204,11 +202,11 @@ fileprivate extension String {
         
         let idx = self.indexInt(of: "\n\n")
         
-        // if there exist \n\n
+        // if there exist \n\n (title and description)
         if let idx = idx {
             attributedText.addAttribute(NSAttributedString.Key.font, value: fontBold, range: NSRange(location: 0, length: idx))
             attributedText.addAttribute(NSAttributedString.Key.font, value: font, range: NSRange(location: idx, length: attributedText.length-idx))
-
+        
         // if there is only commit title
         } else {
             attributedText.addAttribute(NSAttributedString.Key.foregroundColor, value: font, range: NSRange(location: 0, length: attributedText.length))
