@@ -3,36 +3,25 @@ import SwiftUI
 
 @available(macOS 12.0, *)
 struct ContentView: View {
-    @State var text: String = textSample
-    @State var attrStr: NSAttributedString =  NSAttributedString(string: "")
+    @State var text: String = textSample { didSet { print(text) }}
     
     var body: some View {
         ZStack {
             VStack {
                 Spacer()
                 
-                Text("Hello")
+                Text("Text: \(text)")
                 
                 Spacer()
             }
             
             VStack {
-//                AttributedText(attributedString: $attrStr)
-//                    .frame(height: 300)
-                
                 Spacer()
                 
-//                TextEditor(text: $text)
-//                AttrTextEditor(text: $text, font: NSFont(name: "SF Pro", size: 17)!)
-//                    .frame(height: 17*6)
-//                    .background(Color.green)
                 DescriptionTextField(text: $text)
                     .padding(EdgeInsets(top: 3, leading: 3, bottom: 6, trailing: 3) )
                     .background(Color.green)
             }
-//            .onChange(of: text) { text in
-//                self.attrStr = text.asDescr()
-//            }
         }
         .frame(minWidth: 450, minHeight: 300)
         .preferredColorScheme(.light)

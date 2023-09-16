@@ -4,7 +4,6 @@ import AppKit
 
 struct DescriptionTextField: NSViewRepresentable {
     @Binding var text: String
-//    @State var textToDisplay: NSAttributedString
     
     var isEditable: Bool = true
     var font: NSFont?    = .systemFont(ofSize: 17, weight: .regular)
@@ -25,6 +24,7 @@ struct DescriptionTextField: NSViewRepresentable {
     
     func updateNSView(_ view: CustomTextView, context: Context) {
         view.text = text
+        
         view.selectedRanges = context.coordinator.selectedRanges
     }
 }
@@ -64,6 +64,7 @@ extension DescriptionTextField {
             guard let textView = notification.object as? NSTextView else { return }
             
             self.parent.text = textView.string
+            
             self.parent.onCommit()
         }
     }
@@ -76,7 +77,7 @@ final class CustomTextView: NSView {
     
     weak var delegate: NSTextViewDelegate?
     
-    var text: String { didSet { textView.string = text } }
+    var text: String { didSet { textView.textStorage?.setAttributedString(text.asDescr() )  } }
     
     var selectedRanges: [NSValue] = [] {
         didSet {
@@ -109,7 +110,7 @@ final class CustomTextView: NSView {
         let textContainer = NSTextContainer(containerSize: scrollView.frame.size)
         textContainer.widthTracksTextView = true
         textContainer.containerSize = NSSize(
-            width: contentSize.width,
+            width: CGFloat.greatestFiniteMagnitude,
             height: CGFloat.greatestFiniteMagnitude
         )
         
@@ -162,8 +163,6 @@ final class CustomTextView: NSView {
     }
     
     func refreshScrollViewConstrains() {
-        print("Constrains updated!")
-        
         let finalHeight = min(textView.contentSize.height, font!.pointSize * 6)
         
         scrollView.removeConstraints(scrollView.constraints)
