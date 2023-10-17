@@ -26,6 +26,15 @@
         "branch" : "main",
         "revision" : "2de4ab9c48995fe1bfafae8f3e70c4167cdec8d3"
       }
+    },
+    {
+      "identity" : "witness",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/njdehoog/Witness.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "b0469457b460fc78620e3b456fed9b18669100d5"
+      }
     }
   ],
   "version" : 2

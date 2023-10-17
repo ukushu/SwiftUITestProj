@@ -12,6 +12,7 @@
 		1D4A87B7298EE5390062686C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4A87B6298EE5390062686C /* ContentView.swift */; };
 		1D4A87B9298EE53B0062686C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D4A87B8298EE53B0062686C /* Assets.xcassets */; };
 		1D4A87BC298EE53B0062686C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D4A87BB298EE53B0062686C /* Preview Assets.xcassets */; };
+		1DB99A5C2ADF0C0200BD94F6 /* Witness in Frameworks */ = {isa = PBXBuildFile; productRef = 1DB99A5B2ADF0C0200BD94F6 /* Witness */; };
 		1DD156962AA1CBED00AE2475 /* AttributedText2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD156952AA1CBED00AE2475 /* AttributedText2.swift */; };
 		1DDDEDBF29B7639400C48216 /* AsyncNinja in Frameworks */ = {isa = PBXBuildFile; productRef = 1DDDEDBE29B7639400C48216 /* AsyncNinja */; };
 		1DE651A72AA0E8920081E1A3 /* AttrTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE651A62AA0E8920081E1A3 /* AttrTextEditor.swift */; };
@@ -46,6 +47,7 @@
 		1DD156952AA1CBED00AE2475 /* AttributedText2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedText2.swift; sourceTree = "<group>"; };
 		1DE651A62AA0E8920081E1A3 /* AttrTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttrTextEditor.swift; sourceTree = "<group>"; };
 		1DE651B02AA0F1BB0081E1A3 /* DescriptionTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionTextField.swift; sourceTree = "<group>"; };
+		1DF7729C2ACA71F40024591F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +55,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1DB99A5C2ADF0C0200BD94F6 /* Witness in Frameworks */,
 				1DE651AD2AA0E99B0081E1A3 /* Essentials in Frameworks */,
 				1DDDEDBF29B7639400C48216 /* AsyncNinja in Frameworks */,
 				1DE651AA2AA0E94B0081E1A3 /* MoreSwiftUI in Frameworks */,
@@ -89,6 +92,7 @@
 		1D4A87B3298EE5390062686C /* TestSwiftUI */ = {
 			isa = PBXGroup;
 			children = (
+				1DF7729C2ACA71F40024591F /* Info.plist */,
 				1D2AF3462AAD688100346C45 /* TableView */,
 				1D4A87B4298EE5390062686C /* TestSwiftUIApp.swift */,
 				1D4A87B6298EE5390062686C /* ContentView.swift */,
@@ -131,6 +135,7 @@
 				1DDDEDBE29B7639400C48216 /* AsyncNinja */,
 				1DE651A92AA0E94B0081E1A3 /* MoreSwiftUI */,
 				1DE651AC2AA0E99B0081E1A3 /* Essentials */,
+				1DB99A5B2ADF0C0200BD94F6 /* Witness */,
 			);
 			productName = TestSwiftUI;
 			productReference = 1D4A87B1298EE5390062686C /* TestSwiftUI.app */;
@@ -164,6 +169,7 @@
 				1DDDEDBD29B7639400C48216 /* XCRemoteSwiftPackageReference "AsyncNinja" */,
 				1DE651A82AA0E94B0081E1A3 /* XCRemoteSwiftPackageReference "moreswiftui" */,
 				1DE651AB2AA0E99B0081E1A3 /* XCRemoteSwiftPackageReference "essentials" */,
+				1DB99A5A2ADF0C0200BD94F6 /* XCRemoteSwiftPackageReference "Witness" */,
 			);
 			productRefGroup = 1D4A87B2298EE5390062686C /* Products */;
 			projectDirPath = "";
@@ -330,7 +336,10 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TestSwiftUI/Info.plist;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -357,7 +366,10 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TestSwiftUI/Info.plist;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -394,6 +406,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		1DB99A5A2ADF0C0200BD94F6 /* XCRemoteSwiftPackageReference "Witness" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/njdehoog/Witness.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		1DDDEDBD29B7639400C48216 /* XCRemoteSwiftPackageReference "AsyncNinja" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "git@github.com:serg-vinnie/AsyncNinja.git";
@@ -421,6 +441,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1DB99A5B2ADF0C0200BD94F6 /* Witness */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1DB99A5A2ADF0C0200BD94F6 /* XCRemoteSwiftPackageReference "Witness" */;
+			productName = Witness;
+		};
 		1DDDEDBE29B7639400C48216 /* AsyncNinja */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1DDDEDBD29B7639400C48216 /* XCRemoteSwiftPackageReference "AsyncNinja" */;
