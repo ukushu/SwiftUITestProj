@@ -38,26 +38,20 @@ class MainViewModel: ObservableObject {
     let witness: Witness
     
     init() {
-        let desktopPath = "/Users/uks/Desktop"
+        let desktopPath = "/"
         
         self.witness = Witness(paths: [desktopPath], flags: [.NoDefer, .FileEvents], latency: 0) { events in
             var events = events
                 .filter({ !$0.path.ends(with: ".DS_Store") })
                 .filter{ !"\($0)".ends(with: "flags: Item Is File)") } // empty event with no usefull data
+                .filter{ $0.flags.contains(oneOf: [.ItemModified, .ItemCreated, .ItemRemoved, .ItemRenamed]) }
             
             guard events.count > 0 else { return }
             print("\n\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
             
             var uksEvents = [UKSFileEvent]()
             
-            // REMOVED with skipping RecicleBin
-            if events.allSatisfy({ $0.flags.contains(.ItemRemoved)})
-            {
-                events.forEach { uksEvents.append(.removed(from: $0.path) ) }
-                events = []
-            }
-            else
-            // REMOVED
+            // REMOVED to Bin
             if events.allSatisfy({ $0.flags.contains(.ItemRenamed) && !FileManager.default.fileExists(atPath: $0.path) })
             {
                 events.forEach { uksEvents.append(.removed(from: $0.path) ) }
@@ -72,19 +66,41 @@ class MainViewModel: ObservableObject {
                 events = []
             }
             
-            events.filter({ $0.flags.contains(.ItemCreated) }).forEach{ event in
+            // REMOVED with skipping RecicleBin
+            events.filter({ $0.flags.contains(.ItemRemoved) }).forEach { event in
+                events.forEach { uksEvents.append(.removed(from: $0.path) ) }
+                events = []
+                events.removeFirst{ $0 == event }
+            }
+            
+            events.filter({ $0.flags.contains(.ItemCreated) }).forEach { event in
                 let currPath = event.path
                 uksEvents.append( .modified(currPath) )
                 events.removeFirst{ $0 == event }
             }
             
+            events.filter({ $0.flags.contains(.ItemModified) }).forEach { event in
+                let currPath = event.path
+                uksEvents.append( .modified(currPath) )
+                events.removeFirst{ $0 == event }
+            }
+            
+            events.filter({ $0.flags.contains(.ItemRenamed) }).forEach { event in
+                if FileManager.default.fileExists(atPath: event.path) {
+                    uksEvents.append(.modified(event.path))
+                    events.removeFirst{ $0 == event }
+                } else {
+                    uksEvents.append(.removed(from: event.path))
+                    events.removeFirst{ $0 == event }
+                }
+            }
+            
             print("\n----\nuksEvents: \n\(uksEvents)")
             
             if events.count > 0 {
-                print("MISSED Events:")
-                events.forEach{ $0.printDetails() }
+                print("MISSED Events: \(events)\n------------\n\n\n")
                 
-                fatalError("horrible error")
+//                fatalError("horrible error")
             }
         }
     }
@@ -100,12 +116,6 @@ enum UKSFileEvent {
 extension FileEvent {
     var uksIsDeleted: Bool {
         flags.contains(.ItemRenamed) && !FileManager.default.fileExists(atPath: self.path)
-    }
-    
-    func printDetails() {
-        print("=================")
-        let event = self
-        print(event)
     }
 }
 
@@ -164,3 +174,15 @@ extension FileEvent: Equatable {
 */
 
 
+////////////////////
+// HELPERS
+///////////////////
+fileprivate extension FileEventFlags {
+    func contains(oneOf members: [FileEventFlags]) -> Bool {
+        for member in members {
+            if self.contains(member) { return true }
+        }
+        
+        return false
+    }
+}
