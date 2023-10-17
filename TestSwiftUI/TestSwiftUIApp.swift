@@ -100,7 +100,7 @@ class MainViewModel: ObservableObject {
             if events.count > 0 {
                 print("MISSED Events: \(events)\n------------\n\n\n")
                 
-//                fatalError("horrible error")
+                fatalError("horrible error")
             }
         }
     }
