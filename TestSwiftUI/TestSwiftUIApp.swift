@@ -61,29 +61,29 @@ struct ContentView: View {
                 ProgressLine(progressRatio: $model.depressionRate , fillColor: .red)
                     .frame(height: 30)
                 
-                Text("\( Int(model.points) )/\(model.depressionMax)")
+                Text("\( Int(model.depressionPoints) )/\(model.depressionPointsMax)")
             }
             
             HStack {
                 VStack {
-                    Text("Психічні проявлення")
+                    Text("(C-A) Психічні проявлення")
                     
                     ZStack {
                         ProgressLine(progressRatio: $model.psihicRate , fillColor: .red)
                             .frame(height: 20)
                         
-                        Text("\( Int(model.points) )/\(model.psihicRateMax)")
+                        Text("\( Int(model.psihicPoints) )/\(model.psihicPointsMax)")
                     }
                 }
                 
                 VStack {
-                    Text("Фізичні проявлення")
+                    Text("(S-P) Фізичні проявлення")
                     
                     ZStack {
                         ProgressLine(progressRatio: $model.phisicRate , fillColor: .red)
                             .frame(height: 20)
                         
-                        Text("\(Int(model.points))/\(model.phisicRateMax)")
+                        Text("\(Int(model.phisicPoints))/\(model.phisicPointsMax)")
                     }
                 }
             }
@@ -102,15 +102,17 @@ class ContentViewModel: ObservableObject {
     @Published var testResults: [AaronBackPair] = AaronBack.allCases.map{ AaronBackPair(item: $0) }
     @Published private(set) var displayResults: Bool = true
     
-    @Published private(set) var points: CGFloat = 0
+    @Published private(set) var depressionPoints: CGFloat = 0
+    let depressionPointsMax: Int = 63
     @Published var depressionRate: CGFloat = 0
-    let depressionMax: Int = 57
     
+    @Published var psihicPoints: Int = 0
+    let psihicPointsMax: Int = 39
     @Published var psihicRate: CGFloat = 0
-    let psihicRateMax: Int = 30
     
+    @Published var phisicPoints: Int = 0
+    let phisicPointsMax: Int = 24
     @Published var phisicRate: CGFloat = 0
-    let phisicRateMax: Int = 30
     
     func switchDisplayResults() {
         if displayResults {
@@ -119,15 +121,17 @@ class ContentViewModel: ObservableObject {
         }
         
         let groupPoints = testResults.map { item in item.answers.firstIndexInt(where: { $0 == item.selectedAnswer})! }
-        points = CGFloat( groupPoints.reduce(0, +) )
+        depressionPoints = CGFloat( groupPoints.reduce(0, +) )
         
-        depressionRate = points/57
+        depressionRate = depressionPoints/57
         
-        var tempPoints = testResults.first(10).map { item in item.answers.firstIndexInt(where: { $0 == item.selectedAnswer})! }
-        psihicRate = CGFloat( tempPoints.reduce(0, +) ) / CGFloat(phisicRateMax)
+        var tempPoints = testResults.first(13).map { item in item.answers.firstIndexInt(where: { $0 == item.selectedAnswer})! }
+        psihicPoints = tempPoints.reduce(0, +)
+        psihicRate = CGFloat( tempPoints.reduce(0, +) ) / CGFloat(phisicPointsMax)
         
-        tempPoints = testResults.last(10).map { item in item.answers.firstIndexInt(where: { $0 == item.selectedAnswer})! }
-        phisicRate = CGFloat( tempPoints.reduce(0, +) ) / CGFloat(phisicRateMax)
+        tempPoints = testResults.last(21-13).map { item in item.answers.firstIndexInt(where: { $0 == item.selectedAnswer})! }
+        phisicPoints = tempPoints.reduce(0, +)
+        phisicRate = CGFloat( phisicPoints ) / CGFloat(phisicPointsMax)
         
         displayResults.toggle()
     }
