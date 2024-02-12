@@ -123,7 +123,8 @@ class ContentViewModel: ObservableObject {
         let groupPoints = testResults.map { item in item.answers.firstIndexInt(where: { $0 == item.selectedAnswer})! }
         depressionPoints = CGFloat( groupPoints.reduce(0, +) )
         
-        depressionRate = depressionPoints/57
+        let depressionPointsMax = CGFloat(testResults.count * 3)
+        depressionRate = depressionPoints / depressionPointsMax
         
         var tempPoints = testResults.first(13).map { item in item.answers.firstIndexInt(where: { $0 == item.selectedAnswer})! }
         psihPoints = tempPoints.reduce(0, +)
