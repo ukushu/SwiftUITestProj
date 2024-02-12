@@ -16,6 +16,18 @@ struct TestSwiftUIApp: App {
 struct ContentView: View {
     @ObservedObject var model = ContentViewModel()
     
+    var mainScaleColor: Color {
+        if model.depressionPoints <= 9 {
+            return color1
+        } else if model.depressionPoints <= 18 {
+            return color2
+        } else if model.depressionPoints <= 29 {
+            return color3
+        }
+        
+        return color4
+    }
+    
     var body: some View {
         VStack {
             if model.displayResults {
@@ -58,10 +70,17 @@ struct ContentView: View {
             Text("Depression Rate")
             
             ZStack {
-                ProgressLine(progressRatio: $model.depressionRate , fillColor: .red)
+                ProgressLine(progressRatio: $model.depressionRate , fillColor: mainScaleColor)
                     .frame(height: 30)
                 
                 Text("\( Int(model.depressionPoints) )/\(model.depressionPointsMax)")
+            }
+            
+            HStack(spacing: 0) {
+                SpaceX(count: 9, color: color1)
+                SpaceX(count: 18-10, color: color2)
+                SpaceX(count: 29-19, color: color3)
+                SpaceX(count: 63-30, color: color4)
             }
             
             HStack {
@@ -69,7 +88,7 @@ struct ContentView: View {
                     Text("(C-A) Психічні проявлення")
                     
                     ZStack {
-                        ProgressLine(progressRatio: $model.psihRate , fillColor: .red)
+                        ProgressLine(progressRatio: $model.psihRate, fillColor: mainScaleColor)
                             .frame(height: 20)
                         
                         Text("\( Int(model.psihPoints) )/\(model.psihPointsMax)")
@@ -80,7 +99,7 @@ struct ContentView: View {
                     Text("(S-P) Фізичні проявлення")
                     
                     ZStack {
-                        ProgressLine(progressRatio: $model.phizRate , fillColor: .red)
+                        ProgressLine(progressRatio: $model.phizRate , fillColor: mainScaleColor)
                             .frame(height: 20)
                         
                         Text("\(Int(model.phizPoints))/\(model.phizPointsMax)")
@@ -168,3 +187,27 @@ extension AaronBack {
         return Array(1...4).map { self.rawValue + ".answer"+"\($0)" }
     }
 }
+
+
+
+////////////////////
+///HELPERS
+////////////////////
+fileprivate struct SpaceX: View {
+    let count: Int
+    let color: Color
+    
+    var body: some View {
+        ForEach(0..<count) { _ in
+            Space()
+                .frame(height: 9)
+                .background(color)
+                .padding(0.5)
+        }
+    }
+}
+
+fileprivate let color1 = Color(hex: 0x3d7e21)
+fileprivate let color2 = Color(hex: 0x808026)
+fileprivate let color3 = Color(hex: 0x7c160d)
+fileprivate let color4 = Color(hex: 0xc53041)
