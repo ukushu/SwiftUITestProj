@@ -69,10 +69,10 @@ struct ContentView: View {
                     Text("(C-A) Психічні проявлення")
                     
                     ZStack {
-                        ProgressLine(progressRatio: $model.psihicRate , fillColor: .red)
+                        ProgressLine(progressRatio: $model.psihRate , fillColor: .red)
                             .frame(height: 20)
                         
-                        Text("\( Int(model.psihicPoints) )/\(model.psihicPointsMax)")
+                        Text("\( Int(model.psihPoints) )/\(model.psihPointsMax)")
                     }
                 }
                 
@@ -80,10 +80,10 @@ struct ContentView: View {
                     Text("(S-P) Фізичні проявлення")
                     
                     ZStack {
-                        ProgressLine(progressRatio: $model.phisicRate , fillColor: .red)
+                        ProgressLine(progressRatio: $model.phizRate , fillColor: .red)
                             .frame(height: 20)
                         
-                        Text("\(Int(model.phisicPoints))/\(model.phisicPointsMax)")
+                        Text("\(Int(model.phizPoints))/\(model.phizPointsMax)")
                     }
                 }
             }
@@ -106,13 +106,13 @@ class ContentViewModel: ObservableObject {
     let depressionPointsMax: Int = 63
     @Published var depressionRate: CGFloat = 0
     
-    @Published var psihicPoints: Int = 0
-    let psihicPointsMax: Int = 39
-    @Published var psihicRate: CGFloat = 0
+    @Published var psihPoints: Int = 0
+    let psihPointsMax: Int = 39
+    @Published var psihRate: CGFloat = 0
     
-    @Published var phisicPoints: Int = 0
-    let phisicPointsMax: Int = 24
-    @Published var phisicRate: CGFloat = 0
+    @Published var phizPoints: Int = 0
+    let phizPointsMax: Int = 24
+    @Published var phizRate: CGFloat = 0
     
     func switchDisplayResults() {
         if displayResults {
@@ -126,12 +126,12 @@ class ContentViewModel: ObservableObject {
         depressionRate = depressionPoints/57
         
         var tempPoints = testResults.first(13).map { item in item.answers.firstIndexInt(where: { $0 == item.selectedAnswer})! }
-        psihicPoints = tempPoints.reduce(0, +)
-        psihicRate = CGFloat( tempPoints.reduce(0, +) ) / CGFloat(phisicPointsMax)
+        psihPoints = tempPoints.reduce(0, +)
+        psihRate = CGFloat( psihPoints ) / CGFloat(psihPointsMax)
         
-        tempPoints = testResults.last(21-13).map { item in item.answers.firstIndexInt(where: { $0 == item.selectedAnswer})! }
-        phisicPoints = tempPoints.reduce(0, +)
-        phisicRate = CGFloat( phisicPoints ) / CGFloat(phisicPointsMax)
+        tempPoints = testResults.last(testResults.count-13).map { item in item.answers.firstIndexInt(where: { $0 == item.selectedAnswer})! }
+        phizPoints = tempPoints.reduce(0, +)
+        phizRate = CGFloat( phizPoints ) / CGFloat(phizPointsMax)
         
         displayResults.toggle()
     }
