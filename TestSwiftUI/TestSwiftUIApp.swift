@@ -70,18 +70,22 @@ struct ContentView: View {
             Text("Depression Rate")
             
             ZStack {
+                HStack(spacing: 0) {
+                    SpaceX(count: 9, color: color1)
+                    SpaceX(count: 18-10, color: color2)
+                    SpaceX(count: 29-19, color: color3)
+                    SpaceX(count: 63-30, color: color4)
+                }
+                .cornerRadius(45.0)
+                .opacity(0.5)
+                
                 ProgressLine(progressRatio: $model.depressionRate , fillColor: mainScaleColor)
                     .frame(height: 30)
                 
                 Text("\( Int(model.depressionPoints) )/\(model.depressionPointsMax)")
             }
             
-            HStack(spacing: 0) {
-                SpaceX(count: 9, color: color1)
-                SpaceX(count: 18-10, color: color2)
-                SpaceX(count: 29-19, color: color3)
-                SpaceX(count: 63-30, color: color4)
-            }
+            
             
             HStack {
                 VStack {
@@ -200,7 +204,7 @@ fileprivate struct SpaceX: View {
     var body: some View {
         ForEach(0..<count) { _ in
             Space()
-                .frame(height: 9)
+                .frame(height: 30)
                 .background(color)
                 .padding(0.5)
         }
