@@ -45,7 +45,7 @@ struct ContentView: View {
                 VStack(alignment: .leading, spacing: 40) {
                     ForEach(model.testResults.indices, id: \.self) { idx in
                         HStack {
-                            Text("lastWeekI".localized)
+                            Text( "\(idx + 1). " + "lastWeekI".localized)
                             
                             VStack{
                                 Picker(selection: $model.testResults[idx].selectedAnswer, label: Text("")) {
@@ -58,8 +58,11 @@ struct ContentView: View {
                     }
                 }
                 .padding(30)
+                
             }
+            
             Button("Show results") { model.switchDisplayResults() }
+                .padding(.bottom, 30)
         }
     }
     
