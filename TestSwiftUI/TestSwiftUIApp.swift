@@ -61,8 +61,13 @@ struct ContentView: View {
                 
             }
             
-            Button("Show results") { model.switchDisplayResults() }
-                .padding(.bottom, 30)
+            HStack {
+                Button("Show results") { model.switchDisplayResults() }
+                
+                Button("Copy text") { model.copyText() }
+                
+            }
+            .padding(.bottom, 30)
         }
     }
     
@@ -80,7 +85,7 @@ struct ContentView: View {
                     SpaceX(count: 63-30, color: color4)
                 }
                 .cornerRadius(45.0)
-                .opacity(0.5)
+                .opacity(0.2)
                 
                 ProgressLine(progressRatio: $model.depressionRate , fillColor: mainScaleColor)
                     .frame(height: 30)
@@ -163,6 +168,20 @@ class ContentViewModel: ObservableObject {
         displayResults.toggle()
     }
     
+    func copyText () {
+        var txt = ""
+        
+        testResults.indices.forEach { idx in
+            txt += "\(idx+1). " + "lastWeekI".localized + "\n"
+            
+            txt += "◦ " + testResults[idx].answers.map { "\($0)".localized } .joined(separator: "\n◦ ")
+            
+            txt += "\n\n"
+        }
+        
+        print(txt)
+    }
+    
     /*
      Общий балл по шкале может интерпретироваться следующим образом:
      • 0−9 – отсутствие депрессивных симптомов;
@@ -190,6 +209,8 @@ enum AaronBack: String, RawRepresentable, CaseIterable {
 }
 
 extension AaronBack {
+    var questionText: String { "\(self.rawValue)lastWeekI".localized }
+    
     func asAnswerKeys() -> [String] {
         return Array(1...4).map { self.rawValue + ".answer"+"\($0)" }
     }
