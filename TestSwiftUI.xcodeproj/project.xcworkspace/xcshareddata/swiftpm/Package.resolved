@@ -1,5 +1,5 @@
 {
-  "originHash" : "f55c924a7bac45c67071266c098b65b40ccec3f4c888c367f4544f40680a626d",
+  "originHash" : "599f172a7a4bd85986ace5c98106e7050a46557efee730d2f0f718e82da557cf",
   "pins" : [
     {
       "identity" : "asyncninja",
@@ -16,7 +16,7 @@
       "location" : "https://gitlab.com/sergiy.vynnychenko/essentials.git",
       "state" : {
         "branch" : "master",
-        "revision" : "6c23b860a3d5ae56b14b112ebfb2870a068e0e5b"
+        "revision" : "807dcbb48f5f2993ae73491c2cc0d99a85a8a25c"
       }
     },
     {
@@ -35,15 +35,6 @@
       "state" : {
         "revision" : "64889f0c732f210a935a0ad7cda38f77f876262d",
         "version" : "509.1.1"
-      }
-    },
-    {
-      "identity" : "witness",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/njdehoog/Witness.git",
-      "state" : {
-        "branch" : "master",
-        "revision" : "b0469457b460fc78620e3b456fed9b18669100d5"
       }
     }
   ],

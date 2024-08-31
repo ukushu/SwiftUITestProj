@@ -13,10 +13,11 @@
 		1D4A87B9298EE53B0062686C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D4A87B8298EE53B0062686C /* Assets.xcassets */; };
 		1D4A87BC298EE53B0062686C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D4A87BB298EE53B0062686C /* Preview Assets.xcassets */; };
 		1D814E932B5F197A002E49E2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1D814E812B5F197A002E49E2 /* Localizable.strings */; };
-		1DB99A5C2ADF0C0200BD94F6 /* Witness in Frameworks */ = {isa = PBXBuildFile; productRef = 1DB99A5B2ADF0C0200BD94F6 /* Witness */; };
 		1DD156962AA1CBED00AE2475 /* AttributedText2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD156952AA1CBED00AE2475 /* AttributedText2.swift */; };
 		1DDDEDBF29B7639400C48216 /* AsyncNinja in Frameworks */ = {isa = PBXBuildFile; productRef = 1DDDEDBE29B7639400C48216 /* AsyncNinja */; };
 		1DE1F6C72C83CF2600423A53 /* Essentials in Frameworks */ = {isa = PBXBuildFile; productRef = 1DE1F6C62C83CF2600423A53 /* Essentials */; };
+		1DE1F6C82C83D26100423A53 /* AsyncNinja in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 1DDDEDBE29B7639400C48216 /* AsyncNinja */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		1DE1F6C92C83D26300423A53 /* Essentials in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 1DE1F6C62C83CF2600423A53 /* Essentials */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		1DE651A72AA0E8920081E1A3 /* AttrTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE651A62AA0E8920081E1A3 /* AttrTextEditor.swift */; };
 		1DE651AA2AA0E94B0081E1A3 /* MoreSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 1DE651A92AA0E94B0081E1A3 /* MoreSwiftUI */; };
 		1DE651B12AA0F1BB0081E1A3 /* DescriptionTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE651B02AA0F1BB0081E1A3 /* DescriptionTextField.swift */; };
@@ -29,6 +30,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				1DE1F6C82C83D26100423A53 /* AsyncNinja in Embed Frameworks */,
+				1DE1F6C92C83D26300423A53 /* Essentials in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -71,7 +74,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1DB99A5C2ADF0C0200BD94F6 /* Witness in Frameworks */,
 				1DE1F6C72C83CF2600423A53 /* Essentials in Frameworks */,
 				1DDDEDBF29B7639400C48216 /* AsyncNinja in Frameworks */,
 				1DE651AA2AA0E94B0081E1A3 /* MoreSwiftUI in Frameworks */,
@@ -159,7 +161,6 @@
 			packageProductDependencies = (
 				1DDDEDBE29B7639400C48216 /* AsyncNinja */,
 				1DE651A92AA0E94B0081E1A3 /* MoreSwiftUI */,
-				1DB99A5B2ADF0C0200BD94F6 /* Witness */,
 				1DE1F6C62C83CF2600423A53 /* Essentials */,
 			);
 			productName = TestSwiftUI;
@@ -210,7 +211,6 @@
 			packageReferences = (
 				1DDDEDBD29B7639400C48216 /* XCRemoteSwiftPackageReference "AsyncNinja" */,
 				1DE651A82AA0E94B0081E1A3 /* XCRemoteSwiftPackageReference "moreswiftui" */,
-				1DB99A5A2ADF0C0200BD94F6 /* XCRemoteSwiftPackageReference "Witness" */,
 				1DE1F6C52C83CF2600423A53 /* XCRemoteSwiftPackageReference "essentials" */,
 			);
 			productRefGroup = 1D4A87B2298EE5390062686C /* Products */;
@@ -482,14 +482,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		1DB99A5A2ADF0C0200BD94F6 /* XCRemoteSwiftPackageReference "Witness" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/njdehoog/Witness.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		1DDDEDBD29B7639400C48216 /* XCRemoteSwiftPackageReference "AsyncNinja" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "git@github.com:serg-vinnie/AsyncNinja.git";
@@ -517,11 +509,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		1DB99A5B2ADF0C0200BD94F6 /* Witness */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1DB99A5A2ADF0C0200BD94F6 /* XCRemoteSwiftPackageReference "Witness" */;
-			productName = Witness;
-		};
 		1DDDEDBE29B7639400C48216 /* AsyncNinja */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1DDDEDBD29B7639400C48216 /* XCRemoteSwiftPackageReference "AsyncNinja" */;
