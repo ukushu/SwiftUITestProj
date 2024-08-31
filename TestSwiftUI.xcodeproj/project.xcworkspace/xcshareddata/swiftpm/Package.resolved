@@ -1,4 +1,5 @@
 {
+  "originHash" : "f55c924a7bac45c67071266c098b65b40ccec3f4c888c367f4544f40680a626d",
   "pins" : [
     {
       "identity" : "asyncninja",
@@ -6,16 +7,16 @@
       "location" : "git@github.com:serg-vinnie/AsyncNinja.git",
       "state" : {
         "branch" : "master",
-        "revision" : "a13ffeda2d8e513e6ed97fbd4612f7770e7e1053"
+        "revision" : "f2c555857849fbb163fbff6a94efa1f6ca24ade6"
       }
     },
     {
       "identity" : "essentials",
       "kind" : "remoteSourceControl",
-      "location" : "git@gitlab.com:sergiy.vynnychenko/essentials.git",
+      "location" : "https://gitlab.com/sergiy.vynnychenko/essentials.git",
       "state" : {
         "branch" : "master",
-        "revision" : "b8652e5fdc251e3cebb2abbafdccc15b0fc4046b"
+        "revision" : "6c23b860a3d5ae56b14b112ebfb2870a068e0e5b"
       }
     },
     {
@@ -24,7 +25,7 @@
       "location" : "git@gitlab.com:UKS/moreswiftui.git",
       "state" : {
         "branch" : "main",
-        "revision" : "cee0025d123748831f3841438e4324594ae788b1"
+        "revision" : "8c66ed7dbcddb8e112a87df7f341ef3f10555df3"
       }
     },
     {
@@ -46,5 +47,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

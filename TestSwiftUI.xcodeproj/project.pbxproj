@@ -16,10 +16,9 @@
 		1DB99A5C2ADF0C0200BD94F6 /* Witness in Frameworks */ = {isa = PBXBuildFile; productRef = 1DB99A5B2ADF0C0200BD94F6 /* Witness */; };
 		1DD156962AA1CBED00AE2475 /* AttributedText2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD156952AA1CBED00AE2475 /* AttributedText2.swift */; };
 		1DDDEDBF29B7639400C48216 /* AsyncNinja in Frameworks */ = {isa = PBXBuildFile; productRef = 1DDDEDBE29B7639400C48216 /* AsyncNinja */; };
+		1DE1F6C72C83CF2600423A53 /* Essentials in Frameworks */ = {isa = PBXBuildFile; productRef = 1DE1F6C62C83CF2600423A53 /* Essentials */; };
 		1DE651A72AA0E8920081E1A3 /* AttrTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE651A62AA0E8920081E1A3 /* AttrTextEditor.swift */; };
 		1DE651AA2AA0E94B0081E1A3 /* MoreSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 1DE651A92AA0E94B0081E1A3 /* MoreSwiftUI */; };
-		1DE651AD2AA0E99B0081E1A3 /* Essentials in Frameworks */ = {isa = PBXBuildFile; productRef = 1DE651AC2AA0E99B0081E1A3 /* Essentials */; };
-		1DE651AE2AA0E99F0081E1A3 /* Essentials in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 1DE651AC2AA0E99B0081E1A3 /* Essentials */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		1DE651B12AA0F1BB0081E1A3 /* DescriptionTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE651B02AA0F1BB0081E1A3 /* DescriptionTextField.swift */; };
 /* End PBXBuildFile section */
 
@@ -30,7 +29,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				1DE651AE2AA0E99F0081E1A3 /* Essentials in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -74,7 +72,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1DB99A5C2ADF0C0200BD94F6 /* Witness in Frameworks */,
-				1DE651AD2AA0E99B0081E1A3 /* Essentials in Frameworks */,
+				1DE1F6C72C83CF2600423A53 /* Essentials in Frameworks */,
 				1DDDEDBF29B7639400C48216 /* AsyncNinja in Frameworks */,
 				1DE651AA2AA0E94B0081E1A3 /* MoreSwiftUI in Frameworks */,
 			);
@@ -161,8 +159,8 @@
 			packageProductDependencies = (
 				1DDDEDBE29B7639400C48216 /* AsyncNinja */,
 				1DE651A92AA0E94B0081E1A3 /* MoreSwiftUI */,
-				1DE651AC2AA0E99B0081E1A3 /* Essentials */,
 				1DB99A5B2ADF0C0200BD94F6 /* Witness */,
+				1DE1F6C62C83CF2600423A53 /* Essentials */,
 			);
 			productName = TestSwiftUI;
 			productReference = 1D4A87B1298EE5390062686C /* TestSwiftUI.app */;
@@ -212,8 +210,8 @@
 			packageReferences = (
 				1DDDEDBD29B7639400C48216 /* XCRemoteSwiftPackageReference "AsyncNinja" */,
 				1DE651A82AA0E94B0081E1A3 /* XCRemoteSwiftPackageReference "moreswiftui" */,
-				1DE651AB2AA0E99B0081E1A3 /* XCRemoteSwiftPackageReference "essentials" */,
 				1DB99A5A2ADF0C0200BD94F6 /* XCRemoteSwiftPackageReference "Witness" */,
+				1DE1F6C52C83CF2600423A53 /* XCRemoteSwiftPackageReference "essentials" */,
 			);
 			productRefGroup = 1D4A87B2298EE5390062686C /* Products */;
 			projectDirPath = "";
@@ -419,8 +417,11 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chekaZuja.TestSwiftUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -449,8 +450,11 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chekaZuja.TestSwiftUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -494,19 +498,19 @@
 				kind = branch;
 			};
 		};
+		1DE1F6C52C83CF2600423A53 /* XCRemoteSwiftPackageReference "essentials" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://gitlab.com/sergiy.vynnychenko/essentials.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		1DE651A82AA0E94B0081E1A3 /* XCRemoteSwiftPackageReference "moreswiftui" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "git@gitlab.com:UKS/moreswiftui.git";
 			requirement = {
 				branch = main;
-				kind = branch;
-			};
-		};
-		1DE651AB2AA0E99B0081E1A3 /* XCRemoteSwiftPackageReference "essentials" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "git@gitlab.com:sergiy.vynnychenko/essentials.git";
-			requirement = {
-				branch = master;
 				kind = branch;
 			};
 		};
@@ -523,15 +527,15 @@
 			package = 1DDDEDBD29B7639400C48216 /* XCRemoteSwiftPackageReference "AsyncNinja" */;
 			productName = AsyncNinja;
 		};
+		1DE1F6C62C83CF2600423A53 /* Essentials */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1DE1F6C52C83CF2600423A53 /* XCRemoteSwiftPackageReference "essentials" */;
+			productName = Essentials;
+		};
 		1DE651A92AA0E94B0081E1A3 /* MoreSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1DE651A82AA0E94B0081E1A3 /* XCRemoteSwiftPackageReference "moreswiftui" */;
 			productName = MoreSwiftUI;
-		};
-		1DE651AC2AA0E99B0081E1A3 /* Essentials */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1DE651AB2AA0E99B0081E1A3 /* XCRemoteSwiftPackageReference "essentials" */;
-			productName = Essentials;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
