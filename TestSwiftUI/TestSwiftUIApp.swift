@@ -63,7 +63,7 @@ struct ContentView: View {
             HStack {
                 Button("Show results") { model.switchDisplayResults() }
                 
-                Button("Copy text") { model.copyText() }
+                Button("Copy questions text") { model.copyText() }
                 
             }
             .padding(.bottom, 30)
@@ -173,12 +173,16 @@ class ContentViewModel: ObservableObject {
         testResults.indices.forEach { idx in
             txt += "\(idx+1). " + "lastWeekI".localized + "\n"
             
-            txt += "◦ " + testResults[idx].answers.map { "\($0)".localized } .joined(separator: "\n◦ ")
+            txt += "◦ " + testResults[idx].answers.map { "\($0)".localized.replace(of: "\n", to: "\n  ") } .joined(separator: "\n◦ ")
             
             txt += "\n\n"
         }
         
         print(txt)
+        
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        pasteboard.setString(txt, forType: .string)
     }
     
     /*
