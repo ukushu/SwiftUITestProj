@@ -173,7 +173,7 @@ class ContentViewModel: ObservableObject {
         testResults.indices.forEach { idx in
             txt += "\(idx+1). " + "lastWeekI".localized + "\n"
             
-            txt += "◦ " + testResults[idx].answers.map { "\($0)".localized.replace(of: "\n", to: "\n  ") } .joined(separator: "\n◦ ")
+            txt += "◦ " + testResults[idx].answers.map { "\($0)".localized.replace(of: "\n", to: "\n   ") } .joined(separator: "\n◦ ")
             
             txt += "\n\n"
         }
