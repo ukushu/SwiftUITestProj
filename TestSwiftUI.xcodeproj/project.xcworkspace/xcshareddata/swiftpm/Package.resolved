@@ -7,7 +7,7 @@
       "location" : "git@github.com:serg-vinnie/AsyncNinja.git",
       "state" : {
         "branch" : "master",
-        "revision" : "f2c555857849fbb163fbff6a94efa1f6ca24ade6"
+        "revision" : "9f6ae8d09668d08328661404490b0a93a6775520"
       }
     },
     {
@@ -16,7 +16,7 @@
       "location" : "https://gitlab.com/sergiy.vynnychenko/essentials.git",
       "state" : {
         "branch" : "master",
-        "revision" : "807dcbb48f5f2993ae73491c2cc0d99a85a8a25c"
+        "revision" : "bdff90b94e79ce8cbcd8daf5838d932e71b76b57"
       }
     },
     {
@@ -25,16 +25,7 @@
       "location" : "git@gitlab.com:UKS/moreswiftui.git",
       "state" : {
         "branch" : "main",
-        "revision" : "8c66ed7dbcddb8e112a87df7f341ef3f10555df3"
-      }
-    },
-    {
-      "identity" : "swift-syntax",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-syntax.git",
-      "state" : {
-        "revision" : "64889f0c732f210a935a0ad7cda38f77f876262d",
-        "version" : "509.1.1"
+        "revision" : "72391c9baa4f5b2c1ba2261a8dce7101109838ba"
       }
     }
   ],

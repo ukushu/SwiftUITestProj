@@ -8,19 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		1D2AF3482AAD689100346C45 /* DirectoryTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2AF3472AAD689100346C45 /* DirectoryTableView.swift */; };
+		1D37811A2F40ACA4002A1B74 /* RepositoryItemLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3781192F40ACA2002A1B74 /* RepositoryItemLine.swift */; };
+		1D37811C2F40AD11002A1B74 /* RepoState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D37811B2F40AD10002A1B74 /* RepoState.swift */; };
+		1D37811E2F40ADCB002A1B74 /* RepoSubmodInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D37811D2F40ADCA002A1B74 /* RepoSubmodInfo.swift */; };
 		1D4A87B5298EE5390062686C /* TestSwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4A87B4298EE5390062686C /* TestSwiftUIApp.swift */; };
-		1D4A87B7298EE5390062686C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4A87B6298EE5390062686C /* ContentView.swift */; };
+		1D4A87B7298EE5390062686C /* MultyRepoViewNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4A87B6298EE5390062686C /* MultyRepoViewNew.swift */; };
 		1D4A87B9298EE53B0062686C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D4A87B8298EE53B0062686C /* Assets.xcassets */; };
 		1D4A87BC298EE53B0062686C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D4A87BB298EE53B0062686C /* Preview Assets.xcassets */; };
 		1D814E932B5F197A002E49E2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1D814E812B5F197A002E49E2 /* Localizable.strings */; };
-		1DD156962AA1CBED00AE2475 /* AttributedText2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD156952AA1CBED00AE2475 /* AttributedText2.swift */; };
 		1DDDEDBF29B7639400C48216 /* AsyncNinja in Frameworks */ = {isa = PBXBuildFile; productRef = 1DDDEDBE29B7639400C48216 /* AsyncNinja */; };
 		1DE1F6C72C83CF2600423A53 /* Essentials in Frameworks */ = {isa = PBXBuildFile; productRef = 1DE1F6C62C83CF2600423A53 /* Essentials */; };
 		1DE1F6C82C83D26100423A53 /* AsyncNinja in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 1DDDEDBE29B7639400C48216 /* AsyncNinja */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		1DE1F6C92C83D26300423A53 /* Essentials in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 1DE1F6C62C83CF2600423A53 /* Essentials */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		1DE651A72AA0E8920081E1A3 /* AttrTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE651A62AA0E8920081E1A3 /* AttrTextEditor.swift */; };
 		1DE651AA2AA0E94B0081E1A3 /* MoreSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 1DE651A92AA0E94B0081E1A3 /* MoreSwiftUI */; };
-		1DE651B12AA0F1BB0081E1A3 /* DescriptionTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE651B02AA0F1BB0081E1A3 /* DescriptionTextField.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -40,9 +40,12 @@
 
 /* Begin PBXFileReference section */
 		1D2AF3472AAD689100346C45 /* DirectoryTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryTableView.swift; sourceTree = "<group>"; };
+		1D3781192F40ACA2002A1B74 /* RepositoryItemLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryItemLine.swift; sourceTree = "<group>"; };
+		1D37811B2F40AD10002A1B74 /* RepoState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoState.swift; sourceTree = "<group>"; };
+		1D37811D2F40ADCA002A1B74 /* RepoSubmodInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoSubmodInfo.swift; sourceTree = "<group>"; };
 		1D4A87B1298EE5390062686C /* TestSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D4A87B4298EE5390062686C /* TestSwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSwiftUIApp.swift; sourceTree = "<group>"; };
-		1D4A87B6298EE5390062686C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		1D4A87B6298EE5390062686C /* MultyRepoViewNew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultyRepoViewNew.swift; sourceTree = "<group>"; };
 		1D4A87B8298EE53B0062686C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1D4A87BB298EE53B0062686C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		1D4A87BD298EE53B0062686C /* TestSwiftUI.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestSwiftUI.entitlements; sourceTree = "<group>"; };
@@ -63,9 +66,6 @@
 		1D814E902B5F197A002E49E2 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1D814E912B5F197A002E49E2 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1D814E922B5F197A002E49E2 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
-		1DD156952AA1CBED00AE2475 /* AttributedText2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedText2.swift; sourceTree = "<group>"; };
-		1DE651A62AA0E8920081E1A3 /* AttrTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttrTextEditor.swift; sourceTree = "<group>"; };
-		1DE651B02AA0F1BB0081E1A3 /* DescriptionTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionTextField.swift; sourceTree = "<group>"; };
 		1DF7729C2ACA71F40024591F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -91,6 +91,17 @@
 			path = TableView;
 			sourceTree = "<group>";
 		};
+		1D3781182F40AC8A002A1B74 /* MultyRepoView */ = {
+			isa = PBXGroup;
+			children = (
+				1D4A87B6298EE5390062686C /* MultyRepoViewNew.swift */,
+				1D37811D2F40ADCA002A1B74 /* RepoSubmodInfo.swift */,
+				1D37811B2F40AD10002A1B74 /* RepoState.swift */,
+				1D3781192F40ACA2002A1B74 /* RepositoryItemLine.swift */,
+			);
+			path = MultyRepoView;
+			sourceTree = "<group>";
+		};
 		1D4A87A8298EE5390062686C = {
 			isa = PBXGroup;
 			children = (
@@ -113,13 +124,10 @@
 				1DF7729C2ACA71F40024591F /* Info.plist */,
 				1D2AF3462AAD688100346C45 /* TableView */,
 				1D4A87B4298EE5390062686C /* TestSwiftUIApp.swift */,
-				1D4A87B6298EE5390062686C /* ContentView.swift */,
-				1DE651B02AA0F1BB0081E1A3 /* DescriptionTextField.swift */,
+				1D3781182F40AC8A002A1B74 /* MultyRepoView */,
 				1D4A87B8298EE53B0062686C /* Assets.xcassets */,
 				1D4A87BD298EE53B0062686C /* TestSwiftUI.entitlements */,
 				1D4A87BA298EE53B0062686C /* Preview Content */,
-				1DE651A62AA0E8920081E1A3 /* AttrTextEditor.swift */,
-				1DD156952AA1CBED00AE2475 /* AttributedText2.swift */,
 				1D814E802B5F197A002E49E2 /* Locals */,
 			);
 			path = TestSwiftUI;
@@ -240,12 +248,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1D4A87B7298EE5390062686C /* ContentView.swift in Sources */,
+				1D4A87B7298EE5390062686C /* MultyRepoViewNew.swift in Sources */,
+				1D37811C2F40AD11002A1B74 /* RepoState.swift in Sources */,
+				1D37811E2F40ADCB002A1B74 /* RepoSubmodInfo.swift in Sources */,
 				1D2AF3482AAD689100346C45 /* DirectoryTableView.swift in Sources */,
 				1D4A87B5298EE5390062686C /* TestSwiftUIApp.swift in Sources */,
-				1DD156962AA1CBED00AE2475 /* AttributedText2.swift in Sources */,
-				1DE651B12AA0F1BB0081E1A3 /* DescriptionTextField.swift in Sources */,
-				1DE651A72AA0E8920081E1A3 /* AttrTextEditor.swift in Sources */,
+				1D37811A2F40ACA4002A1B74 /* RepositoryItemLine.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -414,6 +422,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chekaZuja.TestSwiftUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -447,6 +456,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chekaZuja.TestSwiftUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
